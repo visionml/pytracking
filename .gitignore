@@ -1,0 +1,7 @@
+*.idea
+*~
+*__pycache__*
+*.pytest_cache
+*.ipynb_checkpoints/
+pytracking/evaluation/local.py
+pytracking/run_local.py
