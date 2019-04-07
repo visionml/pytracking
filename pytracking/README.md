@@ -10,8 +10,6 @@ A general python repository for evaluating trackers. The following trackers are 
 * [Installation](#installation)
 * [Quick Start](#quick-start)
 * [Overview](#overview)
-* [Trackers](#trackers)
-* [Datasets](#datasets)
 * [Issues](#issues)
 
 ## Installation
@@ -66,3 +64,14 @@ This is done using the run_experiment script. To use this, first you need to cre
 python run_experiment.py experiment_module experiment_name --dataset_name dataset_name --sequence sequence  --debug debug --threads threads
 ```  
 Here, ```experiment_module```  is the name of the experiment setting file, e.g. ```myexperiments``` , and ``` experiment_name```  is the name of the experiment setting, e.g. ``` atom_nfs_uav``` .
+
+## Overview
+The tookit consists of the following sub-modules.  
+ -  ```evaluation```: Contains the necessary scripts for running a tracker on a dataset. It also contains integration of a number of standard tracking datasets, namely  [OTB-100](http://cvlab.hanyang.ac.kr/tracker_benchmark/index.html), [NFS](http://ci2cv.net/nfs/index.html),
+ [UAV123](https://ivul.kaust.edu.sa/Pages/pub-benchmark-simulator-uav.aspx), [Temple128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html), [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](https://cis.temple.edu/lasot/), and [VOT2018](http://www.votchallenge.net/vot2018/).  
+ - ```experiments```: The experiment setting files must be stored here,  
+ - ```features```: Contains functions useful for feature extraction, including various data augmentation methods.  
+ - ```libs```: Includes libraries for optimization, dcf, etc.  
+ - ```parameter```: Contains the parameter settings for different trackers.  
+ - ```tracker```: Contains the implementations of different trackers.  
+ - ```utils```: Some uitl functions.  
