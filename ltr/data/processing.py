@@ -2,7 +2,6 @@ import torch
 import torchvision.transforms as transforms
 from pytracking import TensorDict
 import ltr.data.processing_utils as prutils
-import numpy as np
 
 
 class BaseProcessing:
@@ -145,8 +144,8 @@ class ATOMProcessing(BaseProcessing):
         # Generate proposals
         frame2_proposals, gt_iou = zip(*[self._generate_proposals(a) for a in data['test_anno']])
 
-        data['test_proposals'] = frame2_proposals
-        data['proposal_iou'] = gt_iou
+        data['test_proposals'] = list(frame2_proposals)
+        data['proposal_iou'] = list(gt_iou)
 
         # Prepare output
         if self.mode == 'sequence':
