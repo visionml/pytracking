@@ -8,6 +8,10 @@ A general python repository for evaluating trackers. The following trackers are 
 ## Table of Contents
 
 * [Installation](#installation)
+* [Quick Start](#quick-start)
+* [Overview](#overview)
+* [Trackers](#trackers)
+* [Datasets](#datasets)
 * [Issues](#issues)
 
 ## Installation
@@ -34,7 +38,31 @@ This script will also download the default networks and set-up the environment.
 Activate the conda environment and run the script run_webcam.py to track using the webcam input.  
 ```bash
 conda activate environment_name
-python run_webcam atom default    
+python run_webcam.py atom default    
 ```  
 
-   
+## Quick Start
+The toolkit provides 3 ways to run a tracker.  
+
+**Run the tracker on webcam feed**   
+This is done using the run_webcam script. The arguments are the name of the tracker, and the name of the parameter file.  
+```bash
+python run_webcam.py tracker_name parameter_name    
+```  
+
+**Run the tracker on some dataset sequence**
+This is done using the run_tracker script.  
+```bash
+python run_tracker.py tracker_name parameter_name --dataset_name dataset_name --sequence sequence --debug debug --threads threads
+```  
+
+Here, the dataset_name can be either ```'otb'``` (OTB-2015), ```'nfs'``` (Need for Speed), ```'uav'``` (UAV123), ```'tpl'``` (Temple128), ```'tn'``` (TrackingNet test set), ```'gott'``` (GOT-10k test set), 
+```'gotv'``` (GOT-10k val set), ```'lasot'``` (LaSOT) or ```'vot'``` (VOT2018). The sequence can either be an integer denoting the index of the sequence in the dataset, or the name of the sequence, e.g. ```'Soccer'```.
+The ```debug``` parameter can be used to control the level of debug visualizations. ```threads``` parameter can be used to run on multiple threads.
+
+**Run the tracker on a set of datasets**
+This is done using the run_experiment script. To use this, first you need to create an experiment setting file in ```pytracking.experiments```. See ```pytracking.experiments.myexperiments``` for reference. 
+```bash
+python run_experiment.py experiment_module experiment_name --dataset_name dataset_name --sequence sequence  --debug debug --threads threads
+```  
+Here, ```experiment_module```  is the name of the experiment setting file, e.g. ```myexperiments``` , and ``` experiment_name```  is the name of the experiment setting, e.g. ``` atom_nfs_uav``` .
