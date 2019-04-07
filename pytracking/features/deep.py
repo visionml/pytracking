@@ -1,12 +1,11 @@
 from pytracking.features.featurebase import FeatureBase, MultiFeatureBase
 import torch
 import torchvision
-import importlib
 from pytracking import TensorList
 from pytracking.evaluation.environment import env_settings
 import os
-from dlframework.common import load_network
-from dlframework.ltr.models.backbone.resnet18_vggm import resnet18_vggmconv1
+from ltr import load_network
+from ltr.models.backbone.resnet18_vggm import resnet18_vggmconv1
 
 normalize = torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                              std=[0.229, 0.224, 0.225])
