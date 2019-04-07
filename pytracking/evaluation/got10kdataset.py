@@ -4,19 +4,37 @@ import os
 
 
 def GOT10KDatasetTest():
+    """ GOT-10k official test set"""
     return GOT10KDatasetClass('test').get_sequence_list()
 
 
 def GOT10KDatasetVal():
+    """ GOT-10k official val set"""
     return GOT10KDatasetClass('val').get_sequence_list()
 
 
 def GOT10KDatasetLTRVal():
+    """ GOT-10k val split from LTR (a subset of GOT-10k official train set)"""
     return GOT10KDatasetClass('ltrval').get_sequence_list()
 
 
 class GOT10KDatasetClass(BaseDataset):
+    """ GOT-10k dataset.
+
+        Publication:
+            GOT-10k: A Large High-Diversity Benchmark for Generic Object Tracking in the Wild
+            Lianghua Huang, Xin Zhao, and Kaiqi Huang
+            arXiv:1810.11981, 2018
+            https://arxiv.org/pdf/1810.11981.pdf
+
+        Download dataset from http://got-10k.aitestunion.com/downloads
+    """
     def __init__(self, split):
+        """
+        args:
+            split - Split to use. Can be i) 'test': official test set, ii) 'val': official val set, and iii) 'ltrval':
+                    a custom validation set, a subset of the official train set.
+        """
         super().__init__()
         # Split can be test, val, or ltrval
         if split == 'test' or split == 'val':

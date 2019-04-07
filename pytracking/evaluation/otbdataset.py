@@ -7,7 +7,16 @@ def OTBDataset():
 
 
 class OTBDatasetClass(BaseDataset):
-    '''OTB-2015.'''
+    """ OTB-2015 dataset
+
+    Publication:
+        Object Tracking Benchmark
+        Wu, Yi, Jongwoo Lim, and Ming-hsuan Yan
+        TPAMI, 2015
+        http://faculty.ucmerced.edu/mhyang/papers/pami15_tracking_benchmark.pdf
+
+    Download the dataset from http://cvlab.hanyang.ac.kr/tracker_benchmark/index.html
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.otb_path

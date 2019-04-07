@@ -8,7 +8,16 @@ def LaSOTDataset():
 
 
 class LaSOTDatasetClass(BaseDataset):
+    """ LaSOT test set consisting of 280 videos (see Protocol-II in the LaSOT paper)
 
+    Publication:
+        LaSOT: A High-quality Benchmark for Large-scale Single Object Tracking
+        Heng Fan, Liting Lin, Fan Yang, Peng Chu, Ge Deng, Sijia Yu, Hexin Bai, Yong Xu, Chunyuan Liao and Haibin Ling
+        CVPR, 2019
+        https://arxiv.org/pdf/1809.07845.pdf
+
+    Download the dataset from https://cis.temple.edu/lasot/download.html
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.lasot_path
