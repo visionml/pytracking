@@ -319,7 +319,7 @@ class ATOM(BaseTracker):
         return translation_vec, scale_ind, scores, None
 
     def localize_advanced(self, scores):
-        """Dows the advanced localization with hard negative detection and target not found."""
+        """Does the advanced localization with hard negative detection and target not found."""
 
         sz = scores.shape[-2:]
 
