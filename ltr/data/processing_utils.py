@@ -213,7 +213,7 @@ def perturb_box(box, min_iou=0.5, sigma_factor=0.1):
         if box_per[3] <= 1:
             box_per[3] = box[3]*rand_uniform(0.15, 0.5)
 
-        box_iou = iou(box, box_per)
+        box_iou = iou(box.view(1, 4), box_per.view(1, 4))
 
         # if there is sufficient overlap, return
         if box_iou > min_iou:
