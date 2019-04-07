@@ -76,15 +76,25 @@ class BaseTracker:
                     self.mode = 'track'
                     self.mode_switch = True
 
-                if self.target_tl[0] > self.target_br[0]:
-                    temp_var = self.target_tl
-                    self.target_tl = self.target_br
-                    self.target_br = temp_var
+            def get_tl(self):
+                return self.target_tl if self.target_tl[0] < self.target_br[0] else self.target_br
+
+            def get_br(self):
+                return self.target_br if self.target_tl[0] < self.target_br[0] else self.target_tl
+
+            def get_bb(self):
+                tl = self.get_tl()
+                br = self.get_br()
+
+                bb = [tl[0], tl[1], br[0] - tl[0], br[1] - tl[1]]
+                return bb
 
         ui_control = UIControl()
         cap = cv.VideoCapture(0)
-        cv.namedWindow("Display")
-        cv.setMouseCallback("Display", ui_control.mouse_callback)
+        display_name = 'Display: ' + self.params.tracker_name
+        cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
+        cv.resizeWindow(display_name, 960, 720)
+        cv.setMouseCallback(display_name, ui_control.mouse_callback)
 
         if hasattr(self, 'initialize_features'):
             self.initialize_features()
@@ -96,21 +106,33 @@ class BaseTracker:
 
             if ui_control.mode == 'track' and ui_control.mode_switch:
                 ui_control.mode_switch = False
-                init_state = [ui_control.target_tl[0], ui_control.target_tl[1],
-                              ui_control.target_br[0] - ui_control.target_tl[0],
-                              ui_control.target_br[1] - ui_control.target_tl[1]]
+                init_state = ui_control.get_bb()
                 self.initialize(frame, init_state)
 
+            # Draw box
             if ui_control.mode == 'select':
-                cv.rectangle(frame_disp, ui_control.target_tl, ui_control.target_br, (255, 0, 0), 2)
+                cv.rectangle(frame_disp, ui_control.get_tl(), ui_control.get_br(), (255, 0, 0), 2)
             elif ui_control.mode == 'track':
                 state = self.track(frame)
                 state = [int(s) for s in state]
                 cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
                              (0, 255, 0), 5)
 
+            # Put text
+            font_color = (0, 0, 0)
+            if ui_control.mode == 'init' or ui_control.mode == 'select':
+                cv.putText(frame_disp, 'Select target', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, font_color, 1)
+                cv.putText(frame_disp, 'Press q to quit', (20, 55), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
+                           font_color, 1)
+            elif ui_control.mode == 'track':
+                cv.putText(frame_disp, 'Tracking!', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
+                           font_color, 1)
+                cv.putText(frame_disp, 'Press r to reset', (20, 55), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
+                           font_color, 1)
+                cv.putText(frame_disp, 'Press q to quit', (20, 80), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
+                           font_color, 1)
             # Display the resulting frame
-            cv.imshow('Display', frame_disp)
+            cv.imshow(display_name, frame_disp)
             key = cv.waitKey(1)
             if key == ord('q'):
                 break
