@@ -7,7 +7,16 @@ def TPLDataset():
 
 
 class TPLDatasetClass(BaseDataset):
-    '''Temple.'''
+    """ Temple128 dataset
+
+    Publication:
+        Encoding color information for visual tracking: Algorithms and benchmark
+        Pengpeng Liang, Erik Blasch, and Haibin Ling
+        TIP, 2015
+        http://www.dabi.temple.edu/~hbling/publication/TColor-128.pdf
+
+    Download the dataset from http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.tpl_path
