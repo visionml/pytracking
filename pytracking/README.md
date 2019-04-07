@@ -60,7 +60,7 @@ Here, the dataset_name can be either ```'otb'``` (OTB-2015), ```'nfs'``` (Need f
 ```'gotv'``` (GOT-10k val set), ```'lasot'``` (LaSOT) or ```'vot'``` (VOT2018). The sequence can either be an integer denoting the index of the sequence in the dataset, or the name of the sequence, e.g. ```'Soccer'```.
 The ```debug``` parameter can be used to control the level of debug visualizations. ```threads``` parameter can be used to run on multiple threads.
 
-**Run the tracker on a set of datasets**
+**Run the tracker on a set of datasets**  
 This is done using the run_experiment script. To use this, first you need to create an experiment setting file in ```pytracking.experiments```. See ```pytracking.experiments.myexperiments``` for reference. 
 ```bash
 python run_experiment.py experiment_module experiment_name --dataset_name dataset_name --sequence sequence  --debug debug --threads threads
