@@ -40,10 +40,6 @@ class NetConstructor:
 
     def get(self):
         """ Rebuild the network by calling the network function with the correct arguments. """
-
-        # Legacy networks before refactoring
-        if self.fun_module.startswith('dlframework.'):
-            self.fun_module = self.fun_module[len('dlframework.'):]
         net_module = importlib.import_module(self.fun_module)
         net_fun = getattr(net_module, self.fun_name)
         return net_fun(*self.args, **self.kwds)

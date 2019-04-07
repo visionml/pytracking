@@ -3,5 +3,6 @@
 *__pycache__*
 *.pytest_cache
 *.ipynb_checkpoints/
+ltr/admin/local.py
 pytracking/evaluation/local.py
 pytracking/run_local.py

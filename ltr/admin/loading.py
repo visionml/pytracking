@@ -5,7 +5,7 @@ from pathlib import Path
 import importlib
 
 
-def load_network(network_dir = None, checkpoint = None, **kwargs):
+def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, constructor_module=None, **kwargs):
         """Loads a network checkpoint file.
 
         Can be called in two different ways:
@@ -55,11 +55,18 @@ def load_network(network_dir = None, checkpoint = None, **kwargs):
         # Construct network model
         if 'constructor' in checkpoint_dict and checkpoint_dict['constructor'] is not None:
             net_constr = checkpoint_dict['constructor']
+            if constructor_fun_name is not None:
+                net_constr.fun_name = constructor_fun_name
+            if constructor_module is not None:
+                net_constr.fun_module = constructor_module
             for arg, val in kwargs.items():
                 if arg in net_constr.kwds.keys():
                     net_constr.kwds[arg] = val
                 else:
                     print('WARNING: Keyword argument "{}" not found when loading network.'.format(arg))
+            # Legacy networks before refactoring
+            if net_constr.fun_module.startswith('dlframework.'):
+                net_constr.fun_module = net_constr.fun_module[len('dlframework.'):]
             net = net_constr.get()
         else:
             raise RuntimeError('No constructor for the given network.')

@@ -6,16 +6,25 @@ import multiprocessing
 import cv2 as cv
 import torch.backends.cudnn
 
-env_path = os.path.join(os.path.dirname(__file__), '../..')
+env_path = os.path.join(os.path.dirname(__file__), '..')
 if env_path not in sys.path:
     sys.path.append(env_path)
 
 import ltr.admin.settings as ws_settings
 
 
-def run_training(train_module, train_name):
+def run_training(train_module, train_name, cudnn_benchmark=True):
+    """Run a train scripts in train_settings.
+    args:
+        train_module: Name of module in the "train_settings/" folder.
+        train_name: Name of the train settings file.
+        cudnn_benchmark: Use cudnn benchmark or not (default is True).
+    """
+
+    # This is needed to avoid strange crashes related to opencv
     cv.setNumThreads(0)
-    torch.backends.cudnn.benchmark = True
+
+    torch.backends.cudnn.benchmark = cudnn_benchmark
 
     print('Training:  {}  {}'.format(train_module, train_name))
 
@@ -31,15 +40,14 @@ def run_training(train_module, train_name):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Run training.')
-    parser.add_argument('train_module', type=str)
-    parser.add_argument('train_name', type=str)
-    # parser.add_argument('--debug', type=int, default=0)
-    # parser.add_argument('--threads', type=int, default=0)
+    parser = argparse.ArgumentParser(description='Run a train scripts in train_settings.')
+    parser.add_argument('train_module', type=str, help='Name of module in the "train_settings/" folder.')
+    parser.add_argument('train_name', type=str, help='Name of the train settings file.')
+    parser.add_argument('--cudnn_benchmark', type=bool, default=True, help='Set cudnn benchmark on (1) or off (0) (default is on).')
 
     args = parser.parse_args()
 
-    run_training(args.train_module, args.train_name)
+    run_training(args.train_module, args.train_name, args.cudnn_benchmark)
 
 
 if __name__ == '__main__':
