@@ -7,10 +7,11 @@ A general python library for visual tracking algorithms. The following trackers 
 
 ## Table of Contents
 
-* [Quick Start](#quick-start)
+* [Running a tracker](#running-a-tracker)
 * [Overview](#overview)
 * [Trackers](#trackers)
-* [Implementing a new tracker](#implementing-a-new-tracker)
+* [Libs](#libs)
+* [Integrating a new tracker](#integrating-a-new-tracker)
 
 
 ## Running a tracker
