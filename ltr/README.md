@@ -4,10 +4,10 @@ A general PyTorch based framework for learning tracking representations. The rep
 
 ## Table of Contents
 
-* [Installation](#installation)
 * [Quick Start](#quick-start)
 * [Overview](#overview)
-* [Trackers](#trackers)
+* [Train Settings](#train-settings)
+* [Training your own networks](#training-your-own-networks)
 
 ## Quick Start
 The installation script will automatically generate a local configuration file  "admin/local.py". In case the file was not generated, run ```admin.environment.create_default_local_file()``` to generate it. Next, set the paths to the training workspace, 
