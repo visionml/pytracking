@@ -2,6 +2,13 @@
 
 A general PyTorch based framework for learning tracking representations. The repository contains the code for training the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker.
 
+## Table of Contents
+
+* [Installation](#installation)
+* [Quick Start](#quick-start)
+* [Overview](#overview)
+* [Trackers](#trackers)
+
 ## Quick Start
 The installation script will automatically generate a local configuration file  "admin/local.py". In case the file was not generated, run ```admin.environment.create_default_local_file()``` to generate it. Next, set the paths to the training workspace, 
 i.e. the directory where the checkpoints will be saved. Also set the paths to the datasets you want to use. If all the dependencies have been correctly installed, you can train a network using the run_training.py script in the correct conda environment.  
