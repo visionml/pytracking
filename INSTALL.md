@@ -19,11 +19,13 @@ The code has been tested with PyTorch 0.4.1, with cuda92.
 conda install pytorch=0.4.1 torchvision cuda92 -c pytorch
 ```
 
+
 * Install matplotlib, pandas, opencv and tensorboadX:  
 ```bash
 conda install matplotlib pandas
 pip install opencv-python tensorboardX
 ```
+
 
 * Install the coco toolkit:  
 If you want to use COCO dataset for training, install the coco python toolkit. You additionally need to install cython to compile the coco toolkit.
@@ -31,6 +33,7 @@ If you want to use COCO dataset for training, install the coco python toolkit. Y
 conda install cython
 pip install pycocotools
 ```
+
 
 * Compile Precise ROI pooling:
 To compile the Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling) for PyTorch 0.4.1, go to the directory "ltr/external/PreciseRoIPooling/pytorch/prroi_pool" and run "travis.sh" script.  
@@ -45,7 +48,8 @@ PATH=/usr/local/cuda/bin/:$PATH
 bash travis.sh
 ```
 
-In case of issues, we refer to https://github.com/vacancy/PreciseRoIPooling.
+In case of issues, we refer to https://github.com/vacancy/PreciseRoIPooling.  
+
 
 * Install jpeg4py (Optional)
 In order to use [jpeg4py](https://github.com/ajkxyz/jpeg4py) for loading the images instead of OpenCV's imread(), install jpeg4py in the following way,  
@@ -54,7 +58,8 @@ sudo apt-get install libturbojpeg
 pip install jpeg4py 
 ```
 
-In case of issues, we refer to https://github.com/ajkxyz/jpeg4py.
+In case of issues, we refer to https://github.com/ajkxyz/jpeg4py.  
+
 
 * Setup the environment
 Create the default environment setting files. 
@@ -66,7 +71,8 @@ python -c "from pytracking.evaluation.environment import create_default_local_fi
 python -c "from ltr.admin.environment import create_default_local_file; create_default_local_file()"
 ```
 
-You can modify these files to set the paths to datasets, results paths etc.
+You can modify these files to set the paths to datasets, results paths etc.  
+
 
 * Download the pre-trained networks  
 You can download the pre-trained networks from [coming soon]. The networks shoud be saved in the directory set by "network_path" in "pytracking/evaluation/local.py". By default, it is set to pytracking/networks.
