@@ -24,8 +24,8 @@ conda install -y pytorch=0.4.1 torchvision cuda92 -c pytorch
 
 echo ""
 echo ""
-echo "****************** Installing matplotlib ******************"
-conda install -y matplotlib
+echo "****************** Installing matplotlib 2.2.2 ******************"
+conda install -y matplotlib=2.2.2
 
 echo ""
 echo ""
