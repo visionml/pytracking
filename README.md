@@ -1,5 +1,11 @@
 # pytracking
 
+<p align="center">
+    <img src="doc/media/dance_foot.gif", width="360">
+    <br>
+    <sup>Testing the <a href="https://www.youtube.com/watch?v=T8x8i1KkYGk" target="_blank"><i>Crazy Uptown Funk flashmob in Sydney</i></a> video sequence with OpenPose</sup>
+</p>
+
 ## Installation
 
 #### Clone the GIT repository.  
