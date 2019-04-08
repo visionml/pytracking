@@ -70,7 +70,7 @@ echo ""
 echo ""
 echo "****************** Downloading networks ******************"
 mkdir pytracking/networks
-bash pytracking/utils/gdrive_download 1ZTdQbZ1tyN27UIwUnUrjHChQb5ug2sxr pytracking/networks/atom_iou.pth
+bash pytracking/utils/gdrive_download 1ZTdQbZ1tyN27UIwUnUrjHChQb5ug2sxr pytracking/networks/atom_default.pth
 
 echo ""
 echo ""
