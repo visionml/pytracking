@@ -55,12 +55,14 @@ bash travis.sh
 In case of issues, we refer to https://github.com/vacancy/PreciseRoIPooling.  
 
 
-* **Install jpeg4py (Optional)**
+* **Install jpeg4py**  
 In order to use [jpeg4py](https://github.com/ajkxyz/jpeg4py) for loading the images instead of OpenCV's imread(), install jpeg4py in the following way,  
 ```bash
 sudo apt-get install libturbojpeg
 pip install jpeg4py 
 ```
+
+**Note:** The first step (```sudo apt-get install libturbojpeg```) can be optionally ignored, in which case OpenCV's imread() will be used to read the images. However the second step is a must.  
 
 In case of issues, we refer to https://github.com/ajkxyz/jpeg4py.  
 
