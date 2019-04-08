@@ -26,7 +26,7 @@ conda install pytorch=0.4.1 torchvision cuda92 -c pytorch
 
 #### Install matplotlib, pandas, opencv and tensorboadX  
 ```bash
-conda install matplotlib pandas
+conda install matplotlib=2.2.2 pandas
 pip install opencv-python tensorboardX
 ```
 
