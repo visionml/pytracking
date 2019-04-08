@@ -1,6 +1,6 @@
 # PyTracking
 
-A general python repository for evaluating trackers. The following trackers are integrated with the toolkit,  
+A general python library for visual tracking algorithms. The following trackers are integrated with the toolkit,  
 
 1. **ATOM**: Accurate Tracking by Overlap Maximization, Martin Danelljan and Goutam Bhat and Fahad Shahbaz Khan and Michael Felsberg, CVPR 2019 \[[Paper](https://arxiv.org/pdf/1811.07628.pdf)\]  
 2. **ECO**: Efficient Convolution Operators for Tracking, Martin Danelljan and Goutam Bhat and Fahad Shahbaz Khan and Michael Felsberg, CVPR 2017 \[[Paper](https://arxiv.org/pdf/1611.09224.pdf)\]
@@ -13,7 +13,7 @@ A general python repository for evaluating trackers. The following trackers are 
 * [Implementing a new tracker](#implementing-a-new-tracker)
 
 
-## Quick Start
+## Running a tracker
 The installation script will automatically generate a local configuration file  "evaluation/local.py". In case the file was not generated, run ```evaluation.environment.create_default_local_file()``` to generate it. Next, set the paths to the datasets you want
 to use for evaluations. You can also change the path to the networks folder, and the path to the results folder, if you do not want to use the default paths. If all the dependencies have been correctly installed, you are set to run the trackers.  
 
@@ -36,7 +36,7 @@ Here, the dataset_name can be either ```'otb'``` (OTB-2015), ```'nfs'``` (Need f
 The ```debug``` parameter can be used to control the level of debug visualizations. ```threads``` parameter can be used to run on multiple threads.
 
 **Run the tracker on a set of datasets**  
-This is done using the run_experiment script. To use this, first you need to create an experiment setting file in ```pytracking.experiments```. See ```pytracking.experiments.myexperiments``` for reference. 
+This is done using the run_experiment script. To use this, first you need to create an experiment setting file in ```pytracking/experiments```. See [myexperiments.py](pytracking/experiments/myexperiments.py) for reference. 
 ```bash
 python run_experiment.py experiment_module experiment_name --dataset_name dataset_name --sequence sequence  --debug debug --threads threads
 ```  
@@ -62,11 +62,18 @@ The tookit consists of the following sub-modules.
  a few frames. VOT on the other hand evaluates short-term tracking, where the tracker isn't given a chance to recover from a target loss, and instead reset after a target loss on a single frame. The ```default_vot``` setting thus focuses on avoiding target loss, while sacrificing
  re-detection ability. The raw results used in the paper are available at [Coming Soon].
  
- **```eco```**: An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. The implementation differs from the version used in the original paper in several ways. Most importantly i) The tracker uses features from vgg-m layer 1 and 
+ **```eco```**: An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. It is implemented based on an extensive and general library for [complex operations](pytracking/libs/complex.py) and [Fourier tools](pytracking/libs/fourier.py). The implementation differs from the version used in the original paper in several ways. Most importantly i) The tracker uses features from vgg-m layer 1 and 
  resnet18 residual block 3. ii) As suggested in https://arxiv.org/pdf/1804.06833.pdf, seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in training the filters. iii) The GMM memory module is not implemented, instead the raw samples are stored.
  For the official implementation of the tracker, we refer to https://github.com/martin-danelljan/ECO.
  
-## Implementing a new tracker  
+## Libs
+The pytracking repository includes some general libraries for implementing and developing different kinds of visual trackers, including deep learning based, optimization based and correlation filter based. The following libs are included:
+* [**Optimization**](pytracking/libs/optimization.py): Efficient optimizers aimed for online learning, including the Gauss-Newton and Conjugate Gradient based optimizer used in ATOM.
+* [**Complex**](pytracking/libs/complex.py): Complex tensors and operations for PyTorch, which can be used for DCF trackers.
+* [**Fourier**](pytracking/libs/fourier.py): Fourier tools and operations, which can be used for implementing DCF trackers.
+* [**DCF**](pytracking/libs/dcf.py): Some general tools for DCF trackers.
+ 
+## Integrating a new tracker  
  To implement a new tracker, create a new module in "tracker" folder with name your_tracker_name. This folder must contain the implementation of your tracker. Note that your tracker class must inherit from the base tracker class ```tracker.base.BaseTracker```.
  The "\_\_init\_\_.py" inside your tracker folder must contain the following lines,  
 ```python
@@ -75,8 +82,9 @@ from .tracker_file import TrackerClass
 def get_tracker_class():
     return TrackerClass
 ```
+Here, ```TrackerClass``` is the name of your tracker class. See the [file for ATOM](pytracking/tracker/atom/__init__.py) as reference.
 
-Next, you need to create a folder "parameter/your_tracker_name", where the parameter settings for the tracker should be stored.
- 
+Next, you need to create a folder "parameter/your_tracker_name", where the parameter settings for the tracker should be stored. The parameter fil shall contain a ```parameters()``` function that returns a ```TrackerParams``` struct. See the [default parameter file for ATOM](pytracking/parameter/atom/default.py) as an example.
+
  
  

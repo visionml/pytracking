@@ -12,6 +12,8 @@ class BaseDataset(torch.utils.data.Dataset):
             image_loader (jpeg4py_loader) -  The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
                                             is used by default.
         """
+        if root == '':
+            raise Exception('The dataset path is not setup. Check your "ltr/admin/local.py".')
         self.root = root
         self.image_loader = image_loader
 

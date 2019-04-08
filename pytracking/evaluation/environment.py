@@ -4,7 +4,7 @@ import os
 
 class EnvSettings:
     def __init__(self):
-        pytracking_path = os.path.join(os.path.dirname(__file__), '..')
+        pytracking_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
         self.results_path = '{}/tracking_results/'.format(pytracking_path)
         self.network_path = '{}/networks/'.format(pytracking_path)
