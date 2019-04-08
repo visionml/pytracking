@@ -1,6 +1,6 @@
 import os
 from .base_dataset import BaseDataset
-from ltr.data.image_loader import jpeg4py_loader
+from ltr.data.image_loader import default_image_loader
 import torch
 from pycocotools.coco import COCO
 from collections import OrderedDict
@@ -28,7 +28,7 @@ class MSCOCOSeq(BaseDataset):
     Note: You also have to install the coco pythonAPI from https://github.com/cocodataset/cocoapi.
     """
 
-    def __init__(self, root=None, image_loader=jpeg4py_loader):
+    def __init__(self, root=None, image_loader=default_image_loader):
         root = env_settings().coco_dir if root is None else root
         super().__init__(root, image_loader)
 

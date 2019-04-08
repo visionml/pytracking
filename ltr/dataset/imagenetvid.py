@@ -1,6 +1,6 @@
 import os
 from .base_dataset import BaseDataset
-from ltr.data.image_loader import jpeg4py_loader
+from ltr.data.image_loader import default_image_loader
 import xml.etree.ElementTree as ET
 import json
 import torch
@@ -28,7 +28,7 @@ class ImagenetVID(BaseDataset):
 
     Download the dataset from http://image-net.org/
     """
-    def __init__(self, root=None, image_loader=jpeg4py_loader, min_length=0, max_target_area=1):
+    def __init__(self, root=None, image_loader=default_image_loader, min_length=0, max_target_area=1):
         """
         args:
             root - path to the imagenet vid dataset.

@@ -6,7 +6,7 @@ import pandas
 import csv
 from collections import OrderedDict
 from .base_dataset import BaseDataset
-from ltr.data.image_loader import jpeg4py_loader
+from ltr.data.image_loader import default_image_loader
 from ltr.admin.environment import env_settings
 
 
@@ -22,7 +22,7 @@ class Lasot(BaseDataset):
     Download the dataset from https://cis.temple.edu/lasot/download.html
     """
 
-    def __init__(self, root=None, image_loader=jpeg4py_loader, vid_ids=None, split=None):
+    def __init__(self, root=None, image_loader=default_image_loader, vid_ids=None, split=None):
         """
         args:
             root - path to the lasot dataset.

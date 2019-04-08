@@ -5,7 +5,7 @@ import numpy as np
 import pandas
 from collections import OrderedDict
 
-from ltr.data.image_loader import jpeg4py_loader
+from ltr.data.image_loader import default_image_loader
 from .base_dataset import BaseDataset
 from ltr.admin.environment import env_settings
 
@@ -42,7 +42,7 @@ class TrackingNet(BaseDataset):
 
     Download the dataset using the toolkit https://github.com/SilvioGiancola/TrackingNet-devkit.
     """
-    def __init__(self, root=None, image_loader=jpeg4py_loader, set_ids=None):
+    def __init__(self, root=None, image_loader=default_image_loader, set_ids=None):
         """
         args:
             root        - The path to the TrackingNet folder, containing the training sets.

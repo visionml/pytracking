@@ -18,12 +18,16 @@ Run the installation script to install all the dependencies. You need to provide
 ```bash
 bash install.sh conda_install_path environment_name
 ```  
-This script will also download the default networks and set-up the environment.
+This script will also download the default networks and set-up the environment.  
+
+**Note:** The install script has been tested on an Ubuntu 18.04 system. In case of issues, check the [detailed installation instructions](). 
+
 
 #### Test!
-Activate the conda environment and run the script run_webcam.py to track using the webcam input.  
+Activate the conda environment and run the script pytracking/run_webcam.py to track using the webcam input.  
 ```bash
 conda activate environment_name
+cd pytracking
 python run_webcam.py atom default    
 ```  
 
