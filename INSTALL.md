@@ -1,6 +1,6 @@
 # Installation
 
-This document contains detailed instructions for installing the necessary dependencies for PyTracking. The instrustions have been tested on an Ubuntu 18.04 system. We recommend using the install script [TODO:link] if you have not already tried that.  
+This document contains detailed instructions for installing the necessary dependencies for PyTracking. The instrustions have been tested on an Ubuntu 18.04 system. We recommend using the [install script](install.sh) if you have not already tried that.  
 
 ### Requirements  
 * Conda installation with Python 3.7. If not already installed, install from https://docs.conda.io/en/latest/miniconda.html.
@@ -81,10 +81,10 @@ You can modify these files to set the paths to datasets, results paths etc.
 
 
 * **Download the pre-trained networks**  
-You can download the pre-trained networks from [coming soon]. The networks shoud be saved in the directory set by "network_path" in "pytracking/evaluation/local.py". By default, it is set to pytracking/networks.
+You can download the pre-trained networks from the [google drive folder](https://drive.google.com/drive/folders/1WVhJqvdu-_JG1U-V0IqfxTUa1SBPnL0O). The networks shoud be saved in the directory set by "network_path" in "pytracking/evaluation/local.py". By default, it is set to pytracking/networks.
 You can also download the networks using the gdrive_download bash script.
 
 ```bash
 # Download the default network for ATOM
-bash pytracking/utils/gdrive_download 1ZTdQbZ1tyN27UIwUnUrjHChQb5ug2sxr pytracking/networks/atom_iou.pth
+bash pytracking/utils/gdrive_download 1JUB3EucZfBk3rX7M3_q5w_dLBqsT7s-M pytracking/networks/atom_default.pth
 ```
