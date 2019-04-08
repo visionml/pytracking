@@ -9,17 +9,20 @@ Official implementation of the **ATOM** tracker (CVPR 2019), including complete 
 
 ### [Tracking Libraries](pytracking)
 
-Libraries for implementing and evaluating visual trackers. Including:  
+Libraries for implementing and evaluating visual trackers. Including:
+
 * All common tracking datasets.  
 * General building blocks, including **optimization**, **feature extraction** and utilities **correlation filter** tracking.  
 
 ### [Training Code](ltr)
+ 
+General framework for training networks for visual tracking.
 
-General framework for training networks for visual tracking.  
-* All common training datasets for visual tracking.  
-* Functions for data sampling, processing etc.  
-* Integration of ATOM models  
-* More to come ... ;)  
+* All common training datasets for visual tracking.
+* Functions for data sampling, processing etc.
+* Integration of ATOM models
+* More to come ... ;)
+
 
 ## Installation
 

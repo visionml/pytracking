@@ -27,7 +27,7 @@ class ResNet18m1(MultiFeatureBase):
 
         self.output_layers = list(output_layers)
         self.use_gpu = use_gpu
-        self.net_path = 'resnet18_vggmconv1/resnet18_vggmconv1.pth' if net_path is None else net_path
+        self.net_path = 'resnet18_vggmconv1.pth' if net_path is None else net_path
 
     def initialize(self):
         if os.path.isabs(self.net_path):

@@ -68,6 +68,7 @@ The tookit consists of the following sub-modules.
  
 ## Libs
 The pytracking repository includes some general libraries for implementing and developing different kinds of visual trackers, including deep learning based, optimization based and correlation filter based. The following libs are included:
+
 * [**Optimization**](pytracking/libs/optimization.py): Efficient optimizers aimed for online learning, including the Gauss-Newton and Conjugate Gradient based optimizer used in ATOM.
 * [**Complex**](pytracking/libs/complex.py): Complex tensors and operations for PyTorch, which can be used for DCF trackers.
 * [**Fourier**](pytracking/libs/fourier.py): Fourier tools and operations, which can be used for implementing DCF trackers.
