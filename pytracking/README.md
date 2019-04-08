@@ -91,7 +91,15 @@ The tookit consists of the following sub-modules.
  
 ## Implementing a new tracker  
  To implement a new tracker, create a new module in "tracker" folder with name your_tracker_name. This folder must contain the implementation of your tracker. Note that your tracker class must inherit from the base tracker class ```tracker.base.BaseTracker```.
- The __init__.py inside your tracker folder must 
+ The "\_\_init\_\_.py" inside your tracker folder must contain the following lines,  
+```python
+from .tracker_file import TrackerClass
+
+def get_tracker_class():
+    return TrackerClass
+```
+
+Next, you need to create a folder "parameter/your_tracker_name", where the parameter settings for the tracker should be stored.
  
  
  
