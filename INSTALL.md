@@ -1,6 +1,6 @@
 # Installation
 
-This document contains detailed instructions for installing the necessary dependencies for PyTracking. The instrustions have been tested on an Ubuntu 18.04 system. We recommend using the install script [TODO:link] if you have not already tried that.  
+This document contains detailed instructions for installing the necessary dependencies for PyTracking. The instrustions have been tested on an Ubuntu 18.04 system. We recommend using the [install script](install.sh) if you have not already tried that.  
 
 ### Requirements  
 * Conda installation with Python 3.7. If not already installed, install from https://docs.conda.io/en/latest/miniconda.html.
