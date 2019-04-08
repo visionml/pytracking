@@ -1,11 +1,11 @@
 import torch.utils.data
-from ltr.data.image_loader import jpeg4py_loader
+from ltr.data.image_loader import default_image_loader
 
 
 class BaseDataset(torch.utils.data.Dataset):
     """ Base class for datasets """
 
-    def __init__(self, root, image_loader=jpeg4py_loader):
+    def __init__(self, root, image_loader=default_image_loader):
         """
         args:
             root - The root path to the dataset

@@ -6,7 +6,7 @@ import csv
 import pandas
 from collections import OrderedDict
 from .base_dataset import BaseDataset
-from ltr.data.image_loader import jpeg4py_loader
+from ltr.data.image_loader import default_image_loader
 from ltr.admin.environment import env_settings
 
 
@@ -22,7 +22,7 @@ class Got10k(BaseDataset):
     Download dataset from http://got-10k.aitestunion.com/downloads
     """
 
-    def __init__(self, root=None, image_loader=jpeg4py_loader, split=None, seq_ids=None):
+    def __init__(self, root=None, image_loader=default_image_loader, split=None, seq_ids=None):
         """
         args:
             root - path to the got-10k training data. Note: This should point to the 'train' folder inside GOT-10k
