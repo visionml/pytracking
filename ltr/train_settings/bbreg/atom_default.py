@@ -18,12 +18,10 @@ def run(settings):
     settings.normalize_mean = [0.485, 0.456, 0.406]
     settings.normalize_std = [0.229, 0.224, 0.225]
     settings.search_area_factor = 5.0
-    settings.target_filter_sz = 4
     settings.feature_sz = 18
     settings.output_sz = settings.feature_sz * 16
     settings.center_jitter_factor = {'train': 0, 'test': 4.5}
     settings.scale_jitter_factor = {'train': 0, 'test': 0.5}
-    settings.output_sigma_factor = 1/4
 
     # Train datasets
     lasot_train = Lasot(settings.env.lasot_dir, split='train')
