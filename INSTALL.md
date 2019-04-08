@@ -19,10 +19,10 @@ Install PyTorch 0.4.1 with cuda92.
 conda install pytorch=0.4.1 torchvision cuda92 -c pytorch
 ```
 
-**Note:**
-- PyTorch 1.0 should be supported, but it requires an alternate compilation of the PreciseRoIPooling module. [See](compile-precise-roi-pooling).
-- It is possible to use any PyTorch supported version of CUDA (not necessarily 9.2). 
-- For more details about PyTorch installation, see https://pytorch.org/get-started/previous-versions/
+**Note:**  
+- PyTorch 1.0 should be supported, but it requires an alternate compilation of the PreciseRoIPooling module. [See](compile-precise-roi-pooling).  
+- It is possible to use any PyTorch supported version of CUDA (not necessarily 9.2).   
+- For more details about PyTorch installation, see https://pytorch.org/get-started/previous-versions/.  
 
 * **Install matplotlib, pandas, opencv and tensorboadX**  
 ```bash
