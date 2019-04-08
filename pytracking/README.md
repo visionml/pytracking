@@ -7,39 +7,16 @@ A general python repository for evaluating trackers. The following trackers are 
 
 ## Table of Contents
 
-* [Installation](#installation)
 * [Quick Start](#quick-start)
 * [Overview](#overview)
 * [Trackers](#trackers)
+* [Implementing a new tracker](#implementing-a-new-tracker)
 
-## Installation
-
-#### Clone the GIT repository.  
-```bash
-git clone https://github.com/visionml/pytracking.git
-```
-   
-#### Clone the submodules.  
-In the repository directory, run the commands:  
-```bash
-git submodule init  
-git submodule update
-```  
-#### Install dependencies
-Run the installation script to install all the dependencies. You need to provide the conda install path (e.g. /home/visionml/anaconda3) and the name for the created conda environment (e.g. env-pytracking).  
-```bash
-bash install.sh conda_install_path environment_name
-```  
-This script will also download the default networks and set-up the environment.
-
-#### Test!
-Activate the conda environment and run the script run_webcam.py to track using the webcam input.  
-```bash
-conda activate environment_name
-python run_webcam.py atom default    
-```  
 
 ## Quick Start
+The installation script will automatically generate a local configuration file  "evaluation/local.py". In case the file was not generated, run ```evaluation.environment.create_default_local_file()``` to generate it. Next, set the paths to the datasets you want
+to use for evaluations. You can also change the path to the networks folder, and the path to the results folder, if you do not want to use the default paths. If all the dependencies have been correctly installed, you are set to run the trackers.  
+
 The toolkit provides 3 ways to run a tracker.  
 
 **Run the tracker on webcam feed**   
@@ -49,7 +26,7 @@ python run_webcam.py tracker_name parameter_name
 ```  
 
 **Run the tracker on some dataset sequence**
-This is done using the run_tracker script.  
+This is done using the run_tracker script. 
 ```bash
 python run_tracker.py tracker_name parameter_name --dataset_name dataset_name --sequence sequence --debug debug --threads threads
 ```  
@@ -78,14 +55,28 @@ The tookit consists of the following sub-modules.
  
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
- ```atom```: Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. The parameter file  ```default``` is the default parameter setting used to generate all the results in the paper, except the VOT2018 results, 
- which were generated using ```default_vot```. The difference between the two is that the ```default``` settings is suitable for one-pass-evaluations (OPE), where the aim is to track over the complete sequence, and the tracker isn't penalized heavily for incorrect tracking on
- a few frames. VOT on the other hand evaluates short-term tracking, where the tracker isn't given a chance to recover from a target loss, and instead reset after a target loss on a single frame. The ```default_vot``` setting thus focuses on avoiding target loss, while sacrificing
- re-detection ability. The raw results used in the paper are available at TODO:link.
  
- ```eco```: An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. The implementation differs from the version used in the original paper in several ways. Most importantly i) The tracker uses features from vgg-m layer 1 and 
+ 
+ **```atom```**: Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. The parameter file  ```default``` is the default parameter setting used to generate all the results in the paper. The VOT2018 results,
+ were generated using ```default_vot```. The difference between the two is that the ```default``` settings is suitable for one-pass-evaluations (OPE), where the aim is to track over the complete sequence, and the tracker isn't penalized heavily for incorrect tracking on
+ a few frames. VOT on the other hand evaluates short-term tracking, where the tracker isn't given a chance to recover from a target loss, and instead reset after a target loss on a single frame. The ```default_vot``` setting thus focuses on avoiding target loss, while sacrificing
+ re-detection ability. The raw results used in the paper are available at [Coming Soon].
+ 
+ **```eco```**: An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. The implementation differs from the version used in the original paper in several ways. Most importantly i) The tracker uses features from vgg-m layer 1 and 
  resnet18 residual block 3. ii) As suggested in https://arxiv.org/pdf/1804.06833.pdf, seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in training the filters. iii) The GMM memory module is not implemented, instead the raw samples are stored.
  For the official implementation of the tracker, we refer to https://github.com/martin-danelljan/ECO.
+ 
+## Implementing a new tracker  
+ To implement a new tracker, create a new module in "tracker" folder with name your_tracker_name. This folder must contain the implementation of your tracker. Note that your tracker class must inherit from the base tracker class ```tracker.base.BaseTracker```.
+ The "\_\_init\_\_.py" inside your tracker folder must contain the following lines,  
+```python
+from .tracker_file import TrackerClass
+
+def get_tracker_class():
+    return TrackerClass
+```
+
+Next, you need to create a folder "parameter/your_tracker_name", where the parameter settings for the tracker should be stored.
  
  
  

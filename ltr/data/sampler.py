@@ -10,7 +10,17 @@ def no_processing(data):
 class ATOMSampler(torch.utils.data.Dataset):
     """ Class responsible for sampling frames from training sequences to form batches. Each training sample is a
     tuple consisting of i) a train frame, used to obtain the modulation vector, and ii) a set of test frames on which
-    the IoU prediction loss is calculated."""
+    the IoU prediction loss is calculated.
+
+    The sampling is done in the following ways. First a dataset is selected at random. Next, a sequence is selected
+    from that dataset. A 'train frame' is then sampled randomly from the sequence. Next, depending on the
+    frame_sample_mode, the required number of test frames are sampled randomly, either  from the range
+    [train_frame_id - max_gap, train_frame_id + max_gap] in the 'default' mode, or from [train_frame_id, train_frame_id + max_gap]
+    in the 'causal' mode. Only the frames in which the target is visible are sampled, and if enough visible frames are
+    not found, the 'max_gap' is incremented.
+
+    The sampled frames are then passed through the input 'processing' function for the necessary processing-
+    """
 
     def __init__(self, datasets, p_datasets, samples_per_epoch, max_gap, num_test_frames=1, processing=no_processing,
                  frame_sample_mode='default'):
