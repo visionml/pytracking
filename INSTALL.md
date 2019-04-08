@@ -9,8 +9,8 @@ This document contains detailed instructions for installing the necessary depend
 ## Step-by-step instructions  
 * **Create and activate a conda environment**
 ```bash
-conda create --name conda_env_name  python=3.7
-conda activate conda_env_name
+conda create --name pytracking  python=3.7
+conda activate pytracking
 ```
 
 * **Install PyTorch**  
