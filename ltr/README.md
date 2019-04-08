@@ -30,5 +30,17 @@ The framework consists of the following sub-modules.
  The framework currently contains the following training settings:  
  - ```bbreg.atom_default```: The default settings used for training the network in [ATOM](https://arxiv.org/pdf/1811.07628.pdf).
  
+ 
+## Training your own networks
+To train a custom network using the toolkit, the following components need to be specified in the train settings. For reference, see "train_settings.bbreg.atom_default.py".  
+- Datasets: The datasets to be used for training. A number of standard tracking datasets are already available in ```dataset``` module.  
+- Processing: This function should perform the necessary post-processing of the data, e.g. cropping of target region, data augmentations etc.  
+- Sampler: Determines how the frames are sampled from a video sequence to form the batches.  
+- Network: The network module to be trained.  
+- Objective: The training objective.  
+- Actor: The trainer passes the training batch to the actor who is responsible for passing the data through the network correctly, and calculating the training loss.  
+- Optimizer: Optimizer to be used, e.g. Adam.  
+- Trainer: The main class which runs the epochs and saves checkpoints. 
+ 
 
  
