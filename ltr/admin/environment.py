@@ -3,7 +3,9 @@ import os
 from collections import OrderedDict
 
 
-def create_default_local_file(path):
+def create_default_local_file():
+    path = os.path.join(os.path.dirname(__file__), 'local.py')
+
     empty_str = '\'\''
     default_settings = OrderedDict({
         'workspace_dir': empty_str,
@@ -40,5 +42,5 @@ def env_settings():
     except:
         env_file = os.path.join(os.path.dirname(__file__), 'local.py')
 
-        create_default_local_file(env_file)
+        create_default_local_file()
         raise RuntimeError('YOU HAVE NOT SETUP YOUR local.py!!!\n Go to "{}" and set all the paths you need. Then try to run again.'.format(env_file))

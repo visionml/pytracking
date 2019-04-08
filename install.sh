@@ -33,6 +33,12 @@ pip install tensorboardX
 echo "Installing jpeg4py"
 pip install jpeg4py  
 
+echo "Installing cython"
+conda install cython
+
+echo "Installing coco toolkit"
+pip install pycocotools
+
 echo "Downloading networks"
 mkdir pytracking/networks
 bash pytracking/utils/gdrive_download 1ZTdQbZ1tyN27UIwUnUrjHChQb5ug2sxr pytracking/networks/atom_iou.pth
@@ -45,7 +51,7 @@ bash travis.sh
 cd $base_dir
 
 echo "Setting up environment"
-python -c "from pytracking.evaluation.environment import create_default_local_file; create_default_local_file('pytracking/evaluation/local.py')"
-python -c "from ltr.admin.environment import create_default_local_file; create_default_local_file('ltr/admin/local.py')"
+python -c "from pytracking.evaluation.environment import create_default_local_file; create_default_local_file()"
+python -c "from ltr.admin.environment import create_default_local_file; create_default_local_file()"
 
 echo "Installation complete!"

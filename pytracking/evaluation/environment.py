@@ -18,10 +18,11 @@ class EnvSettings:
         self.trackingnet_path = ''
 
 
-def create_default_local_file(path):
+def create_default_local_file():
     comment = {'results_path': 'Where to store tracking results',
                'network_path': 'Where tracking networks are stored.'}
 
+    path = os.path.join(os.path.dirname(__file__), 'local.py')
     with open(path, 'w') as f:
         settings = EnvSettings()
 
@@ -52,6 +53,6 @@ def env_settings():
         env_file = os.path.join(os.path.dirname(__file__), 'local.py')
 
         # Create a default file
-        create_default_local_file(env_file)
+        create_default_local_file()
         raise RuntimeError('YOU HAVE NOT SETUP YOUR local.py!!!\n Go to "{}" and set all the paths you need. '
                            'Then try to run again.'.format(env_file))
