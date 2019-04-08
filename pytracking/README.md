@@ -14,6 +14,9 @@ A general python repository for evaluating trackers. The following trackers are 
 
 
 ## Quick Start
+The installation script will automatically generate a local configuration file  "evaluation/local.py". In case the file was not generated, run ```evaluation.environment.create_default_local_file()``` to generate it. Next, set the paths to the datasets you want
+to use for evaluations. You can also change the path to the networks folder, and the path to the results folder, if you do not want to use the default paths. If all the dependencies have been correctly installed, you are set to run the trackers.  
+
 The toolkit provides 3 ways to run a tracker.  
 
 **Run the tracker on webcam feed**   
@@ -23,7 +26,7 @@ python run_webcam.py tracker_name parameter_name
 ```  
 
 **Run the tracker on some dataset sequence**
-This is done using the run_tracker script.  
+This is done using the run_tracker script. 
 ```bash
 python run_tracker.py tracker_name parameter_name --dataset_name dataset_name --sequence sequence --debug debug --threads threads
 ```  
