@@ -20,7 +20,7 @@ conda install pytorch=0.4.1 torchvision cuda92 -c pytorch
 ```
 
 **Note:**  
-- PyTorch 1.0 should be supported, but **not recommended** as it requires an [alternate compilation](https://github.com/vacancy/PreciseRoIPooling) of the PreciseRoIPooling module which hasn't been tested.
+- PyTorch 1.0 should be supported, but **not recommended** as it requires an [alternate compilation](https://github.com/vacancy/PreciseRoIPooling) of the PreciseRoIPooling module which hasn't been tested.  
 - It is possible to use any PyTorch supported version of CUDA (not necessarily 9.2).   
 - For more details about PyTorch installation, see https://pytorch.org/get-started/previous-versions/.  
 
