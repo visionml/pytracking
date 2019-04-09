@@ -2,7 +2,7 @@
 
 A general python library for visual tracking algorithms. The following trackers are integrated with the toolkit,  
 
-1. **ATOM**: Accurate Tracking by Overlap Maximization, Martin Danelljan and Goutam Bhat and Fahad Shahbaz Khan and Michael Felsberg, CVPR 2019 \[[Paper](https://arxiv.org/pdf/1811.07628.pdf)\]  
+1. **ATOM**: Accurate Tracking by Overlap Maximization, Martin Danelljan and Goutam Bhat and Fahad Shahbaz Khan and Michael Felsberg, CVPR 2019 \[[Paper](https://arxiv.org/pdf/1811.07628.pdf)\]\[[Raw results](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_)\]
 2. **ECO**: Efficient Convolution Operators for Tracking, Martin Danelljan and Goutam Bhat and Fahad Shahbaz Khan and Michael Felsberg, CVPR 2017 \[[Paper](https://arxiv.org/pdf/1611.09224.pdf)\]
 
 ## Table of Contents
@@ -60,8 +60,9 @@ The tookit consists of the following sub-modules.
  
  **[atom](tracker/atom)**: Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. The parameter file  [default](parameter/atom/default.py) is the default parameter setting used to generate all the results in the paper. The VOT2018 results,
  were generated using [default_vot](parameter/atom/default_vot.py). The difference between the two is that the ```default``` settings is suitable for one-pass-evaluations (OPE), where the aim is to track over the complete sequence, and the tracker isn't penalized heavily for incorrect tracking on
- a few frames. VOT on the other hand evaluates short-term tracking, where the tracker isn't given a chance to recover from a target loss, and instead reset after a target loss on a single frame. The ```default_vot``` setting thus focuses on avoiding target loss, while sacrificing
- re-detection ability. The raw results used in the paper are available at [Coming Soon].
+ a single frame. VOT on the other hand evaluates short-term tracking, where the tracker isn't given a chance to recover from a target loss, and instead reset after a target loss on a single frame. The ```default_vot``` setting thus focuses on avoiding target loss, while sacrificing
+ re-detection ability. The raw results used in the paper are available in the [google drive folder](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_).  
+ **Note**: Due to the stochastic nature of the tracker, results can vary slightly between different runs of the same network. The results reported in the paper are hence an average over 5 runs for NFS, UAV123, OTB-100 and LaSOT datasets, and 15 runs for VOT2018. 
  
  **[eco](tracker/eco)**: An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. It is implemented based on an extensive and general library for [complex operations](libs/complex.py) and [Fourier tools](libs/fourier.py). The implementation differs from the version used in the original paper in several ways. Most importantly i) The tracker uses features from vgg-m layer 1 and 
  resnet18 residual block 3. ii) As suggested in https://arxiv.org/pdf/1804.06833.pdf, seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in training the filters. iii) The GMM memory module is not implemented, instead the raw samples are stored.
