@@ -1,0 +1,11 @@
+*.idea
+*~
+*__pycache__*
+*.pyc
+*.pytest_cache
+*.ipynb_checkpoints/
+ltr/admin/local.py
+pytracking/networks/
+pytracking/tracking_results/
+pytracking/evaluation/local.py
+pytracking/run_local.py
