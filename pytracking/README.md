@@ -45,25 +45,25 @@ Here, ```experiment_module```  is the name of the experiment setting file, e.g. 
 
 ## Overview
 The tookit consists of the following sub-modules.  
- -  ```evaluation```: Contains the necessary scripts for running a tracker on a dataset. It also contains integration of a number of standard tracking datasets, namely  [OTB-100](http://cvlab.hanyang.ac.kr/tracker_benchmark/index.html), [NFS](http://ci2cv.net/nfs/index.html),
+ -  [evaluation](evaluation): Contains the necessary scripts for running a tracker on a dataset. It also contains integration of a number of standard tracking datasets, namely  [OTB-100](http://cvlab.hanyang.ac.kr/tracker_benchmark/index.html), [NFS](http://ci2cv.net/nfs/index.html),
  [UAV123](https://ivul.kaust.edu.sa/Pages/pub-benchmark-simulator-uav.aspx), [Temple128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html), [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](https://cis.temple.edu/lasot/), and [VOT2018](http://www.votchallenge.net/vot2018/).  
- - ```experiments```: The experiment setting files must be stored here,  
- - ```features```: Contains functions useful for feature extraction, including various data augmentation methods.  
- - ```libs```: Includes libraries for optimization, dcf, etc.  
- - ```parameter```: Contains the parameter settings for different trackers.  
- - ```tracker```: Contains the implementations of different trackers.  
- - ```utils```: Some uitl functions.  
+ - [experiments](experiments): The experiment setting files must be stored here,  
+ - [features](features): Contains functions useful for feature extraction, including various data augmentation methods.  
+ - [libs](libs): Includes libraries for optimization, dcf, etc.  
+ - [parameter](parameter): Contains the parameter settings for different trackers.  
+ - [tracker](tracker): Contains the implementations of different trackers.  
+ - [utils](utils): Some uitl functions.  
  
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
  
  
- **```atom```**: Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. The parameter file  ```default``` is the default parameter setting used to generate all the results in the paper. The VOT2018 results,
- were generated using ```default_vot```. The difference between the two is that the ```default``` settings is suitable for one-pass-evaluations (OPE), where the aim is to track over the complete sequence, and the tracker isn't penalized heavily for incorrect tracking on
+ **[atom](tracker/atom)**: Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. The parameter file  [default](parameter/atom/default.py) is the default parameter setting used to generate all the results in the paper. The VOT2018 results,
+ were generated using [default_vot](parameter/atom/default_vot.py). The difference between the two is that the ```default``` settings is suitable for one-pass-evaluations (OPE), where the aim is to track over the complete sequence, and the tracker isn't penalized heavily for incorrect tracking on
  a few frames. VOT on the other hand evaluates short-term tracking, where the tracker isn't given a chance to recover from a target loss, and instead reset after a target loss on a single frame. The ```default_vot``` setting thus focuses on avoiding target loss, while sacrificing
  re-detection ability. The raw results used in the paper are available at [Coming Soon].
  
- **```eco```**: An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. It is implemented based on an extensive and general library for [complex operations](libs/complex.py) and [Fourier tools](libs/fourier.py). The implementation differs from the version used in the original paper in several ways. Most importantly i) The tracker uses features from vgg-m layer 1 and 
+ **[eco](tracker/eco)**: An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. It is implemented based on an extensive and general library for [complex operations](libs/complex.py) and [Fourier tools](libs/fourier.py). The implementation differs from the version used in the original paper in several ways. Most importantly i) The tracker uses features from vgg-m layer 1 and 
  resnet18 residual block 3. ii) As suggested in https://arxiv.org/pdf/1804.06833.pdf, seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in training the filters. iii) The GMM memory module is not implemented, instead the raw samples are stored.
  For the official implementation of the tracker, we refer to https://github.com/martin-danelljan/ECO.
  
