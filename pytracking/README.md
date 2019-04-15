@@ -10,6 +10,8 @@ A general python library for visual tracking algorithms. The following trackers 
 * [Running a tracker](#running-a-tracker)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [ATOM](#ATOM)
+   * [ECO](#ECO)
 * [Libs](#libs)
 * [Integrating a new tracker](#integrating-a-new-tracker)
 
@@ -58,15 +60,29 @@ The tookit consists of the following sub-modules.
  The toolkit contains the implementation of the following trackers.  
  
  
- **[atom](tracker/atom)**: Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. The parameter file  [default](parameter/atom/default.py) is the default parameter setting used to generate all the results in the paper. The VOT2018 results,
- were generated using [default_vot](parameter/atom/default_vot.py). The difference between the two is that the ```default``` settings is suitable for one-pass-evaluations (OPE), where the aim is to track over the complete sequence, and the tracker isn't penalized heavily for incorrect tracking on
- a single frame. VOT on the other hand evaluates short-term tracking, where the tracker isn't given a chance to recover from a target loss, and instead reset after a target loss on a single frame. The ```default_vot``` setting thus focuses on avoiding target loss, while sacrificing
- re-detection ability. The raw results used in the paper are available in the [google drive folder](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_).  
- **Note**: Due to the stochastic nature of the tracker, results can vary slightly between different runs of the same network. The results reported in the paper are hence an average over 5 runs for NFS, UAV123, OTB-100 and LaSOT datasets, and 15 runs for VOT2018. 
+### [ATOM](tracker/atom)
+Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. ATOM is based on (i) a **target estimation** module that is trained offline, and (ii) **target classification** module that is trained online. The target estimation module is trained to predict the intersection-over-union (IoU) overlap between the target and a bounding box estimate. The target classification module is learned online using dedicated optimization techniques to discriminate between the target object and background.
  
- **[eco](tracker/eco)**: An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. It is implemented based on an extensive and general library for [complex operations](libs/complex.py) and [Fourier tools](libs/fourier.py). The implementation differs from the version used in the original paper in several ways. Most importantly i) The tracker uses features from vgg-m layer 1 and 
- resnet18 residual block 3. ii) As suggested in https://arxiv.org/pdf/1804.06833.pdf, seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in training the filters. iii) The GMM memory module is not implemented, instead the raw samples are stored.
- For the official implementation of the tracker, we refer to https://github.com/martin-danelljan/ECO.
+![ATOM overview figure](utils/atom_overview.png)
+ 
+##### Parameter Files
+Two parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
+* **[default](parameter/atom/default.py)**: The default parameter setting that was used to produce all ATOM results in the paper, except on VOT.  
+* **[default_vot](parameter/atom/default_vot.py)**: The parameters settings used to generate the VOT2018 results in the paper.  
+
+The difference between these two stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```default_vot``` setting thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
+
+##### Raw Results
+ The raw results used in the paper are available in this [google drive folder](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_).  
+ **Note**: Due to the stochastic nature of the tracker, results can vary slightly between different runs. The results reported in the paper are hence an average over 5 runs for NFS, UAV123, OTB-100 and LaSOT datasets, and 15 runs for VOT2018. 
+ 
+### [ECO](tracker/eco)
+An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. It is implemented based on an extensive and general library for [complex operations](libs/complex.py) and [Fourier tools](libs/fourier.py). The implementation differs from the version used in the original paper in a few important aspects. 
+1. This implementation uses features from vgg-m layer 1 and resnet18 residual block 3.   
+2. As in our later [UPDT tracker](https://arxiv.org/pdf/1804.06833.pdf), seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in the first frame.  
+3. The GMM memory module is not implemented, instead the raw projected samples are stored.  
+
+Please refer to the [official implementation of ECO](https://github.com/martin-danelljan/ECO) if you are looking to reproduce the results in the ECO paper or download the raw results.
  
 ## Libs
 The pytracking repository includes some general libraries for implementing and developing different kinds of visual trackers, including deep learning based, optimization based and correlation filter based. The following libs are included:
