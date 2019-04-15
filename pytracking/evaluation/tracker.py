@@ -61,7 +61,7 @@ class Tracker:
 
         return output_bb, execution_times
     def run_video(self, videofilepath, optional_box=None, debug=None):
-        """Run the tracker with the webcam.
+        """Run the tracker with the vieofile.
         args:
             debug: Debug level.
         """
