@@ -32,7 +32,7 @@ This is done using the run_webcam script. The arguments are the name of the trac
 python run_webcam.py tracker_name parameter_name    
 ```  
 
-**Run the tracker on some dataset sequence**
+**Run the tracker on some dataset sequence**  
 This is done using the run_tracker script. 
 ```bash
 python run_tracker.py tracker_name parameter_name --dataset_name dataset_name --sequence sequence --debug debug --threads threads
