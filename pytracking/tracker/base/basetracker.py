@@ -51,6 +51,64 @@ class BaseTracker:
                 self.visualize(image, state)
 
         return tracked_bb, times
+    
+     def track_videofile(self,videofilepath,optional_box=None):
+        """Run track with a video file input."""
+
+        assert os.path.isfile(videofilepath) , "Invalid param {}".format(videofilepath)
+        ", videofilepath must be a valid videofile"
+
+        cap = cv.VideoCapture(videofilepath)
+        display_name = 'Display: ' + self.params.tracker_name
+        cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
+        cv.resizeWindow(display_name, 960, 720)
+        success, frame = cap.read()
+        cv.imshow(display_name, frame)
+        if success is not True:
+            print("Read frame from {} failed.".format(videofilepath))
+            exit(-1)
+        if optional_box is not None:
+            assert isinstance(optional_box,list,tuple)
+            assert len(optional_box) == 4 , "valid box's foramt is [x,y,w,h]"
+            self.initialize(frame,optional_box)
+        else:
+            while True:
+                # cv.waitKey()
+                x, y, w, h = cv.selectROI(display_name, frame, fromCenter=False)
+                init_state = [x, y, w, h]
+                self.initialize(frame, init_state)
+                break
+
+
+        if hasattr(self, 'initialize_features'):
+            self.initialize_features()
+
+        while True:
+            ret, frame = cap.read()
+            frame_disp = frame.copy()
+
+            # Draw box
+            state= self.track(frame)
+            state = [int(s) for s in state]
+            cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
+                             (0, 255, 0), 5)
+
+            # Display the resulting frame
+            cv.imshow(display_name, frame_disp)
+            key = cv.waitKey(1)
+            if key == ord('q'):
+                break
+            elif key == ord('r'):
+                ret, frame = cap.read()
+                cv.imshow(display_name, frame)
+                x, y, w, h = cv.selectROI(display_name, frame, fromCenter=False)
+                init_state = [x, y, w, h]
+                self.initialize(frame, init_state)
+
+
+        # When everything done, release the capture
+        cap.release()
+        cv.destroyAllWindows()
 
 
     def track_webcam(self):
