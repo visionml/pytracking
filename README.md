@@ -12,7 +12,7 @@ Official implementation of the **ATOM** tracker (CVPR 2019), including complete 
 Libraries for implementing and evaluating visual trackers. Including:
 
 * All common tracking datasets.  
-* General building blocks, including **optimization**, **feature extraction** and utilities **correlation filter** tracking.  
+* General building blocks, including **optimization**, **feature extraction** and utilities for **correlation filter** tracking.  
 
 ### [Training Code](ltr)
  
