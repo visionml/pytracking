@@ -252,23 +252,25 @@ class ATOM(BaseTracker):
         hard_negative = (flag == 'hard_negative')
         learning_rate = self.params.hard_negative_learning_rate if hard_negative else None
 
-        if update_flag:
+
+        # Train filter
+        #在跟踪阶段，每间隔CG_iter帧，在线训练一次分类器
+        if update_flag and (hard_negative or (self.frame_num -1) % self.params.train_skipping == 0):
             # Get train sample
-            train_x = TensorList([x[scale_ind:scale_ind+1, ...] for x in test_x])
+            train_x = TensorList([x[scale_ind:scale_ind + 1, ...] for x in test_x])
 
             # Create label for sample
             train_y = self.get_label_function(sample_pos, sample_scales[scale_ind])
 
             # Update memory
             self.update_memory(train_x, train_y, learning_rate)
+            if hard_negative:
+                num_iter = self.params.hard_negative_CG_iter
+            else:
+                num_iter = self.params.CG_iter
+            self.filter_optimizer.run(num_iter)
 
-        # Train filter
-        if hard_negative:
-            self.filter_optimizer.run(self.params.hard_negative_CG_iter)
-        elif (self.frame_num-1) % self.params.train_skipping == 0:
-            self.filter_optimizer.run(self.params.CG_iter)
-
-        # Set the pos of the tracker to iounet pos
+            # Set the pos of the tracker to iounet pos
         if self.use_iou_net and flag != 'not_found':
             self.pos = self.pos_iounet.clone()
 
