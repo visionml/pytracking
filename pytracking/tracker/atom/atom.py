@@ -157,7 +157,7 @@ class ATOM(BaseTracker):
             # Variable containing both filter and projection matrix
             joint_var = self.filter.concat(self.projection_matrix)
 
-            # Initialize optimizer
+            # Initialize optimizer 
             analyze_convergence = getattr(self.params, 'analyze_convergence', False)
             if optimizer == 'GaussNewtonCG':
                 self.joint_optimizer = GaussNewtonCG(self.joint_problem, joint_var, plotting=(self.params.debug >= 3), analyze=analyze_convergence, fig_num=(12, 13, 14))
@@ -274,7 +274,7 @@ class ATOM(BaseTracker):
         if self.use_iou_net and flag != 'not_found':
             self.pos = self.pos_iounet.clone()
 
-        # Return new state
+        # Return new states
         new_state = torch.cat((self.pos[[1,0]] - (self.target_sz[[1,0]]-1)/2, self.target_sz[[1,0]]))
 
         return new_state.tolist()
