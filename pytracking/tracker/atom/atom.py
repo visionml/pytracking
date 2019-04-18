@@ -264,10 +264,7 @@ class ATOM(BaseTracker):
 
             # Update memory
             self.update_memory(train_x, train_y, learning_rate)
-            if hard_negative:
-                num_iter = self.params.hard_negative_CG_iter
-            else:
-                num_iter = self.params.CG_iter
+            num_iter = self.params.hard_negative_CG_iter if hard_negative else self.params.CG_iter
             self.filter_optimizer.run(num_iter)
 
             # Set the pos of the tracker to iounet pos
