@@ -1,4 +1,5 @@
 import numpy as np
+import os
 from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
 
 
@@ -35,6 +36,20 @@ class OTBDatasetClass(BaseDataset):
         init_omit = 0
         if 'initOmit' in sequence_info:
             init_omit = sequence_info['initOmit']
+
+        if isinstance(ext, list):
+            for e in ext:
+                first_frame_path = '{base_path}/{sequence_path}/{frame:0{nz}}.{ext}'.format(base_path=self.base_path,
+                                                                                            sequence_path=sequence_path,
+                                                                                            frame=start_frame + init_omit,
+                                                                                            nz=nz,
+                                                                                            ext=e)
+                if os.path.isfile(first_frame_path):
+                    ext = e
+                    break
+
+            if isinstance(ext, list):
+                raise Exception('Sequence {} not found'.format(sequence_info['name']))
 
         frames = ['{base_path}/{sequence_path}/{frame:0{nz}}.{ext}'.format(base_path=self.base_path, 
         sequence_path=sequence_path, frame=frame_num, nz=nz, ext=ext) for frame_num in range(start_frame+init_omit, end_frame+1)]
@@ -120,7 +135,7 @@ class OTBDatasetClass(BaseDataset):
             {"name": "Jogging_2", "path": "Jogging/img", "startFrame": 1, "endFrame": 307, "nz": 4, "ext": "jpg", "anno_path": "Jogging/groundtruth_rect.2.txt"},
             {"name": "Jump", "path": "Jump/img", "startFrame": 1, "endFrame": 122, "nz": 4, "ext": "jpg", "anno_path": "Jump/groundtruth_rect.txt"},
             {"name": "Jumping", "path": "Jumping/img", "startFrame": 1, "endFrame": 313, "nz": 4, "ext": "jpg", "anno_path": "Jumping/groundtruth_rect.txt"},
-            {"name": "KiteSurf", "path": "KiteSurf/img", "startFrame": 1, "endFrame": 84, "nz": 4, "ext": "png", "anno_path": "KiteSurf/groundtruth_rect.txt"},
+            {"name": "KiteSurf", "path": "KiteSurf/img", "startFrame": 1, "endFrame": 84, "nz": 4, "ext": ["png", "jpg"], "anno_path": "KiteSurf/groundtruth_rect.txt"},
             {"name": "Lemming", "path": "Lemming/img", "startFrame": 1, "endFrame": 1336, "nz": 4, "ext": "jpg", "anno_path": "Lemming/groundtruth_rect.txt"},
             {"name": "Liquor", "path": "Liquor/img", "startFrame": 1, "endFrame": 1741, "nz": 4, "ext": "jpg", "anno_path": "Liquor/groundtruth_rect.txt"},
             {"name": "Man", "path": "Man/img", "startFrame": 1, "endFrame": 134, "nz": 4, "ext": "jpg", "anno_path": "Man/groundtruth_rect.txt"},

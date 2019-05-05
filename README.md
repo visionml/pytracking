@@ -12,7 +12,7 @@ Official implementation of the **ATOM** tracker (CVPR 2019), including complete 
 Libraries for implementing and evaluating visual trackers. Including:
 
 * All common tracking datasets.  
-* General building blocks, including **optimization**, **feature extraction** and utilities **correlation filter** tracking.  
+* General building blocks, including **optimization**, **feature extraction** and utilities for **correlation filter** tracking.  
 
 ### [Training Code](ltr)
  
@@ -59,3 +59,8 @@ python run_webcam.py atom default
 #### [pytracking](pytracking) - for implementing your tracker
 
 #### [ltr](ltr) - for training your tracker
+
+## Contributors
+
+* [Martin Danelljan](https://martin-danelljan.github.io/)  
+* [Goutam Bhat](https://www.vision.ee.ethz.ch/en/members/detail/407/)

@@ -2,8 +2,12 @@
 
 A general python library for visual tracking algorithms. The following trackers are integrated with the toolkit,  
 
-1. **ATOM**: Accurate Tracking by Overlap Maximization, Martin Danelljan and Goutam Bhat and Fahad Shahbaz Khan and Michael Felsberg, CVPR 2019 \[[Paper](https://arxiv.org/pdf/1811.07628.pdf)\]\[[Raw results](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_)\]
-2. **ECO**: Efficient Convolution Operators for Tracking, Martin Danelljan and Goutam Bhat and Fahad Shahbaz Khan and Michael Felsberg, CVPR 2017 \[[Paper](https://arxiv.org/pdf/1611.09224.pdf)\]
+1. **ATOM**: Accurate Tracking by Overlap Maximization.  
+Martin Danelljan, Goutam Bhat, Fahad Shahbaz Khan, and Michael Felsberg.  
+In: CVPR 2019. \[[Paper](https://arxiv.org/pdf/1811.07628.pdf)\] \[[Raw results](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_)\]
+2. **ECO**: Efficient Convolution Operators for Tracking.  
+Martin Danelljan, Goutam Bhat, Fahad Shahbaz Khan, and Michael Felsberg.  
+In: CVPR 2017. \[[Paper](https://arxiv.org/pdf/1611.09224.pdf)\] \[[Github](https://github.com/martin-danelljan/ECO)\]
 
 ## Table of Contents
 
@@ -28,7 +32,7 @@ This is done using the run_webcam script. The arguments are the name of the trac
 python run_webcam.py tracker_name parameter_name    
 ```  
 
-**Run the tracker on some dataset sequence**
+**Run the tracker on some dataset sequence**  
 This is done using the run_tracker script. 
 ```bash
 python run_tracker.py tracker_name parameter_name --dataset_name dataset_name --sequence sequence --debug debug --threads threads
