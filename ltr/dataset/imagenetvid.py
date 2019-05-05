@@ -5,8 +5,6 @@ import xml.etree.ElementTree as ET
 import json
 import torch
 from collections import OrderedDict
-import nltk
-from nltk.corpus import wordnet
 from ltr.admin.environment import env_settings
 
 
