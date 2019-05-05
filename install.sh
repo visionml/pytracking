@@ -19,8 +19,8 @@ conda activate $conda_env_name
 
 echo ""
 echo ""
-echo "****************** Installing pytorch 0.4.1 with cuda92 ******************"
-conda install -y pytorch=0.4.1 torchvision cuda92 -c pytorch 
+echo "****************** Installing pytorch with cuda10 ******************"
+conda install -y pytorch torchvision cudatoolkit=10.0 -c pytorch 
 
 echo ""
 echo ""
@@ -59,12 +59,8 @@ pip install jpeg4py
 
 echo ""
 echo ""
-echo "****************** Installing PreROIPooling ******************"
-base_dir=$(pwd)
-cd ltr/external/PreciseRoIPooling/pytorch/prroi_pool
-PATH=/usr/local/cuda/bin/:$PATH
-bash travis.sh
-cd $base_dir
+echo "****************** Installing ninja-build to compile PreROIPooling ******************"
+sudo apt-get install ninja-build
 
 echo ""
 echo ""

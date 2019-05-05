@@ -14,13 +14,12 @@ conda activate pytracking
 ```
 
 #### Install PyTorch  
-Install PyTorch 0.4.1 with cuda92.  
+Install PyTorch 1.0 with cuda10.  
 ```bash
-conda install pytorch=0.4.1 torchvision cuda92 -c pytorch
+conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
 ```
 
 **Note:**  
-- PyTorch 1.0 should be supported, but **not recommended** as it requires an [alternate compilation](https://github.com/vacancy/PreciseRoIPooling) of the PreciseRoIPooling module which hasn't been tested.  
 - It is possible to use any PyTorch supported version of CUDA (not necessarily 9.2).   
 - For more details about PyTorch installation, see https://pytorch.org/get-started/previous-versions/.  
 
@@ -39,19 +38,11 @@ pip install pycocotools
 ```
 
 
-#### Compile Precise ROI pooling  
-To compile the Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling) for PyTorch 0.4.1, go to the directory "ltr/external/PreciseRoIPooling/pytorch/prroi_pool" and run "travis.sh" script.  
-You may additionally have to export the path to the cuda installation.
+#### Install ninja-build for Precise ROI pooling  
+To compile the Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling), you may additionally have to install ninja-build.
 ```bash
-cd ltr/external/PreciseRoIPooling/pytorch/prroi_pool
-
-# Export the path to the cuda installation
-PATH=/usr/local/cuda/bin/:$PATH
-
-# Compile Precise ROI Pool
-bash travis.sh
+sudo apt-get install ninja-build
 ```
-
 In case of issues, we refer to https://github.com/vacancy/PreciseRoIPooling.  
 
 
