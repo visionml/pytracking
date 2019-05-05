@@ -126,15 +126,14 @@ class ImagenetVID(BaseDataset):
                 for tracklet_id, tracklet_start in tracklets.items():
                     tracklet_anno = []
                     target_visible = []
-                    class_name = None
+                    class_name_id = None
 
                     for f_id in range(tracklet_start, len(objects)):
                         found = False
                         for target in objects[f_id]:
                             if target.find('trackid').text == tracklet_id:
-                                if not class_name:
+                                if not class_name_id:
                                     class_name_id = target.find('name').text
-                                    class_name = self._get_class_name_from_id(class_name_id)
                                 x1 = int(target.find('bndbox/xmin').text)
                                 y1 = int(target.find('bndbox/ymin').text)
                                 x2 = int(target.find('bndbox/xmax').text)
@@ -148,7 +147,7 @@ class ImagenetVID(BaseDataset):
                         if not found:
                             break
 
-                    new_sequence = {'set_id': set_id, 'vid_id': vid_id, 'class_name': class_name,
+                    new_sequence = {'set_id': set_id, 'vid_id': vid_id, 'class_name': class_name_id,
                                     'start_frame': tracklet_start, 'anno': tracklet_anno,
                                     'target_visible': target_visible, 'image_size': image_size}
                     all_sequences.append(new_sequence)

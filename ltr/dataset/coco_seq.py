@@ -58,8 +58,9 @@ class MSCOCOSeq(BaseDataset):
 
     def get_sequence_info(self, seq_id):
         anno = self._get_anno(seq_id)
+        target_visible = (anno[:, 2] > 0) & (anno[:, 3] > 0)
 
-        return anno, torch.Tensor([1])
+        return anno, target_visible
 
     def _get_anno(self, seq_id):
         anno = self.coco_set.anns[self.sequence_list[seq_id]]['bbox']
