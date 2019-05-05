@@ -14,13 +14,13 @@ conda activate pytracking
 ```
 
 #### Install PyTorch  
-Install PyTorch 1.0 with cuda10.  
+Install PyTorch with cuda10.  
 ```bash
 conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
 ```
 
 **Note:**  
-- It is possible to use any PyTorch supported version of CUDA (not necessarily 9.2).   
+- It is possible to use any PyTorch supported version of CUDA (not necessarily v10).   
 - For more details about PyTorch installation, see https://pytorch.org/get-started/previous-versions/.  
 
 #### Install matplotlib, pandas, opencv and tensorboadX  
