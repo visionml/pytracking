@@ -1,5 +1,7 @@
 # PyTracking
 A general python framework for training and running visual object trackers, based on **PyTorch**.
+
+**News:** Upgraded to latest version of PyTorch (v1.x).
  
 ## Highlights
 
