@@ -225,21 +225,22 @@ class ATOM(BaseTracker):
         # Get sample
         sample_pos = self.pos.round()
         sample_scales = self.target_scale * self.params.scale_factors
-        test_x = self.extract_processed_sample(im, self.pos, sample_scales, self.img_sample_sz)
+        test_x = self.extract_processed_sample(im, sample_pos, sample_scales, self.img_sample_sz)
 
         # Compute scores
         scores_raw = self.apply_filter(test_x)
         translation_vec, scale_ind, s, flag = self.localize_target(scores_raw)
+        new_pos = sample_pos + translation_vec
 
         # Update position and scale
         if flag != 'not_found':
             if self.use_iou_net:
                 update_scale_flag = getattr(self.params, 'update_scale_when_uncertain', True) or flag != 'uncertain'
                 if getattr(self.params, 'use_classifier', True):
-                    self.update_state(sample_pos + translation_vec)
+                    self.update_state(new_pos)
                 self.refine_target_box(sample_pos, sample_scales[scale_ind], scale_ind, update_scale_flag)
             elif getattr(self.params, 'use_classifier', True):
-                self.update_state(sample_pos + translation_vec, sample_scales[scale_ind])
+                self.update_state(new_pos, sample_scales[scale_ind])
 
         if self.params.debug >= 2:
             show_tensor(s[scale_ind,...], 5, title='Max score = {:.2f}'.format(torch.max(s[scale_ind,...]).item()))
@@ -486,7 +487,7 @@ class ATOM(BaseTracker):
             self.transforms.extend([augmentation.Rotate(angle, aug_output_sz, get_rand_shift()) for angle in self.params.augmentation['rotate']])
 
         # Generate initial samples
-        init_samples = self.params.features.extract_transformed(im, self.pos, self.target_scale, aug_expansion_sz, self.transforms)
+        init_samples = self.params.features.extract_transformed(im, self.pos.round(), self.target_scale, aug_expansion_sz, self.transforms)
 
         # Remove augmented samples for those that shall not have
         for i, use_aug in enumerate(self.fparams.attribute('use_augmentation')):
@@ -627,7 +628,7 @@ class ATOM(BaseTracker):
             train_y.append(dcf.label_function_spatial(sz, sig, center))
         return train_y
 
-    def update_state(self, new_pos, new_scale = None):
+    def update_state(self, new_pos, new_scale=None):
         # Update scale
         if new_scale is not None:
             self.target_scale = new_scale.clamp(self.min_scale_factor, self.max_scale_factor)

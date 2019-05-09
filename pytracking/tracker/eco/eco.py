@@ -187,7 +187,7 @@ class ECO(BaseTracker):
         # Get sample
         sample_pos = self.pos.round()
         sample_scales = self.target_scale * self.params.scale_factors
-        test_xf = self.extract_fourier_sample(im, self.pos, sample_scales, self.img_sample_sz)
+        test_xf = self.extract_fourier_sample(im, sample_pos, sample_scales, self.img_sample_sz)
 
         # Compute scores
         sf = self.apply_filter(test_xf)
@@ -306,7 +306,7 @@ class ECO(BaseTracker):
         if 'blur' in self.params.augmentation:
             transforms.extend([augmentation.Blur(sigma) for sigma in self.params.augmentation['blur']])
 
-        init_samples = self.params.features.extract_transformed(im, self.pos, self.target_scale, self.img_sample_sz, transforms)
+        init_samples = self.params.features.extract_transformed(im, self.pos.round(), self.target_scale, self.img_sample_sz, transforms)
 
         # Remove augmented samples for those that shall not have
         for i, use_aug in enumerate(self.fparams.attribute('use_augmentation')):
