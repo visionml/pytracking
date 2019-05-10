@@ -16,6 +16,12 @@ class ATOM(BaseTracker):
 
     def initialize_features(self):
         if not getattr(self, 'features_initialized', False):
+            """
+            self.param.features list has only one element(
+            MultResolutionExtractor with ATOMResNet18)
+            initalize() will load the pretrained model
+            and some other init operation.
+            """
             self.params.features.initialize()
         self.features_initialized = True
 
@@ -23,29 +29,32 @@ class ATOM(BaseTracker):
     def initialize(self, image, state, *args, **kwargs):
 
         # Initialize some stuff
-        self.frame_num = 1
+        self.frame_num = 1 # this param is used to control the optimizer train or not in tracking.
         if not hasattr(self.params, 'device'):
             self.params.device = 'cuda' if self.params.use_gpu else 'cpu'
 
         # Initialize features
-        self.initialize_features()
+        self.initialize_features()#load bb_predict model etc.
 
         # Check if image is color
         self.params.features.set_is_color(image.shape[2] == 3)
 
         # Get feature specific params
+        #self.fparams is deep_params fro ATOM
         self.fparams = self.params.features.get_fparams('feature_params')
 
         self.time = 0
         tic = time.time()
 
         # Get position and size
-        self.pos = torch.Tensor([state[1] + (state[3] - 1)/2, state[0] + (state[2] - 1)/2])
-        self.target_sz = torch.Tensor([state[3], state[2]])
+        # NCHW
+        self.pos = torch.Tensor([state[1] + (state[3] - 1)/2, state[0] + (state[2] - 1)/2])#because NCHW in tensror --->pos = center y, center x in original image
+        self.target_sz = torch.Tensor([state[3], state[2]])#h, w in original image
 
         # Set search area
         self.target_scale = 1.0
         search_area = torch.prod(self.target_sz * self.params.search_area_scale).item()
+        #图像的最大尺寸是self.params.max_image_sample_size: 288×288
         if search_area > self.params.max_image_sample_size:
             self.target_scale =  math.sqrt(search_area / self.params.max_image_sample_size)
         elif search_area < self.params.min_image_sample_size:
@@ -55,9 +64,15 @@ class ATOM(BaseTracker):
         self.use_iou_net = getattr(self.params, 'use_iou_net', True)
 
         # Target size in base scale
+        # this operator is to ensure self.base_target_sz*self.search_area_scale <= self.params.max_image_sample_size
         self.base_target_sz = self.target_sz / self.target_scale
+        print(self.target_scale, " ", self.base_target_sz, " ", self.target_sz)
 
         # Use odd square search area and set sizes
+        """
+         #获取特征器中最大的stride，某个特征器的stride()返回的是这个特征器返回的最终特征相对于原始图像的缩放比
+         #这个缩放比包含了网络整个前向传播后的缩放比与输出特征的后期标准化为规定尺寸的缩放比。
+        """
         feat_max_stride = max(self.params.features.stride())
         if getattr(self.params, 'search_area_shape', 'square') == 'square':
             self.img_sample_sz = torch.round(torch.sqrt(torch.prod(self.base_target_sz * self.params.search_area_scale))) * torch.ones(2)
@@ -104,7 +119,13 @@ class ATOM(BaseTracker):
         self.min_scale_factor = torch.max(10 / self.base_target_sz)
         self.max_scale_factor = torch.min(self.image_sz / self.base_target_sz)
 
-        # Extract and transform sample
+        """
+        Extract and transform sample
+        #get 30x256x18x18 feature maps
+        #30 is sample numbers and 18 is the featrue map size.
+        #sample augmentation is use for online training the target classfication
+        #and the iou_net just use the Non transformed sample as input
+        """
         x = self.generate_init_samples(im)
 
         # Initialize iounet
@@ -157,7 +178,7 @@ class ATOM(BaseTracker):
             # Variable containing both filter and projection matrix
             joint_var = self.filter.concat(self.projection_matrix)
 
-            # Initialize optimizer 
+            # Initialize optimizer
             analyze_convergence = getattr(self.params, 'analyze_convergence', False)
             if optimizer == 'GaussNewtonCG':
                 self.joint_optimizer = GaussNewtonCG(self.joint_problem, joint_var, plotting=(self.params.debug >= 3), analyze=analyze_convergence, fig_num=(12, 13, 14))
@@ -212,6 +233,11 @@ class ATOM(BaseTracker):
             del self.joint_problem, self.joint_optimizer
 
 
+    """
+    最开始初始化的时候，在线分类模型
+    的两个卷积核都要进行在线优化，之后
+    的跟踪中，仅优化第二个卷积核。
+    """
     def track(self, image):
 
         self.frame_num += 1
@@ -225,9 +251,14 @@ class ATOM(BaseTracker):
         # Get sample
         sample_pos = self.pos.round()
         sample_scales = self.target_scale * self.params.scale_factors
+        #In below function
+        #1. Extract the backbone feature
+        #2. Do project use the online classification model's fisrt conv kernel.
         test_x = self.extract_processed_sample(im, self.pos, sample_scales, self.img_sample_sz)
 
         # Compute scores
+        #3. compute scores use the online classification model's second conv kernel.
+        #   and get a rough location of the tracked target.
         scores_raw = self.apply_filter(test_x)
         translation_vec, scale_ind, s, flag = self.localize_target(scores_raw)
 
@@ -236,26 +267,23 @@ class ATOM(BaseTracker):
             if self.use_iou_net:
                 update_scale_flag = getattr(self.params, 'update_scale_when_uncertain', True) or flag != 'uncertain'
                 if getattr(self.params, 'use_classifier', True):
-                    self.update_state(sample_pos + translation_vec)
+                    self.update_state_absolute_inside_image(sample_pos + translation_vec)
+                    # self.update_state(translation_vec)
                 self.refine_target_box(sample_pos, sample_scales[scale_ind], scale_ind, update_scale_flag)
             elif getattr(self.params, 'use_classifier', True):
-                self.update_state(sample_pos + translation_vec, sample_scales[scale_ind])
+                self.update_state_absolute_inside_image(sample_pos + translation_vec, sample_scales[scale_ind])
 
         if self.params.debug >= 2:
             show_tensor(s[scale_ind,...], 5, title='Max score = {:.2f}'.format(torch.max(s[scale_ind,...]).item()))
 
+            # ------- UPDATE ------- #
 
-        # ------- UPDATE ------- #
-
-        # Check flags and set learning rate if hard negative
+            # Check flags and set learning rate if hard negative
         update_flag = flag not in ['not_found', 'uncertain']
         hard_negative = (flag == 'hard_negative')
         learning_rate = self.params.hard_negative_learning_rate if hard_negative else None
 
-
-        # Train filter
-        #在跟踪阶段，每间隔CG_iter帧，在线训练一次分类器
-        if update_flag and (hard_negative or (self.frame_num -1) % self.params.train_skipping == 0):
+        if update_flag:
             # Get train sample
             train_x = TensorList([x[scale_ind:scale_ind + 1, ...] for x in test_x])
 
@@ -264,15 +292,19 @@ class ATOM(BaseTracker):
 
             # Update memory
             self.update_memory(train_x, train_y, learning_rate)
-            num_iter = self.params.hard_negative_CG_iter if hard_negative else self.params.CG_iter
-            self.filter_optimizer.run(num_iter)
 
-            # Set the pos of the tracker to iounet pos
+        # Train filter
+        if hard_negative:
+            self.filter_optimizer.run(self.params.hard_negative_CG_iter)
+        elif (self.frame_num - 1) % self.params.train_skipping == 0:
+            self.filter_optimizer.run(self.params.CG_iter)
+
+        # Set the pos of the tracker to iounet pos
         if self.use_iou_net and flag != 'not_found':
             self.pos = self.pos_iounet.clone()
 
-        # Return new states
-        new_state = torch.cat((self.pos[[1,0]] - (self.target_sz[[1,0]]-1)/2, self.target_sz[[1,0]]))
+            # Return new state
+        new_state = torch.cat((self.pos[[1, 0]] - (self.target_sz[[1, 0]] - 1) / 2, self.target_sz[[1, 0]]))
 
         return new_state.tolist()
 
@@ -280,11 +312,81 @@ class ATOM(BaseTracker):
     def apply_filter(self, sample_x: TensorList):
         return operation.conv2d(sample_x, self.filter, mode='same')
 
+    def localize_target_no_fourier(self, scores_raw):
+        if getattr(self.params, 'advanced_localization', False):
+            return self.localize_advanced_no_fourier(scores_raw[0])
+        max_score_r, max_disp_r = dcf.max2d(scores_raw[0])
+
+        max_disp_r = max_disp_r.float().cpu()
+        # Convert to displacements in the base scale
+        disp_r = max_disp_r * 16 - self.output_sz / 2
+
+        # Compute translation vector and scale change factor
+        translation_vec_r = disp_r[0, ...].view(-1) * (self.img_support_sz / self.output_sz) * self.target_scale
+        translation_vec_r *= self.params.scale_factors[0]
+
+
+        return translation_vec_r, 0, scores_raw, None
+
+    def localize_advanced_no_fourier(self, scores):
+        """Does the advanced localization with hard negative detection and target not found."""
+
+        sz = scores.shape[-2:]
+
+        # Find maximum
+        max_score1, max_disp1 = dcf.max2d(scores)
+        _, scale_ind = torch.max(max_score1, dim=0)
+        max_score1 = max_score1[scale_ind]
+        max_disp1 = max_disp1[scale_ind,...].float().cpu().view(-1)
+        max_disp1 = max_disp1 * 16
+        target_disp1 = max_disp1 - self.output_sz // 2
+        translation_vec1 = target_disp1 * (self.img_support_sz / self.output_sz) * self.target_scale
+
+        if max_score1.item() < self.params.target_not_found_threshold:
+            return translation_vec1, scale_ind, scores, 'not_found'
+
+        # Mask out target neighborhood
+        target_neigh_sz = self.params.target_neighborhood_scale * self.target_sz / self.target_scale
+        tneigh_top = max(round(max_disp1[0].item() - target_neigh_sz[0].item() / 2), 0)
+        tneigh_bottom = min(round(max_disp1[0].item() + target_neigh_sz[0].item() / 2 + 1), sz[0])
+        tneigh_left = max(round(max_disp1[1].item() - target_neigh_sz[1].item() / 2), 0)
+        tneigh_right = min(round(max_disp1[1].item() + target_neigh_sz[1].item() / 2 + 1), sz[1])
+        scores_masked = scores[scale_ind:scale_ind+1,...].clone()
+        scores_masked[...,tneigh_top:tneigh_bottom,tneigh_left:tneigh_right] = 0
+
+        # Find new maximum
+        max_score2, max_disp2 = dcf.max2d(scores_masked)
+        max_disp2 = max_disp2.float().cpu().view(-1)
+        target_disp2 = max_disp2 - self.output_sz // 2
+        translation_vec2 = target_disp2 * (self.img_support_sz / self.output_sz) * self.target_scale
+
+        # Handle the different cases
+        if max_score2 > self.params.distractor_threshold * max_score1:
+            disp_norm1 = torch.sqrt(torch.sum(target_disp1**2))
+            disp_norm2 = torch.sqrt(torch.sum(target_disp2**2))
+            disp_threshold = self.params.dispalcement_scale * math.sqrt(sz[0] * sz[1]) / 2
+
+            if disp_norm2 > disp_threshold and disp_norm1 < disp_threshold:
+                return translation_vec1, scale_ind, scores, 'hard_negative'
+            if disp_norm2 < disp_threshold and disp_norm1 > disp_threshold:
+                return translation_vec2, scale_ind, scores, 'hard_negative'
+            if disp_norm2 > disp_threshold and disp_norm1 > disp_threshold:
+                return translation_vec1, scale_ind, scores, 'uncertain'
+
+            # If also the distractor is close, return with highest score
+            return translation_vec1, scale_ind, scores, 'uncertain'
+
+        if max_score2 > self.params.hard_negative_threshold * max_score1 and max_score2 > self.params.target_not_found_threshold:
+            return translation_vec1, scale_ind, scores, 'hard_negative'
+
+        return translation_vec1, scale_ind, scores, None
+
     def localize_target(self, scores_raw):
         # Weighted sum (if multiple features) with interpolation in fourier domain
         weight = self.fparams.attribute('translation_weight', 1.0)
         scores_raw = weight * scores_raw
         sf_weighted = fourier.cfft2(scores_raw) / (scores_raw.size(2) * scores_raw.size(3))
+        # sf_weighted = fourier.cfft2(scores_raw)
         for i, (sz, ksz) in enumerate(zip(self.feature_sz, self.kernel_size)):
             sf_weighted[i] = fourier.shift_fs(sf_weighted[i], math.pi * (1 - torch.Tensor([ksz[0]%2, ksz[1]%2]) / sz))
 
@@ -294,20 +396,27 @@ class ATOM(BaseTracker):
         if self.output_window is not None and not getattr(self.params, 'perform_hn_without_windowing', False):
             scores *= self.output_window
 
+        # Shift scores back
+        sz = scores.shape[-2:]
+        scores = torch.cat([scores[..., (sz[0] + 1) // 2:, :], scores[..., :(sz[0] + 1) // 2, :]], -2)
+        scores = torch.cat([scores[..., :, (sz[1] + 1) // 2:], scores[..., :, :(sz[1] + 1) // 2]], -1)
+
         if getattr(self.params, 'advanced_localization', False):
             return self.localize_advanced(scores)
 
         # Get maximum
+        #scores is 1x1x288x288
         max_score, max_disp = dcf.max2d(scores)
         _, scale_ind = torch.max(max_score, dim=0)
         max_disp = max_disp.float().cpu()
 
         # Convert to displacements in the base scale
-        disp = (max_disp + self.output_sz / 2) % self.output_sz - self.output_sz / 2
+        disp = max_disp - self.output_sz / 2
 
         # Compute translation vector and scale change factor
         translation_vec = disp[scale_ind, ...].view(-1) * (self.img_support_sz / self.output_sz) * self.target_scale
         translation_vec *= self.params.scale_factors[scale_ind]
+
 
         # Shift the score output for visualization purposes
         if self.params.debug >= 2:
@@ -325,14 +434,15 @@ class ATOM(BaseTracker):
         if self.output_window is not None and getattr(self.params, 'perform_hn_without_windowing', False):
             scores_orig = scores.clone()
 
-            scores_orig = torch.cat([scores_orig[..., (sz[0] + 1) // 2:, :], scores_orig[..., :(sz[0] + 1) // 2, :]], -2)
-            scores_orig = torch.cat([scores_orig[..., :, (sz[1] + 1) // 2:], scores_orig[..., :, :(sz[1] + 1) // 2]], -1)
-
             scores *= self.output_window
 
-        # Shift scores back
-        scores = torch.cat([scores[...,(sz[0]+1)//2:,:], scores[...,:(sz[0]+1)//2,:]], -2)
-        scores = torch.cat([scores[...,:,(sz[1]+1)//2:], scores[...,:,:(sz[1]+1)//2]], -1)
+        # import PIL.Image as img
+        # scores_raw_detach = scores.squeeze()
+        # maxv = torch.max(scores_raw_detach)
+        # minv = torch.min(scores_raw_detach)
+        # scores_raw_detach = (scores_raw_detach - minv) / ((maxv - minv) / 255)
+        # nparr = scores_raw_detach.cpu().numpy()
+        # img.fromarray(nparr).show()
 
         # Find maximum
         max_score1, max_disp1 = dcf.max2d(scores)
@@ -466,6 +576,7 @@ class ATOM(BaseTracker):
         get_rand_shift = lambda: None
         random_shift_factor = getattr(self.params, 'random_shift_factor', 0)
         if random_shift_factor > 0:
+            #每次调用这个函数都可以得到不用的随即偏移两dx dy
             get_rand_shift = lambda: ((torch.rand(2) - 0.5) * self.img_sample_sz * random_shift_factor).long().tolist()
 
         # Create transofmations
@@ -484,7 +595,10 @@ class ATOM(BaseTracker):
         if 'rotate' in self.params.augmentation:
             self.transforms.extend([augmentation.Rotate(angle, aug_output_sz, get_rand_shift()) for angle in self.params.augmentation['rotate']])
 
-        # Generate initial samples
+        """
+         # Generate initial samples
+         # target_scale * aug_expansion_ze will transfer to the size consponding to the original image.
+        """
         init_samples = self.params.features.extract_transformed(im, self.pos, self.target_scale, aug_expansion_sz, self.transforms)
 
         # Remove augmented samples for those that shall not have
@@ -539,7 +653,9 @@ class ATOM(BaseTracker):
 
         # Generate label functions
         for y, sig, sz, ksz, x in zip(self.y, self.sigma, self.feature_sz, self.kernel_size, train_x):
-            center_pos = sz * target_center_norm + 0.5 * torch.Tensor([(ksz[0] + 1) % 2, (ksz[1] + 1) % 2])
+            # center_pos = sz * target_center_norm + 0.5 * torch.Tensor([(ksz[0] + 1) % 2, (ksz[1] + 1) % 2])
+            center_pos = sz * target_center_norm
+            # print(ksz, " size")
             for i, T in enumerate(self.transforms[:x.shape[0]]):
                 sample_center = center_pos + torch.Tensor(T.shift) / self.img_support_sz * sz
                 y[i, 0, ...] = dcf.label_function_spatial(sz, sig, sample_center)
@@ -622,7 +738,8 @@ class ATOM(BaseTracker):
         train_y = TensorList()
         target_center_norm = (self.pos - sample_pos) / (sample_scale * self.img_support_sz)
         for sig, sz, ksz in zip(self.sigma, self.feature_sz, self.kernel_size):
-            center = sz * target_center_norm + 0.5 * torch.Tensor([(ksz[0] + 1) % 2, (ksz[1] + 1) % 2])
+            # center = sz * target_center_norm + 0.5 * torch.Tensor([(ksz[0] + 1) % 2, (ksz[1] + 1) % 2])
+            center = sz * target_center_norm
             train_y.append(dcf.label_function_spatial(sz, sig, center))
         return train_y
 
@@ -637,8 +754,21 @@ class ATOM(BaseTracker):
         inside_offset = (inside_ratio - 0.5) * self.target_sz
         self.pos = torch.max(torch.min(new_pos, self.image_sz - inside_offset), inside_offset)
 
+    def update_state_absolute_inside_image(self, new_pos, new_scale = None):
+        # Update scale
+        if new_scale is not None:
+            self.target_scale = new_scale.clamp(self.min_scale_factor, self.max_scale_factor)
+            self.target_sz = self.base_target_sz * self.target_scale
+
+        # Update pos
+        self.pos = torch.max(torch.min(new_pos, self.image_sz), torch.zeros([2]))
+
     def get_iounet_box(self, pos, sz, sample_pos, sample_scale):
-        """All inputs in original image coordinates"""
+        """
+        All inputs in original image coordinates
+        从原图的坐标转换为相对于iou_net输入sample的boxcenter
+        box_size
+        """
         box_center = (pos - sample_pos) / sample_scale + (self.iou_img_sample_sz - 1) / 2
         box_sz = sz / sample_scale
         target_ul = box_center - (box_sz - 1) / 2
@@ -653,6 +783,7 @@ class ATOM(BaseTracker):
         # Get target boxes for the different augmentations
         self.iou_target_box = self.get_iounet_box(self.pos, self.target_sz, self.pos.round(), self.target_scale)
         target_boxes = TensorList()
+        #是否要使用增广的样本计算调制向量，默认是false，不使用。
         if self.params.iounet_augmentation:
             for T in self.transforms:
                 if not isinstance(T, (augmentation.Identity, augmentation.Translation, augmentation.FlipHorizontal, augmentation.FlipVertical, augmentation.Blur)):
@@ -663,14 +794,19 @@ class ATOM(BaseTracker):
         target_boxes = torch.cat(target_boxes.view(1,4), 0).to(self.params.device)
 
         # Get iou features
+        # iou_backbone_features may have freatures from multi layers
+        # eg,resnet18's layer3 and layer4
+        # every layer may be extract multi sample's features of the augmentated samples.
         iou_backbone_features = self.get_iou_backbone_features()
 
         # Remove other augmentations such as rotation
+        # only store the identity feature on each exctact layer
         iou_backbone_features = TensorList([x[:target_boxes.shape[0],...] for x in iou_backbone_features])
 
         # Extract target feat
         with torch.no_grad():
             target_feat = self.iou_predictor.get_filter(iou_backbone_features, target_boxes)
+        #这个东西应该就是所谓的调制向量
         self.target_feat = TensorList([x.detach().mean(0) for x in target_feat])
 
         if getattr(self.params, 'iounet_not_use_reference', False):
