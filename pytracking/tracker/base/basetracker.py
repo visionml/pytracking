@@ -165,7 +165,7 @@ class BaseTracker:
                 tl = self.get_tl()
                 br = self.get_br()
 
-                bb = [tl[0], tl[1], br[0] - tl[0], br[1] - tl[1]]
+                bb = [min(tl[0], br[0]), min(tl[1], br[1]), abs(br[0] - tl[0]), abs(br[1] - tl[1])]
                 return bb
 
         ui_control = UIControl()
