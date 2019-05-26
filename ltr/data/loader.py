@@ -1,8 +1,15 @@
 import torch
 import torch.utils.data.dataloader
+import importlib
 import collections
 from torch._six import string_classes, int_classes
 from pytracking import TensorDict, TensorList
+
+
+def _check_use_shared_memory():
+    if hasattr(torch.utils.data.dataloader, '_use_shared_memory'):
+        return getattr(torch.utils.data.dataloader, '_use_shared_memory')
+    return importlib.import_module('torch.utils.data._utils.collate')._use_shared_memory
 
 
 def ltr_collate(batch):
@@ -12,7 +19,7 @@ def ltr_collate(batch):
     elem_type = type(batch[0])
     if isinstance(batch[0], torch.Tensor):
         out = None
-        if torch.utils.data.dataloader._use_shared_memory:
+        if _check_use_shared_memory():
             # If we're in a background process, concatenate directly into a
             # shared memory tensor to avoid an extra copy
             numel = sum([x.numel() for x in batch])
@@ -63,7 +70,7 @@ def ltr_collate_stack1(batch):
     elem_type = type(batch[0])
     if isinstance(batch[0], torch.Tensor):
         out = None
-        if torch.utils.data.dataloader._use_shared_memory:
+        if _check_use_shared_memory():
             # If we're in a background process, concatenate directly into a
             # shared memory tensor to avoid an extra copy
             numel = sum([x.numel() for x in batch])
