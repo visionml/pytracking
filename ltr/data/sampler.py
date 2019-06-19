@@ -101,7 +101,7 @@ class ATOMSampler(torch.utils.data.Dataset):
             seq_id = random.randint(0, dataset.get_num_sequences() - 1)
             anno, visible = dataset.get_sequence_info(seq_id)
             num_visible = visible.type(torch.int64).sum().item()
-            enough_visible_frames = not is_video_dataset or (num_visible > min_visible_frames and len(visible) >= 20)
+            enough_visible_frames = ((not is_video_dataset) and num_visible > 0) or (num_visible > min_visible_frames and len(visible) >= 20)
 
         if is_video_dataset:
             train_frame_ids = None

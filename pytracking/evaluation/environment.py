@@ -16,6 +16,7 @@ class EnvSettings:
         self.got10k_path = ''
         self.lasot_path = ''
         self.trackingnet_path = ''
+        self.mobiface_path = ''
 
 
 def create_default_local_file():
