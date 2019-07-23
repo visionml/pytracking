@@ -2,7 +2,6 @@ import torch
 import math
 import cv2 as cv
 import random
-from random import gauss
 
 
 def stack_tensors(x):
@@ -193,11 +192,11 @@ def perturb_box(box, min_iou=0.5, sigma_factor=0.1):
     for i_ in range(100):
         c_x = box[0] + 0.5*box[2]
         c_y = box[1] + 0.5 * box[3]
-        c_x_per = gauss(c_x, perturb_factor[0])
-        c_y_per = gauss(c_y, perturb_factor[1])
+        c_x_per = random.gauss(c_x, perturb_factor[0])
+        c_y_per = random.gauss(c_y, perturb_factor[1])
 
-        w_per = gauss(box[2], perturb_factor[2])
-        h_per = gauss(box[3], perturb_factor[3])
+        w_per = random.gauss(box[2], perturb_factor[2])
+        h_per = random.gauss(box[3], perturb_factor[3])
 
         if w_per <= 1:
             w_per = box[2]*rand_uniform(0.15, 0.5)
