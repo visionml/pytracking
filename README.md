@@ -1,11 +1,16 @@
 # PyTracking
 A general python framework for training and running visual object trackers, based on **PyTorch**.
 
-**News:** Upgraded to latest version of PyTorch (v1.x).
+### **News:** Our paper [Learning Discriminative Model Prediction for Tracking](https://arxiv.org/pdf/1904.07220.pdf), proposing our new **DiMP** tracker, got accepted as **Oral** at [ICCV 2019](http://iccv2019.thecvf.com/).
+#### Code will appear here soon...
  
 ## Highlights
 
-### [ATOM](https://arxiv.org/pdf/1811.07628.pdf)
+### The [DiMP](https://arxiv.org/pdf/1904.07220.pdf) Tracker
+
+Official implementation of the **DiMP** tracker (ICCV 2019). Code coming soon...
+
+### The [ATOM](https://arxiv.org/pdf/1811.07628.pdf) Tracker
 
 Official implementation of the **ATOM** tracker (CVPR 2019), including complete **training code** and trained models.
 
