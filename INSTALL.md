@@ -77,7 +77,7 @@ You can also download the networks using the gdrive_download bash script.
 
 ```bash
 # Download the default network for ATOM
-bash pytracking/utils/gdrive_download 1JUB3EucZfBk3rX7M3_q5w_dLBqsT7s-M pytracking/networks/atom_default.pth
+bash pytracking/utils/gdrive_download 1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU pytracking/networks/atom_default.pth
 
 # Download the default network for ECO
 bash pytracking/utils/gdrive_download 1aWC4waLv_te-BULoy0k-n_zS-ONms21S pytracking/networks/resnet18_vggmconv1.pth
