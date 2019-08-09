@@ -70,7 +70,7 @@ mkdir pytracking/networks
 echo ""
 echo ""
 echo "****************** ATOM Network ******************"
-bash pytracking/utils/gdrive_download 1JUB3EucZfBk3rX7M3_q5w_dLBqsT7s-M pytracking/networks/atom_default.pth
+bash pytracking/utils/gdrive_download 1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU pytracking/networks/atom_default.pth
 
 echo ""
 echo ""
