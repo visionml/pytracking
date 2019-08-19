@@ -20,7 +20,7 @@ conda activate $conda_env_name
 echo ""
 echo ""
 echo "****************** Installing pytorch with cuda10 ******************"
-conda install -y pytorch torchvision cudatoolkit=10.0 -c pytorch 
+conda install -y pytorch=1.1 torchvision cudatoolkit=10.0 -c pytorch 
 
 echo ""
 echo ""
