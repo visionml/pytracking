@@ -4,10 +4,10 @@ import random
 
 class TrackerParams:
     """Class for tracker parameters."""
-    def free_memory(self):
-        for a in dir(self):
-            if not a.startswith('__') and hasattr(getattr(self, a), 'free_memory'):
-                getattr(self, a).free_memory()
+    def set_default_values(self, default_vals: dict):
+        for name, val in default_vals.items():
+            if not hasattr(self, name):
+                setattr(self, name, val)
 
 
 class FeatureParams:

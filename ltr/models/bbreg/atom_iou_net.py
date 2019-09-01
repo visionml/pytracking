@@ -12,14 +12,14 @@ def conv(in_planes, out_planes, kernel_size=3, stride=1, padding=1, dilation=1):
             nn.ReLU(inplace=True))
 
 
-def valid_roi(roi: torch.Tensor, image_size: torch.Tensor):
-    valid = all(0 <= roi[:, 1]) and all(0 <= roi[:, 2]) and all(roi[:, 3] <= image_size[0]-1) and \
-            all(roi[:, 4] <= image_size[1]-1)
-    return valid
-
-
 class AtomIoUNet(nn.Module):
-    """ Network module for IoU prediction. Refer to the paper for an illustration of the architecture."""
+    """Network module for IoU prediction. Refer to the ATOM paper for an illustration of the architecture.
+    It uses two backbone feature layers as input.
+    args:
+        input_dim:  Feature dimensionality of the two input backbone layers.
+        pred_input_dim:  Dimensionality input the the prediction network.
+        pred_inter_dim:  Intermediate dimensionality in the prediction network."""
+
     def __init__(self, input_dim=(128,256), pred_input_dim=(256,256), pred_inter_dim=(256,256)):
         super().__init__()
         # _r for reference, _t for test
@@ -57,30 +57,43 @@ class AtomIoUNet(nn.Module):
                     m.bias.data.zero_()
 
     def forward(self, feat1, feat2, bb1, proposals2):
-        assert feat1[0].dim() == 5, 'Expect 5  dimensional feat1'
+        """Runs the ATOM IoUNet during training operation.
+        This forward pass is mainly used for training. Call the individual functions during tracking instead.
+        args:
+            feat1:  Features from the reference frames (4 or 5 dims).
+            feat2:  Features from the test frames (4 or 5 dims).
+            bb1:  Target boxes (x,y,w,h) in image coords in the reference samples. Dims (images, sequences, 4).
+            proposals2:  Proposal boxes for which the IoU will be predicted (images, sequences, num_proposals, 4)."""
 
-        num_test_images = feat2[0].shape[0]
-        batch_size = feat2[0].shape[1]
+        assert bb1.dim() == 3
+
+        num_images = bb1.shape[0]
+        num_sequences = bb1.shape[1]
 
         # Extract first train sample
-        feat1 = [f[0,...] for f in feat1]
+        feat1 = [f[0,...] if f.dim()==5 else f.view(num_images, num_sequences, *f.shape[-3:])[0,...] for f in feat1]
         bb1 = bb1[0,...]
 
         # Get modulation vector
-        filter = self.get_filter(feat1, bb1)
+        modulation = self.get_modulation(feat1, bb1)
 
-        feat2 = [f.view(batch_size * num_test_images, f.shape[2], f.shape[3], f.shape[4]) for f in feat2]
         iou_feat = self.get_iou_feat(feat2)
 
-        filter = [f.view(1, batch_size, -1).repeat(num_test_images, 1, 1).view(batch_size*num_test_images, -1) for f in filter]
+        modulation = [f.view(1, num_sequences, -1).repeat(num_images, 1, 1).view(num_sequences*num_images, -1) for f in modulation]
 
-        proposals2 = proposals2.view(batch_size*num_test_images, -1, 4)
-        pred_iou = self.predict_iou(filter, iou_feat, proposals2)
-        return pred_iou.view(num_test_images, batch_size, -1)
+        proposals2 = proposals2.view(num_sequences*num_images, -1, 4)
+        pred_iou = self.predict_iou(modulation, iou_feat, proposals2)
+        return pred_iou.view(num_images, num_sequences, -1)
 
-    def predict_iou(self, filter, feat2, proposals):
-        fc34_3_r, fc34_4_r = filter
-        c3_t, c4_t = feat2
+    def predict_iou(self, modulation, feat, proposals):
+        """Predicts IoU for the give proposals.
+        args:
+            modulation:  Modulation vectors for the targets. Dims (batch, feature_dim).
+            feat:  IoU features (from get_iou_feat) for test images. Dims (batch, feature_dim, H, W).
+            proposals:  Proposal boxes for which the IoU will be predicted (batch, num_proposals, 4)."""
+
+        fc34_3_r, fc34_4_r = modulation
+        c3_t, c4_t = feat
 
         batch_size = c3_t.size()[0]
 
@@ -89,7 +102,7 @@ class AtomIoUNet(nn.Module):
         c4_t_att = c4_t * fc34_4_r.view(batch_size, -1, 1, 1)
 
         # Add batch_index to rois
-        batch_index = torch.Tensor([x for x in range(batch_size)]).view(batch_size, 1).to(c3_t.device)
+        batch_index = torch.arange(batch_size, dtype=torch.float32).view(-1, 1).to(c3_t.device)
 
         # Push the different rois for the same image along the batch dimension
         num_proposals_per_batch = proposals.shape[1]
@@ -114,19 +127,24 @@ class AtomIoUNet(nn.Module):
 
         return iou_pred
 
-    def get_filter(self, feat1, bb1):
-        feat3_r, feat4_r = feat1
+    def get_modulation(self, feat, bb):
+        """Get modulation vectors for the targets.
+        args:
+            feat: Backbone features from reference images. Dims (batch, feature_dim, H, W).
+            bb:  Target boxes (x,y,w,h) in image coords in the reference samples. Dims (batch, 4)."""
+
+        feat3_r, feat4_r = feat
 
         c3_r = self.conv3_1r(feat3_r)
 
         # Add batch_index to rois
-        batch_size = bb1.size()[0]
-        batch_index = torch.Tensor([x for x in range(batch_size)]).view(batch_size, 1).to(bb1.device)
+        batch_size = bb.shape[0]
+        batch_index = torch.arange(batch_size, dtype=torch.float32).view(-1, 1).to(bb.device)
 
         # input bb is in format xywh, convert it to x0y0x1y1 format
-        bb1 = bb1.clone()
-        bb1[:, 2:4] = bb1[:, 0:2] + bb1[:, 2:4]
-        roi1 = torch.cat((batch_index, bb1), dim=1)
+        bb = bb.clone()
+        bb[:, 2:4] = bb[:, 0:2] + bb[:, 2:4]
+        roi1 = torch.cat((batch_index, bb), dim=1)
 
         roi3r = self.prroi_pool3r(c3_r, roi1)
 
@@ -144,6 +162,8 @@ class AtomIoUNet(nn.Module):
         return fc34_3_r, fc34_4_r
 
     def get_iou_feat(self, feat2):
+        """Get IoU prediction features from a 4 or 5 dimensional backbone input."""
+        feat2 = [f.view(-1, *f.shape[-3:]) if f.dim()==5 else f for f in feat2]
         feat3_t, feat4_t = feat2
         c3_t = self.conv3_2t(self.conv3_1t(feat3_t))
         c4_t = self.conv4_2t(self.conv4_1t(feat4_t))

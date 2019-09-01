@@ -24,9 +24,6 @@ class FeatureBase:
     def initialize(self):
         pass
 
-    def free_memory(self):
-        pass
-
     def dim(self):
         raise NotImplementedError
 

@@ -4,7 +4,7 @@ import math
 
 
 class FactorizedConvProblem(optimization.L2Problem):
-    def __init__(self, training_samples: TensorList, y: TensorList, filter_reg: torch.Tensor, projection_reg, params, sample_weights: TensorList,
+    def __init__(self, training_samples: TensorList, y:TensorList, filter_reg: torch.Tensor, projection_reg, params, sample_weights: TensorList,
                  projection_activation, response_activation):
         self.training_samples = training_samples
         self.y = y
@@ -69,7 +69,7 @@ class FactorizedConvProblem(optimization.L2Problem):
 
 
 class ConvProblem(optimization.L2Problem):
-    def __init__(self, training_samples: TensorList, y: TensorList, filter_reg: torch.Tensor, sample_weights: TensorList, response_activation):
+    def __init__(self, training_samples: TensorList, y:TensorList, filter_reg: torch.Tensor, sample_weights: TensorList, response_activation):
         self.training_samples = training_samples
         self.y = y
         self.filter_reg = filter_reg

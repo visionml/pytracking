@@ -20,7 +20,8 @@ class ATOM(BaseTracker):
         self.features_initialized = True
 
 
-    def initialize(self, image, state, *args, **kwargs):
+    def initialize(self, image, info: dict) -> dict:
+        state = info['init_bbox']
 
         # Initialize some stuff
         self.frame_num = 1
@@ -36,7 +37,6 @@ class ATOM(BaseTracker):
         # Get feature specific params
         self.fparams = self.params.features.get_fparams('feature_params')
 
-        self.time = 0
         tic = time.time()
 
         # Get position and size
@@ -128,7 +128,8 @@ class ATOM(BaseTracker):
 
         self.pos_iounet = self.pos.clone()
 
-        self.time += time.time() - tic
+        out = {'time': time.time() - tic}
+        return out
 
 
     def init_optimization(self, train_x, init_y):
@@ -212,7 +213,7 @@ class ATOM(BaseTracker):
             del self.joint_problem, self.joint_optimizer
 
 
-    def track(self, image):
+    def track(self, image) -> dict:
 
         self.frame_num += 1
 
@@ -225,22 +226,21 @@ class ATOM(BaseTracker):
         # Get sample
         sample_pos = self.pos.round()
         sample_scales = self.target_scale * self.params.scale_factors
-        test_x = self.extract_processed_sample(im, sample_pos, sample_scales, self.img_sample_sz)
+        test_x = self.extract_processed_sample(im, self.pos, sample_scales, self.img_sample_sz)
 
         # Compute scores
         scores_raw = self.apply_filter(test_x)
         translation_vec, scale_ind, s, flag = self.localize_target(scores_raw)
-        new_pos = sample_pos + translation_vec
 
         # Update position and scale
         if flag != 'not_found':
             if self.use_iou_net:
                 update_scale_flag = getattr(self.params, 'update_scale_when_uncertain', True) or flag != 'uncertain'
                 if getattr(self.params, 'use_classifier', True):
-                    self.update_state(new_pos)
+                    self.update_state(sample_pos + translation_vec)
                 self.refine_target_box(sample_pos, sample_scales[scale_ind], scale_ind, update_scale_flag)
             elif getattr(self.params, 'use_classifier', True):
-                self.update_state(new_pos, sample_scales[scale_ind])
+                self.update_state(sample_pos + translation_vec, sample_scales[scale_ind])
 
         if self.params.debug >= 2:
             show_tensor(s[scale_ind,...], 5, title='Max score = {:.2f}'.format(torch.max(s[scale_ind,...]).item()))
@@ -276,7 +276,8 @@ class ATOM(BaseTracker):
         # Return new state
         new_state = torch.cat((self.pos[[1,0]] - (self.target_sz[[1,0]]-1)/2, self.target_sz[[1,0]]))
 
-        return new_state.tolist()
+        out = {'target_bbox': new_state.tolist()}
+        return out
 
 
     def apply_filter(self, sample_x: TensorList):
@@ -320,7 +321,7 @@ class ATOM(BaseTracker):
         return translation_vec, scale_ind, scores, None
 
     def localize_advanced(self, scores):
-        """Does the advanced localization with hard negative detection and target not found."""
+        """Dows the advanced localization with hard negative detection and target not found."""
 
         sz = scores.shape[-2:]
 
@@ -388,7 +389,7 @@ class ATOM(BaseTracker):
 
 
     def extract_sample(self, im: torch.Tensor, pos: torch.Tensor, scales, sz: torch.Tensor):
-        return self.params.features.extract(im, pos, scales, sz)
+        return self.params.features.extract(im, pos, scales, sz)[0]
 
     def get_iou_features(self):
         return self.params.features.get_unique_attribute('iounet_features')
@@ -487,7 +488,7 @@ class ATOM(BaseTracker):
             self.transforms.extend([augmentation.Rotate(angle, aug_output_sz, get_rand_shift()) for angle in self.params.augmentation['rotate']])
 
         # Generate initial samples
-        init_samples = self.params.features.extract_transformed(im, self.pos.round(), self.target_scale, aug_expansion_sz, self.transforms)
+        init_samples = self.params.features.extract_transformed(im, self.pos, self.target_scale, aug_expansion_sz, self.transforms)
 
         # Remove augmented samples for those that shall not have
         for i, use_aug in enumerate(self.fparams.attribute('use_augmentation')):
@@ -628,7 +629,7 @@ class ATOM(BaseTracker):
             train_y.append(dcf.label_function_spatial(sz, sig, center))
         return train_y
 
-    def update_state(self, new_pos, new_scale=None):
+    def update_state(self, new_pos, new_scale = None):
         # Update scale
         if new_scale is not None:
             self.target_scale = new_scale.clamp(self.min_scale_factor, self.max_scale_factor)
@@ -672,7 +673,7 @@ class ATOM(BaseTracker):
 
         # Extract target feat
         with torch.no_grad():
-            target_feat = self.iou_predictor.get_filter(iou_backbone_features, target_boxes)
+            target_feat = self.iou_predictor.get_modulation(iou_backbone_features, target_boxes)
         self.target_feat = TensorList([x.detach().mean(0) for x in target_feat])
 
         if getattr(self.params, 'iounet_not_use_reference', False):
@@ -735,7 +736,6 @@ class ATOM(BaseTracker):
 
         if update_scale:
             self.target_scale = new_scale
-
 
     def optimize_boxes(self, iou_features, init_boxes):
         # Optimize iounet boxes

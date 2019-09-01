@@ -1,58 +1,107 @@
-import matplotlib
-
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cv2 as cv
-import time
 import os
+import time
+import torch
+from pytracking.utils.visdom import Visdom
+from pytracking.features.preprocessing import torch_to_numpy
+from pytracking.utils.plotting import draw_figure
 
 
 class BaseTracker:
     """Base class for all trackers."""
+    def visdom_ui_handler(self, data):
+        if data['event_type'] == 'KeyPress':
+            if data['key'] == ' ':
+                self.pause_mode = not self.pause_mode
+
+            elif data['key'] == 'ArrowRight' and self.pause_mode:
+                self.step = True
 
     def __init__(self, params):
         self.params = params
 
-    def initialize(self, image, state, class_info=None):
+        self.pause_mode = False
+        self.step = False
+
+        self.visdom = None
+        if self.params.debug > 0 and self.params.visdom_info.get('use_visdom', True):
+            try:
+                self.visdom = Visdom(self.params.debug, {'handler': self.visdom_ui_handler, 'win_id':  'Tracking'},
+                                     visdom_info=self.params.visdom_info)
+            except:
+                time.sleep(0.5)
+                print('!!! WARNING: Visdom could not start, so using matplotlib visualization instead !!!\n'
+                      '!!! Start Visdom in a separate terminal window by typing \'visdom\' !!!')
+
+
+    def initialize(self, image, info: dict) -> dict:
         """Overload this function in your tracker. This should initialize the model."""
         raise NotImplementedError
 
-    def track(self, image):
+
+    def track(self, image) -> dict:
         """Overload this function in your tracker. This should track in the frame and update the model."""
         raise NotImplementedError
+
 
     def track_sequence(self, sequence):
         """Run tracker on a sequence."""
 
+        output = {'target_bbox': [],
+                  'time': []}
+
+        def _store_outputs(tracker_out: dict, defaults=None):
+            defaults = {} if defaults is None else defaults
+            for key in tracker_out.keys():
+                if key not in output:
+                    raise RuntimeError('Unknown output from tracker.')
+            for key in output.keys():
+                val = tracker_out.get(key, defaults.get(key, None))
+                if val is not None:
+                    output[key].append(val)
+
         # Initialize
         image = self._read_image(sequence.frames[0])
 
-        times = []
-        start_time = time.time()
-        self.initialize(image, sequence.init_state)
-        init_time = getattr(self, 'time', time.time() - start_time)
-        times.append(init_time)
-
-        if self.params.visualization:
+        if self.params.visualization and self.visdom is None:
             self.init_visualization()
-            self.visualize(image, sequence.init_state)
+            self.visualize(image, sequence.get('init_bbox'))
+
+        start_time = time.time()
+        out = self.initialize(image, sequence.init_info())
+        if out is None:
+            out = {}
+        _store_outputs(out, {'target_bbox': sequence.get('init_bbox'),
+                             'time': time.time() - start_time})
+
+        if self.visdom is not None:
+            self.visdom.register((image, sequence.get('init_bbox')), 'Tracking', 1, 'Tracking')
 
         # Track
-        tracked_bb = [sequence.init_state]
         for frame in sequence.frames[1:]:
+            while True:
+                if not self.pause_mode:
+                    break
+                elif self.step:
+                    self.step = False
+                    break
+                else:
+                    time.sleep(0.1)
+
             image = self._read_image(frame)
 
             start_time = time.time()
-            state = self.track(image)
-            times.append(time.time() - start_time)
+            out = self.track(image)
+            _store_outputs(out, {'time': time.time() - start_time})
 
-            tracked_bb.append(state)
+            if self.visdom is not None:
+                self.visdom.register((image, out['target_bbox']), 'Tracking', 1, 'Tracking')
+            elif self.params.visualization:
+                self.visualize(image, out['target_bbox'])
 
-            if self.params.visualization:
-                self.visualize(image, state)
-
-        return tracked_bb, times
+        return output
 
     def track_videofile(self, videofilepath, optional_box=None):
         """Run track with a video file input."""
@@ -75,7 +124,7 @@ class BaseTracker:
         if optional_box is not None:
             assert isinstance(optional_box, list, tuple)
             assert len(optional_box) == 4, "valid box's foramt is [x,y,w,h]"
-            self.initialize(frame, optional_box)
+            self.initialize(frame, {'init_bbox': optional_box})
         else:
             while True:
                 # cv.waitKey()
@@ -86,7 +135,7 @@ class BaseTracker:
 
                 x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
                 init_state = [x, y, w, h]
-                self.initialize(frame, init_state)
+                self.initialize(frame, {'init_bbox': init_state})
                 break
 
         while True:
@@ -98,8 +147,8 @@ class BaseTracker:
             frame_disp = frame.copy()
 
             # Draw box
-            state = self.track(frame)
-            state = [int(s) for s in state]
+            out = self.track(frame)
+            state = [int(s) for s in out['target_bbox']]
             cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
                          (0, 255, 0), 5)
 
@@ -126,7 +175,7 @@ class BaseTracker:
                 cv.imshow(display_name, frame_disp)
                 x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
                 init_state = [x, y, w, h]
-                self.initialize(frame, init_state)
+                self.initialize(frame, {'init_bbox': init_state})
 
         # When everything done, release the capture
         cap.release()
@@ -186,14 +235,14 @@ class BaseTracker:
             if ui_control.mode == 'track' and ui_control.mode_switch:
                 ui_control.mode_switch = False
                 init_state = ui_control.get_bb()
-                self.initialize(frame, init_state)
+                self.initialize(frame, {'init_bbox': init_state})
 
             # Draw box
             if ui_control.mode == 'select':
                 cv.rectangle(frame_disp, ui_control.get_tl(), ui_control.get_br(), (255, 0, 0), 2)
             elif ui_control.mode == 'track':
-                state = self.track(frame)
-                state = [int(s) for s in state]
+                out = self.track(frame)
+                state = [int(s) for s in out['target_bbox']]
                 cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
                              (0, 255, 0), 5)
 
@@ -248,16 +297,42 @@ class BaseTracker:
 
         if hasattr(self, 'gt_state') and False:
             gt_state = self.gt_state
-            rect = patches.Rectangle((gt_state[0], gt_state[1]), gt_state[2], gt_state[3], linewidth=1, edgecolor='g',
-                                     facecolor='none')
+            rect = patches.Rectangle((gt_state[0], gt_state[1]), gt_state[2], gt_state[3], linewidth=1, edgecolor='g', facecolor='none')
             self.ax.add_patch(rect)
         self.ax.set_axis_off()
         self.ax.axis('equal')
-        plt.draw()
-        plt.pause(0.001)
+        draw_figure(self.fig)
 
         if self.pause_mode:
-            plt.waitforbuttonpress()
+            keypress = False
+            while not keypress:
+                keypress = plt.waitforbuttonpress()
+
+    def show_image(self, im, plot_name=None, ax=None):
+        if isinstance(im, torch.Tensor):
+            im = torch_to_numpy(im)
+        # plot_id = sum([ord(x) for x in list(plot_name)])
+
+        if ax is None:
+            plot_fig_name = 'debug_fig_' + plot_name
+            plot_ax_name = 'debug_ax_' + plot_name
+            if not hasattr(self, plot_fig_name):
+                fig, ax = plt.subplots(1)
+                setattr(self, plot_fig_name, fig)
+                setattr(self, plot_ax_name, ax)
+                plt.tight_layout()
+                ax.set_title(plot_name)
+            else:
+                fig = getattr(self, plot_fig_name, None)
+                ax = getattr(self, plot_ax_name, None)
+
+        ax.cla()
+        ax.imshow(im)
+
+        ax.set_axis_off()
+        ax.axis('equal')
+        ax.set_title(plot_name)
+        draw_figure(fig)
 
     def _read_image(self, image_file: str):
         return cv.cvtColor(cv.imread(image_file), cv.COLOR_BGR2RGB)

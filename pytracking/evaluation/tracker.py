@@ -26,73 +26,80 @@ class Tracker:
             os.makedirs(self.results_dir)
 
         tracker_module = importlib.import_module('pytracking.tracker.{}'.format(self.name))
-
-        self.parameters = self.get_parameters()
         self.tracker_class = tracker_module.get_tracker_class()
 
-        self.default_visualization = getattr(self.parameters, 'visualization', False)
-        self.default_debug = getattr(self.parameters, 'debug', 0)
 
-    def run(self, seq, visualization=None, debug=None):
+    def run(self, seq, visualization=None, debug=None, visdom_info=None):
         """Run tracker on sequence.
         args:
             seq: Sequence to run the tracker on.
             visualization: Set visualization flag (None means default value specified in the parameters).
             debug: Set debug level (None means default value specified in the parameters).
         """
+        visdom_info = {} if visdom_info is None else visdom_info
+        params = self.get_parameters()
         visualization_ = visualization
+
         debug_ = debug
         if debug is None:
-            debug_ = self.default_debug
+            debug_ = getattr(params, 'debug', 0)
         if visualization is None:
             if debug is None:
-                visualization_ = self.default_visualization
+                visualization_ = getattr(params, 'visualization', False)
             else:
                 visualization_ = True if debug else False
 
-        self.parameters.visualization = visualization_
-        self.parameters.debug = debug_
+        params.visualization = visualization_
+        params.debug = debug_
+        params.visdom_info = visdom_info
 
-        tracker = self.tracker_class(self.parameters)
+        tracker = self.tracker_class(params)
 
-        output_bb, execution_times = tracker.track_sequence(seq)
+        output = tracker.track_sequence(seq)
 
-        self.parameters.free_memory()
+        return output
 
-        return output_bb, execution_times
-    def run_video(self, videofilepath, optional_box=None, debug=None):
+    def run_video(self, videofilepath, optional_box=None, debug=None, visdom_info=None):
         """Run the tracker with the vieofile.
         args:
             debug: Debug level.
         """
+        visdom_info = {} if visdom_info is None else visdom_info
+
+        params = self.get_parameters()
 
         debug_ = debug
         if debug is None:
-            debug_ = self.default_debug
-        self.parameters.debug = debug_
+            debug_ = getattr(params, 'debug', 0)
+        params.debug = debug_
+        params.visdom_info = visdom_info
 
-        self.parameters.tracker_name = self.name
-        self.parameters.param_name = self.parameter_name
-        tracker = self.tracker_class(self.parameters)
+        params.tracker_name = self.name
+        params.param_name = self.parameter_name
+        tracker = self.tracker_class(params)
         tracker.track_videofile(videofilepath, optional_box)
 
-    def run_webcam(self, debug=None):
+    def run_webcam(self, debug=None, visdom_info=None):
         """Run the tracker with the webcam.
         args:
             debug: Debug level.
         """
+        visdom_info = {} if visdom_info is None else visdom_info
+        params = self.get_parameters()
 
         debug_ = debug
         if debug is None:
-            debug_ = self.default_debug
-        self.parameters.debug = debug_
+            debug_ = getattr(params, 'debug', 0)
+        params.debug = debug_
 
-        self.parameters.tracker_name = self.name
-        self.parameters.param_name = self.parameter_name
-        tracker = self.tracker_class(self.parameters)
+        params.tracker_name = self.name
+        params.param_name = self.parameter_name
+        params.visdom_info = visdom_info
+
+        tracker = self.tracker_class(params)
 
         tracker.track_webcam()
-
+        
     def get_parameters(self):
         """Get parameters."""
 

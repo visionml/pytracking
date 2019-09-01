@@ -2,7 +2,6 @@ import torch
 from pytracking.features.preprocessing import sample_patch
 from pytracking import TensorList
 
-
 class ExtractorBase:
     """Base feature extractor class.
     args:
@@ -14,10 +13,6 @@ class ExtractorBase:
     def initialize(self):
         for f in self.features:
             f.initialize()
-
-    def free_memory(self):
-        for f in self.features:
-            f.free_memory()
 
 
 class SingleResolutionExtractor(ExtractorBase):
@@ -56,8 +51,9 @@ class MultiResolutionExtractor(ExtractorBase):
     args:
         features: List of features.
     """
-    def __init__(self, features):
+    def __init__(self, features, patch_mode='replicate'):
         super().__init__(features)
+        self.patch_mode = patch_mode
         self.is_color = None
 
     def stride(self):
@@ -97,7 +93,7 @@ class MultiResolutionExtractor(ExtractorBase):
     def set_is_color(self, is_color: bool):
         self.is_color = is_color
 
-    def extract(self, im, pos, scales, image_sz):
+    def extract(self, im, pos, scales, image_sz, return_patches=False):
         """Extract features.
         args:
             im: Image.
@@ -109,12 +105,19 @@ class MultiResolutionExtractor(ExtractorBase):
             scales = [scales]
 
         # Get image patches
-        im_patches = torch.cat([sample_patch(im, pos, s*image_sz, image_sz) for s in scales])
+        patch_iter, coord_iter = zip(*(sample_patch(im, pos, s*image_sz, image_sz, mode=self.patch_mode) for s in scales))
+        im_patches = torch.cat(list(patch_iter))
+        patch_coords = torch.cat(list(coord_iter))
+
+        # im_patches = torch.cat([sample_patch(im, pos, s*image_sz, image_sz) for s in scales])
 
         # Compute features
         feature_map = TensorList([f.get_feature(im_patches) for f in self.features]).unroll()
 
-        return feature_map
+        if return_patches:
+            return feature_map, patch_coords, im_patches
+        else:
+            return feature_map, patch_coords
 
     def extract_transformed(self, im, pos, scale, image_sz, transforms):
         """Extract features from a set of transformed image samples.
@@ -127,7 +130,7 @@ class MultiResolutionExtractor(ExtractorBase):
         """
 
         # Get image patche
-        im_patch = sample_patch(im, pos, scale*image_sz, image_sz)
+        im_patch, _ = sample_patch(im, pos, scale*image_sz, image_sz)
 
         # Apply transforms
         im_patches = torch.cat([T(im_patch) for T in transforms])
@@ -135,4 +138,4 @@ class MultiResolutionExtractor(ExtractorBase):
         # Compute features
         feature_map = TensorList([f.get_feature(im_patches) for f in self.features]).unroll()
 
-        return feature_map
+        return feature_map 

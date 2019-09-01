@@ -29,10 +29,6 @@ def run_training(train_module, train_name, cudnn_benchmark=True):
     print('Training:  {}  {}'.format(train_module, train_name))
 
     settings = ws_settings.Settings()
-
-    if settings.env.workspace_dir == '':
-        raise Exception('Setup your workspace_dir in "ltr/admin/local.py".')
-
     settings.module_name = train_module
     settings.script_name = train_name
     settings.project_path = 'ltr/{}/{}'.format(train_module, train_name)

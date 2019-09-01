@@ -35,16 +35,11 @@ class ATOMnet(nn.Module):
         num_test_images = test_imgs.shape[0] if test_imgs.dim() == 5 else 1
 
         # Extract backbone features
-        train_feat = self.extract_backbone_features(
-            train_imgs.view(-1, train_imgs.shape[-3], train_imgs.shape[-2], train_imgs.shape[-1]))
-        test_feat = self.extract_backbone_features(
-            test_imgs.view(-1, test_imgs.shape[-3], test_imgs.shape[-2], test_imgs.shape[-1]))
+        train_feat = self.extract_backbone_features(train_imgs.view(-1, *train_imgs.shape[-3:]))
+        test_feat = self.extract_backbone_features(test_imgs.view(-1, *test_imgs.shape[-3:]))
 
-        # For clarity, send the features to bb_regressor in sequence form, i.e. [sequence, batch, feature, row, col]
-        train_feat_iou = [feat.view(num_train_images, num_sequences, feat.shape[-3], feat.shape[-2], feat.shape[-1])
-                          for feat in train_feat.values()]
-        test_feat_iou = [feat.view(num_test_images, num_sequences, feat.shape[-3], feat.shape[-2], feat.shape[-1])
-                         for feat in test_feat.values()]
+        train_feat_iou = [feat for feat in train_feat.values()]
+        test_feat_iou = [feat for feat in test_feat.values()]
 
         # Obtain iou prediction
         iou_pred = self.bb_regressor(train_feat_iou, test_feat_iou,
@@ -69,6 +64,20 @@ def atom_resnet18(iou_input_dim=(256,256), iou_inter_dim=(256,256), backbone_pre
 
     # Bounding box regressor
     iou_predictor = bbmodels.AtomIoUNet(pred_input_dim=iou_input_dim, pred_inter_dim=iou_inter_dim)
+
+    net = ATOMnet(feature_extractor=backbone_net, bb_regressor=iou_predictor, bb_regressor_layer=['layer2', 'layer3'],
+                  extractor_grad=False)
+
+    return net
+
+
+@model_constructor
+def atom_resnet50(iou_input_dim=(256,256), iou_inter_dim=(256,256), backbone_pretrained=True):
+    # backbone
+    backbone_net = backbones.resnet50(pretrained=backbone_pretrained)
+
+    # Bounding box regressor
+    iou_predictor = bbmodels.AtomIoUNet(input_dim=(4*128,4*256), pred_input_dim=iou_input_dim, pred_inter_dim=iou_inter_dim)
 
     net = ATOMnet(feature_extractor=backbone_net, bb_regressor=iou_predictor, bb_regressor_layer=['layer2', 'layer3'],
                   extractor_grad=False)

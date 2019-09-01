@@ -6,21 +6,16 @@ def TPLDataset():
     return TPLDatasetClass().get_sequence_list()
 
 
+def TPLDatasetNoOtb():
+    return TPLDatasetClass(exclude_otb=True).get_sequence_list()
+
+
 class TPLDatasetClass(BaseDataset):
-    """ Temple128 dataset
-
-    Publication:
-        Encoding color information for visual tracking: Algorithms and benchmark
-        Pengpeng Liang, Erik Blasch, and Haibin Ling
-        TIP, 2015
-        http://www.dabi.temple.edu/~hbling/publication/TColor-128.pdf
-
-    Download the dataset from http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html
-    """
-    def __init__(self):
+    '''Temple.'''
+    def __init__(self, exclude_otb=False):
         super().__init__()
         self.base_path = self.env_settings.tpl_path
-        self.sequence_info_list = self._get_sequence_info_list()
+        self.sequence_info_list = self._get_sequence_info_list(exclude_otb)
 
     def get_sequence_list(self):
         return SequenceList([self._construct_sequence(s) for s in self.sequence_info_list])
@@ -37,7 +32,7 @@ class TPLDatasetClass(BaseDataset):
         if 'initOmit' in sequence_info:
             init_omit = sequence_info['initOmit']
 
-        frames = ['{base_path}/{sequence_path}/{frame:0{nz}}.{ext}'.format(base_path=self.base_path, 
+        frames = ['{base_path}/{sequence_path}/{frame:0{nz}}.{ext}'.format(base_path=self.base_path,
         sequence_path=sequence_path, frame=frame_num, nz=nz, ext=ext) for frame_num in range(start_frame+init_omit, end_frame+1)]
 
         anno_path = '{}/{}'.format(self.base_path, sequence_info['anno_path'])
@@ -54,7 +49,7 @@ class TPLDatasetClass(BaseDataset):
         return len(self.sequence_info_list)
 
 
-    def _get_sequence_info_list(self):
+    def _get_sequence_info_list(self, exclude_otb=False):
         sequence_info_list = [
             {"name": "tpl_Skating2", "path": "tpl_Skating2/img", "startFrame": 1, "endFrame": 707, "nz": 4,
              "ext": "jpg", "anno_path": "tpl_Skating2/Skating2_gt.txt"},
@@ -316,5 +311,17 @@ class TPLDatasetClass(BaseDataset):
              "ext": "jpg", "anno_path": "tpl_Guitar_ce2/Guitar_ce2_gt.txt"}
 
         ]
+
+        otb_sequences = ['tpl_Skating2', 'tpl_Lemming', 'tpl_Board', 'tpl_Soccer', 'tpl_Liquor', 'tpl_Couple', 'tpl_Walking', 'tpl_David', 'tpl_Tiger2', 'tpl_Bird', 'tpl_Crossing', 'tpl_MountainBike',
+                         'tpl_Diving', 'tpl_CarDark', 'tpl_Shaking', 'tpl_Ironman', 'tpl_FaceOcc1', 'tpl_Tiger1', 'tpl_Skiing', 'tpl_Walking2', 'tpl_Girl', 'tpl_Girlmov', 'tpl_Subway', 'tpl_David3', 'tpl_Woman',
+                         'tpl_Gym', 'tpl_Matrix', 'tpl_Doll', 'tpl_Singer2', 'tpl_Basketball', 'tpl_MotorRolling', 'tpl_CarScale', 'tpl_Football1', 'tpl_Singer1', 'tpl_Skating1', 'tpl_Biker',
+                         'tpl_Boy', 'tpl_Jogging1', 'tpl_Deer', 'tpl_Panda', 'tpl_Coke', 'tpl_Trellis', 'tpl_Jogging2', 'tpl_Bolt', ]
+        if exclude_otb:
+            sequence_info_list_nootb = []
+            for seq in sequence_info_list:
+                if seq['name'] not in otb_sequences:
+                    sequence_info_list_nootb.append(seq)
+
+            sequence_info_list = sequence_info_list_nootb
 
         return sequence_info_list

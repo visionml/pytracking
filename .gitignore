@@ -6,7 +6,7 @@
 *.ipynb_checkpoints/
 ltr/admin/local.py
 ltr/run_ltr_local.py
-ltr/train_settings/bbreg/debug.py
+ltr/train_settings/*/debug.py
 pytracking/networks/
 pytracking/tracking_results/
 pytracking/evaluation/local.py

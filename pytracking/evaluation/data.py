@@ -17,12 +17,20 @@ class BaseDataset:
 
 class Sequence:
     """Class for the sequence in an evaluation."""
-    def __init__(self, name, frames, ground_truth_rect, object_class=None):
+    def __init__(self, name, frames, ground_truth_rect):
         self.name = name
         self.frames = frames
         self.ground_truth_rect = ground_truth_rect
-        self.init_state = list(self.ground_truth_rect[0,:])
-        self.object_class = object_class
+
+    def init_info(self):
+        return {key: self.get(key) for key in ['init_bbox']}
+
+    def init_bbox(self):
+        return list(self.ground_truth_rect[0,:])
+
+    def get(self, name):
+        return getattr(self, name)()
+
 
 
 class SequenceList(list):

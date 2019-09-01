@@ -108,7 +108,7 @@ class Got10k(BaseDataset):
                              low_memory=False).values
         return torch.tensor(gt)
 
-    def _read_target_visible(self, seq_path, anno):
+    def _read_target_visible(self, seq_path):
         # Read full occlusion and out_of_view
         occlusion_file = os.path.join(seq_path, "absence.label")
         cover_file = os.path.join(seq_path, "cover.label")

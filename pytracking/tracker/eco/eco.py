@@ -20,7 +20,8 @@ class ECO(BaseTracker):
         self.features_initialized = True
 
 
-    def initialize(self, image, state, *args, **kwargs):
+    def initialize(self, image, info: dict) -> dict:
+        state = info['init_bbox']
 
         # Initialize some stuff
         self.frame_num = 1
@@ -175,7 +176,7 @@ class ECO(BaseTracker):
 
 
 
-    def track(self, image):
+    def track(self, image) -> dict:
 
         self.frame_num += 1
 
@@ -187,7 +188,7 @@ class ECO(BaseTracker):
         # Get sample
         sample_pos = self.pos.round()
         sample_scales = self.target_scale * self.params.scale_factors
-        test_xf = self.extract_fourier_sample(im, sample_pos, sample_scales, self.img_sample_sz)
+        test_xf = self.extract_fourier_sample(im, self.pos, sample_scales, self.img_sample_sz)
 
         # Compute scores
         sf = self.apply_filter(test_xf)
@@ -224,7 +225,8 @@ class ECO(BaseTracker):
         # Return new state
         new_state = torch.cat((self.pos[[1,0]] - (self.target_sz[[1,0]]-1)/2, self.target_sz[[1,0]]))
 
-        return new_state.tolist()
+        out = {'target_bbox': new_state.tolist()}
+        return out
 
 
     def apply_filter(self, sample_xf: TensorList) -> torch.Tensor:
@@ -274,7 +276,7 @@ class ECO(BaseTracker):
 
 
     def extract_sample(self, im: torch.Tensor, pos: torch.Tensor, scales, sz: torch.Tensor):
-        return self.params.features.extract(im, pos, scales, sz)
+        return self.params.features.extract(im, pos, scales, sz)[0]
 
     def extract_fourier_sample(self, im: torch.Tensor, pos: torch.Tensor, scales, sz: torch.Tensor) -> TensorList:
         x = self.extract_sample(im, pos, scales, sz)
@@ -306,7 +308,7 @@ class ECO(BaseTracker):
         if 'blur' in self.params.augmentation:
             transforms.extend([augmentation.Blur(sigma) for sigma in self.params.augmentation['blur']])
 
-        init_samples = self.params.features.extract_transformed(im, self.pos.round(), self.target_scale, self.img_sample_sz, transforms)
+        init_samples = self.params.features.extract_transformed(im, self.pos, self.target_scale, self.img_sample_sz, transforms)
 
         # Remove augmented samples for those that shall not have
         for i, use_aug in enumerate(self.fparams.attribute('use_augmentation')):

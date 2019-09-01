@@ -9,7 +9,7 @@ if env_path not in sys.path:
 from pytracking.evaluation.otbdataset import OTBDataset
 from pytracking.evaluation.nfsdataset import NFSDataset
 from pytracking.evaluation.uavdataset import UAVDataset
-from pytracking.evaluation.tpldataset import TPLDataset
+from pytracking.evaluation.tpldataset import TPLDataset, TPLDatasetNoOtb
 from pytracking.evaluation.votdataset import VOTDataset
 from pytracking.evaluation.lasotdataset import LaSOTDataset
 from pytracking.evaluation.trackingnetdataset import TrackingNetDataset
@@ -18,7 +18,8 @@ from pytracking.evaluation.running import run_dataset
 from pytracking.evaluation import Tracker
 
 
-def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', sequence=None, debug=0, threads=0):
+def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', sequence=None, debug=0, threads=0,
+                visdom_info=None):
     """Run tracker on sequence or dataset.
     args:
         tracker_name: Name of tracking method.
@@ -28,7 +29,11 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
         sequence: Sequence number or name.
         debug: Debug level.
         threads: Number of threads.
+        visdom_info: Dict optionally containing 'use_visdom', 'server' and 'port' for Visdom visualization.
     """
+
+    visdom_info = {} if visdom_info is None else visdom_info
+
     if dataset_name == 'otb':
         dataset = OTBDataset()
     elif dataset_name == 'nfs':
@@ -37,6 +42,8 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
         dataset = UAVDataset()
     elif dataset_name == 'tpl':
         dataset = TPLDataset()
+    elif dataset_name == 'tplnootb':
+        dataset = TPLDatasetNoOtb()
     elif dataset_name == 'vot':
         dataset = VOTDataset()
     elif dataset_name == 'tn':
@@ -57,7 +64,7 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
 
     trackers = [Tracker(tracker_name, tracker_param, run_id)]
 
-    run_dataset(dataset, trackers, debug, threads)
+    run_dataset(dataset, trackers, debug, threads, visdom_info=visdom_info)
 
 
 def main():
@@ -69,10 +76,14 @@ def main():
     parser.add_argument('--sequence', type=str, default=None, help='Sequence number or name.')
     parser.add_argument('--debug', type=int, default=0, help='Debug level.')
     parser.add_argument('--threads', type=int, default=0, help='Number of threads.')
+    parser.add_argument('--use_visdom', type=bool, default=True, help='Flag to enable visdom')
+    parser.add_argument('--visdom_server', type=str, default='127.0.0.1', help='Server for visdom')
+    parser.add_argument('--visdom_port', type=int, default=8097, help='Port for visdom')
 
     args = parser.parse_args()
 
-    run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset, args.sequence, args.debug, args.threads)
+    run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset, args.sequence, args.debug, args.threads,
+                {'use_visdom': args.use_visdom, 'server': args.visdom_server, 'port': args.visdom_port})
 
 
 if __name__ == '__main__':

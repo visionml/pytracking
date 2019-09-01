@@ -4,7 +4,7 @@ import torchvision
 from pytracking import TensorList
 from pytracking.evaluation.environment import env_settings
 import os
-from ltr import load_network
+from pytracking.utils.loading import load_network
 from ltr.models.backbone.resnet18_vggm import resnet18_vggmconv1
 
 normalize = torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -27,7 +27,7 @@ class ResNet18m1(MultiFeatureBase):
 
         self.output_layers = list(output_layers)
         self.use_gpu = use_gpu
-        self.net_path = 'resnet18_vggmconv1.pth' if net_path is None else net_path
+        self.net_path = 'resnet18_vggmconv1/resnet18_vggmconv1.pth' if net_path is None else net_path
 
     def initialize(self):
         if os.path.isabs(self.net_path):
@@ -48,10 +48,6 @@ class ResNet18m1(MultiFeatureBase):
         if self.use_gpu:
             self.net.cuda()
         self.net.eval()
-
-    def free_memory(self):
-        if hasattr(self, 'net'):
-            del self.net
 
     def dim(self):
         return TensorList([self.layer_dim[l] for l in self.output_layers])
@@ -87,12 +83,7 @@ class ATOMResNet18(MultiFeatureBase):
         self.net_path = net_path
 
     def initialize(self):
-        if os.path.isabs(self.net_path):
-            net_path_full = self.net_path
-        else:
-            net_path_full = os.path.join(env_settings().network_path, self.net_path)
-
-        self.net, _ = load_network(net_path_full, backbone_pretrained=False)
+        self.net = load_network(self.net_path)
 
         if self.use_gpu:
             self.net.cuda()
@@ -112,16 +103,6 @@ class ATOMResNet18(MultiFeatureBase):
 
         self.mean = torch.Tensor([0.485, 0.456, 0.406]).view(1,-1,1,1)
         self.std = torch.Tensor([0.229, 0.224, 0.225]).view(1,-1,1,1)
-
-    def free_memory(self):
-        if hasattr(self, 'net'):
-            del self.net
-        if hasattr(self, 'iou_predictor'):
-            del self.iou_predictor
-        if hasattr(self, 'iounet_backbone_features'):
-            del self.iounet_backbone_features
-        if hasattr(self, 'iounet_features'):
-            del self.iounet_features
 
     def dim(self):
         return TensorList([self.layer_dim[l] for l in self.output_layers])
