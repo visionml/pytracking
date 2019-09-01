@@ -118,7 +118,7 @@ class Got10k(BaseDataset):
         with open(cover_file, 'r', newline='') as f:
             cover = torch.ByteTensor([int(v[0]) for v in csv.reader(f)])
 
-        target_visible = ~occlusion & (cover>0)
+        target_visible = ~occlusion & (cover>0).byte()
 
         visible_ratio = cover.float() / 8
         return target_visible,  visible_ratio
@@ -132,7 +132,7 @@ class Got10k(BaseDataset):
 
         valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
         visible, visible_ratio = self._read_target_visible(seq_path)
-        visible = visible & valid
+        visible = visible & valid.byte()
 
         return {'bbox': bbox, 'valid': valid, 'visible': visible, 'visible_ratio': visible_ratio}
 
