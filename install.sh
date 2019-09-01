@@ -24,8 +24,8 @@ conda install -y pytorch=1.1 torchvision cudatoolkit=10.0 -c pytorch
 
 echo ""
 echo ""
-echo "****************** Installing matplotlib 2.2.2 ******************"
-conda install -y matplotlib=2.2.2
+echo "****************** Installing matplotlib ******************"
+conda install -y matplotlib
 
 echo ""
 echo ""
@@ -41,6 +41,11 @@ echo ""
 echo ""
 echo "****************** Installing tensorboardX ******************"
 pip install tensorboardX
+
+echo ""
+echo ""
+echo "****************** Installing visdom ******************"
+pip install visdom
 
 echo ""
 echo ""
