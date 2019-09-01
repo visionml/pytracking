@@ -23,10 +23,10 @@ conda install pytorch=1.1 torchvision cudatoolkit=10.0 -c pytorch
 - It is possible to use any PyTorch supported version of CUDA (not necessarily v10).   
 - For more details about PyTorch installation, see https://pytorch.org/get-started/previous-versions/.  
 
-#### Install matplotlib, pandas, opencv and tensorboadX  
+#### Install matplotlib, pandas, opencv, visdom and tensorboadX  
 ```bash
-conda install matplotlib=2.2.2 pandas
-pip install opencv-python tensorboardX
+conda install matplotlib pandas
+pip install opencv-python tensorboardX visdom
 ```
 
 
