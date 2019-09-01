@@ -5,7 +5,9 @@ import torch
 class TensorList(list):
     """Container mainly used for lists of torch tensors. Extends lists with pytorch functionality."""
 
-    def __init__(self, list_of_tensors = list()):
+    def __init__(self, list_of_tensors = None):
+        if list_of_tensors is None:
+            list_of_tensors = list()
         super(TensorList, self).__init__(list_of_tensors)
 
     def __getitem__(self, item):
@@ -154,6 +156,9 @@ class TensorList(list):
             else:
                 new_list.append(t)
         return new_list
+
+    def list(self):
+        return list(self)
 
     def attribute(self, attr: str, *args):
         return TensorList([getattr(e, attr, *args) for e in self])
