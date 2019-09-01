@@ -1,6 +1,7 @@
 import os
 import glob
 import torch
+import traceback
 from ltr.admin import loading
 
 
@@ -77,6 +78,8 @@ class BaseTrainer:
                 print('Training crashed at epoch {}'.format(epoch))
                 if fail_safe:
                     load_latest = True
+                    print('Traceback for the error!')
+                    print(traceback.format_exc())
                     print('Restarting training from last epoch ...')
                 else:
                     raise
