@@ -126,6 +126,122 @@ def jittered_center_crop(frames, box_extract, box_gt, search_area_factor, output
     return frames_crop, box_crop
 
 
+def sample_target_nopad(im, target_bb, search_area_factor, output_sz):
+    """ Extracts a crop centered at target_bb box, of area search_area_factor^2. If the crop area contains regions
+    outside the image, it is shifted so that the it is inside the image. Further, if the crop area exceeds the image
+    size, a smaller crop which fits the image is returned instead.
+
+    args:
+        im - cv image
+        target_bb - target box [x, y, w, h]
+        search_area_factor - Ratio of crop size to target size
+        output_sz - (float) Size to which the extracted crop is resized (always square). If None, no resizing is done.
+
+    returns:
+        cv image - extracted crop
+        torch.Tensor - a bounding box denoting the cropped region in the image.
+    """
+
+    if isinstance(output_sz, (float, int)):
+        output_sz = (output_sz, output_sz)
+    output_sz = torch.Tensor(output_sz)
+
+    im_h = im.shape[0]
+    im_w = im.shape[1]
+
+    bbx, bby, bbw, bbh = target_bb.tolist()
+
+    # Crop image
+    crop_sz_x, crop_sz_y = (output_sz * (target_bb[2:].prod()/output_sz.prod()).sqrt() * search_area_factor).ceil()
+
+    # Calculate rescaling factor if outside the image
+    rescale_factor = max(1, crop_sz_x/im_w, crop_sz_y/im_h)
+    crop_sz_x = math.floor(crop_sz_x / rescale_factor)
+    crop_sz_y = math.floor(crop_sz_y / rescale_factor)
+
+    if crop_sz_x < 1 or crop_sz_y < 1:
+        raise Exception('Too small bounding box.')
+
+    x1 = round(bbx + 0.5*bbw - crop_sz_x*0.5)
+    x2 = x1 + crop_sz_x
+
+    y1 = round(bby + 0.5*bbh - crop_sz_y*0.5)
+    y2 = y1 + crop_sz_y
+
+    # Move box inside image
+    shift_x = max(0, -x1) + min(0, im_w - x2)
+    x1 += shift_x
+    x2 += shift_x
+
+    shift_y = max(0, -y1) + min(0, im_h - y2)
+    y1 += shift_y
+    y2 += shift_y
+
+    # Crop and resize image
+    im_crop = im[y1:y2, x1:x2, :]
+    im_out = cv.resize(im_crop, tuple(output_sz.long().tolist()))
+
+    crop_box = torch.Tensor([x1, y1, x2-x1, y2-y1])
+    return im_out, crop_box
+
+
+def transform_box_to_crop(box: torch.Tensor, crop_box: torch.Tensor, crop_sz: torch.Tensor) -> torch.Tensor:
+    """ Transform the box co-ordinates from the original image co-ordinates to the co-ordinates of the cropped image
+    args:
+        box - the box for which the co-ordinates are to be transformed
+        crop_box - bounding box defining the crop in the original image
+        crop_sz - size of the cropped image
+
+    returns:
+        torch.Tensor - transformed co-ordinates of box_in
+    """
+
+    box_out = box.clone()
+    box_out[:2] -= crop_box[:2]
+
+    scale_factor = crop_sz / crop_box[2:]
+
+    box_out[:2] *= scale_factor
+    box_out[2:] *= scale_factor
+    return box_out
+
+
+def jittered_center_crop_nopad(frames, box_extract, box_gt, search_area_factor, output_sz):
+    """ For each frame in frames, extracts a square crop centered at box_extract, of area search_area_factor^2
+    times box_extract area. If the crop area contains regions outside the image, it is shifted / shrunk so that it
+    completely fits inside the image. The extracted crops are then resized to output_sz. Further, the co-ordinates of
+    the box box_gt are transformed to the image crop co-ordinates
+
+    args:
+        frames - list of frames
+        box_extract - list of boxes of same length as frames. The crops are extracted using anno_extract
+        box_gt - list of boxes of same length as frames. The co-ordinates of these boxes are transformed from
+                    image co-ordinates to the crop co-ordinates
+        search_area_factor - The area of the extracted crop is search_area_factor^2 times box_extract area
+        output_sz - The size to which the extracted crops are resized
+
+    returns:
+        list - list of image crops
+        list - box_gt location in the crop co-ordinates
+        """
+
+    if isinstance(output_sz, (float, int)):
+        output_sz = (output_sz, output_sz)
+
+    frame_crops_boxes = [sample_target_nopad(f, a, search_area_factor, output_sz)
+                            for f, a in zip(frames, box_extract)]
+
+    frames_crop, crop_boxes = zip(*frame_crops_boxes)
+
+    crop_sz = torch.Tensor(output_sz)
+
+    # find the bb location in the crop
+    box_crop = [transform_box_to_crop(bb_gt, crop_bb, crop_sz)
+                for bb_gt, crop_bb in zip(box_gt, crop_boxes)]
+
+    return frames_crop, box_crop
+
+
 def iou(reference, proposals):
     """Compute the IoU between a reference box with multiple proposal boxes.
 
@@ -222,3 +338,46 @@ def perturb_box(box, min_iou=0.5, sigma_factor=0.1):
         perturb_factor *= 0.9
 
     return box_per, box_iou
+
+
+def gauss_1d(sz, sigma, center, end_pad=0):
+    k = torch.arange(-(sz-1)/2, (sz+1)/2 + end_pad).reshape(1, -1)
+    return torch.exp(-1.0/(2*sigma**2) * (k - center.reshape(-1, 1))**2)
+
+
+def gauss_2d(sz, sigma, center, end_pad=(0, 0)):
+    if isinstance(sigma, (float, int)):
+        sigma = (sigma, sigma)
+    return gauss_1d(sz[0].item(), sigma[0], center[:, 0], end_pad[0]).reshape(center.shape[0], 1, -1) * \
+           gauss_1d(sz[1].item(), sigma[1], center[:, 1], end_pad[1]).reshape(center.shape[0], -1, 1)
+
+
+def gaussian_label_function(target_bb, sigma_factor, kernel_sz, feat_sz, image_sz, end_pad_if_even=True):
+    """Construct Gaussian label function."""
+
+    if isinstance(kernel_sz, (float, int)):
+        kernel_sz = (kernel_sz, kernel_sz)
+    if isinstance(feat_sz, (float, int)):
+        feat_sz = (feat_sz, feat_sz)
+    if isinstance(image_sz, (float, int)):
+        image_sz = (image_sz, image_sz)
+
+    image_sz = torch.Tensor(image_sz)
+    feat_sz = torch.Tensor(feat_sz)
+
+    target_center = target_bb[:, 0:2] + 0.5 * target_bb[:, 2:4]
+    target_center_norm = (target_center - image_sz / 2) / image_sz
+
+    center = feat_sz * target_center_norm + 0.5 * \
+             torch.Tensor([(kernel_sz[0] + 1) % 2, (kernel_sz[1] + 1) % 2])
+
+    sigma = sigma_factor * feat_sz.prod().sqrt().item()
+
+    if end_pad_if_even:
+        end_pad = (int(kernel_sz[0]%2 == 0), int(kernel_sz[1]%2 == 0))
+    else:
+        end_pad = (0, 0)
+
+    gauss_label = gauss_2d(feat_sz, sigma, center, end_pad)
+    return gauss_label
+

@@ -4,6 +4,7 @@ import torch
 import numpy as np
 import pandas
 import csv
+import random
 from collections import OrderedDict
 from .base_dataset import BaseDataset
 from ltr.data.image_loader import default_image_loader
@@ -22,21 +23,27 @@ class Lasot(BaseDataset):
     Download the dataset from https://cis.temple.edu/lasot/download.html
     """
 
-    def __init__(self, root=None, image_loader=default_image_loader, vid_ids=None, split=None):
+    def __init__(self, root=None, image_loader=default_image_loader, vid_ids=None, split=None, data_fraction=None):
         """
         args:
             root - path to the lasot dataset.
-            image_loader (jpeg4py_loader) -  The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
-                                            is used by default.
+            image_loader (default_image_loader) -  The function to read the images. If installed,
+                                                   jpeg4py (https://github.com/ajkxyz/jpeg4py) is used by default. Else,
+                                                   opencv's imread is used.
             vid_ids - List containing the ids of the videos (1 - 20) used for training. If vid_ids = [1, 3, 5], then the
                     videos with subscripts -1, -3, and -5 from each class will be used for training.
             split - If split='train', the official train split (protocol-II) is used for training. Note: Only one of
                     vid_ids or split option can be used at a time.
+            data_fraction (None) - Fraction of videos to be used. The videos are selected randomly. If None, all the
+                                   videos will be used
         """
         root = env_settings().lasot_dir if root is None else root
         super().__init__(root, image_loader)
 
         self.sequence_list = self._build_sequence_list(vid_ids, split)
+
+        if data_fraction is not None:
+            self.sequence_list = random.sample(self.sequence_list, int(len(self.sequence_list)*data_fraction))
 
     def _build_sequence_list(self, vid_ids=None, split=None):
         if split is not None:
@@ -61,9 +68,9 @@ class Lasot(BaseDataset):
     def get_num_sequences(self):
         return len(self.sequence_list)
 
-    def _read_anno(self, seq_path):
-        anno_file = os.path.join(seq_path, "groundtruth.txt")
-        gt = pandas.read_csv(anno_file, delimiter=',', header=None, dtype=np.float32, na_filter=False, low_memory=False).values
+    def _read_bb_anno(self, seq_path):
+        bb_anno_file = os.path.join(seq_path, "groundtruth.txt")
+        gt = pandas.read_csv(bb_anno_file, delimiter=',', header=None, dtype=np.float32, na_filter=False, low_memory=False).values
         return torch.tensor(gt)
 
     def _read_target_visible(self, seq_path, anno):
@@ -76,7 +83,7 @@ class Lasot(BaseDataset):
         with open(out_of_view_file, 'r') as f:
             out_of_view = torch.ByteTensor([int(v) for v in list(csv.reader(f))[0]])
 
-        target_visible = ~occlusion & ~out_of_view & (anno[:,2]>0) & (anno[:,3]>0)
+        target_visible = ~occlusion & ~out_of_view
 
         return target_visible
 
@@ -89,10 +96,12 @@ class Lasot(BaseDataset):
 
     def get_sequence_info(self, seq_id):
         seq_path = self._get_sequence_path(seq_id)
-        anno = self._read_anno(seq_path)
-        target_visible = self._read_target_visible(seq_path, anno)
+        bbox = self._read_bb_anno(seq_path)
 
-        return anno, target_visible
+        valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
+        visible = self._read_target_visible(seq_path) & valid
+
+        return {'bbox': bbox, 'valid': valid, 'visible': visible}
 
     def _get_frame_path(self, seq_path, frame_id):
         return os.path.join(seq_path, 'img', '{:08}.jpg'.format(frame_id+1))    # frames start from 1
@@ -111,10 +120,12 @@ class Lasot(BaseDataset):
         frame_list = [self._get_frame(seq_path, f_id) for f_id in frame_ids]
 
         if anno is None:
-            anno = self._read_anno(seq_path)
+            anno = self.get_sequence_info(seq_id)
 
-        # Return as list of tensors
-        anno_frames = [anno[f_id, :] for f_id in frame_ids]
+        # Create anno dict
+        anno_frames = {}
+        for key, value in anno.items():
+            anno_frames[key] = [value[f_id, ...].clone() for f_id in frame_ids]
 
         object_meta = OrderedDict({'object_class': obj_class,
                                    'motion_class': None,

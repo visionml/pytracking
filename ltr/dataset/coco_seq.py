@@ -2,6 +2,7 @@ import os
 from .base_dataset import BaseDataset
 from ltr.data.image_loader import default_image_loader
 import torch
+import random
 from pycocotools.coco import COCO
 from collections import OrderedDict
 from ltr.admin.environment import env_settings
@@ -28,7 +29,16 @@ class MSCOCOSeq(BaseDataset):
     Note: You also have to install the coco pythonAPI from https://github.com/cocodataset/cocoapi.
     """
 
-    def __init__(self, root=None, image_loader=default_image_loader):
+    def __init__(self, root=None, image_loader=default_image_loader, data_fraction=None):
+        """
+        args:
+            root - path to the coco dataset.
+            image_loader (default_image_loader) -  The function to read the images. If installed,
+                                                   jpeg4py (https://github.com/ajkxyz/jpeg4py) is used by default. Else,
+                                                   opencv's imread is used.
+            data_fraction (None) - Fraction of images to be used. The images are selected randomly. If None, all the
+                                  images  will be used
+        """
         root = env_settings().coco_dir if root is None else root
         super().__init__(root, image_loader)
 
@@ -40,6 +50,9 @@ class MSCOCOSeq(BaseDataset):
 
         self.cats = self.coco_set.cats
         self.sequence_list = self._get_sequence_list()
+
+        if data_fraction is not None:
+            self.sequence_list = random.sample(self.sequence_list, int(len(self.sequence_list)*data_fraction))
 
     def _get_sequence_list(self):
         ann_list = list(self.coco_set.anns.keys())
@@ -58,13 +71,16 @@ class MSCOCOSeq(BaseDataset):
 
     def get_sequence_info(self, seq_id):
         anno = self._get_anno(seq_id)
-        target_visible = (anno[:, 2] > 0) & (anno[:, 3] > 0)
 
-        return anno, target_visible
+        bbox = torch.Tensor(anno['bbox']).view(1, 4)
+        valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
+        visible = valid.clone()
+
+        return {'bbox': bbox, 'valid': valid, 'visible': visible}
 
     def _get_anno(self, seq_id):
-        anno = self.coco_set.anns[self.sequence_list[seq_id]]['bbox']
-        return torch.Tensor(anno).view(1, 4)
+        anno = self.coco_set.anns[self.sequence_list[seq_id]]
+        return anno
 
     def _get_frames(self, seq_id):
         path = self.coco_set.loadImgs([self.coco_set.anns[self.sequence_list[seq_id]]['image_id']])[0]['file_name']
@@ -95,9 +111,12 @@ class MSCOCOSeq(BaseDataset):
         frame_list = [frame.copy() for _ in frame_ids]
 
         if anno is None:
-            anno = self._get_anno(seq_id)
+            anno = self.get_sequence_info(seq_id)
 
-        anno_frames = [anno.clone()[0, :] for _ in frame_ids]
+        # Create anno dict
+        anno_frames = {}
+        for key, value in anno.items():
+            anno_frames[key] = [value[0, ...] for _ in frame_ids]
 
         object_meta = self.get_meta_info(seq_id)
 

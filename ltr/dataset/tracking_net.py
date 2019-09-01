@@ -3,6 +3,7 @@ import os
 import os.path
 import numpy as np
 import pandas
+import random
 from collections import OrderedDict
 
 from ltr.data.image_loader import default_image_loader
@@ -42,14 +43,17 @@ class TrackingNet(BaseDataset):
 
     Download the dataset using the toolkit https://github.com/SilvioGiancola/TrackingNet-devkit.
     """
-    def __init__(self, root=None, image_loader=default_image_loader, set_ids=None):
+    def __init__(self, root=None, image_loader=default_image_loader, set_ids=None, data_fraction=None):
         """
         args:
             root        - The path to the TrackingNet folder, containing the training sets.
-            image_loader (jpeg4py_loader) -  The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
-                                            is used by default.
+            image_loader (default_image_loader) -  The function to read the images. If installed,
+                                       jpeg4py (https://github.com/ajkxyz/jpeg4py) is used by default. Else,
+                                       opencv's imread is used.
             set_ids (None) - List containing the ids of the TrackingNet sets to be used for training. If None, all the
                             sets (0 - 11) will be used.
+            data_fraction (None) - Fraction of videos to be used. The videos are selected randomly. If None, all the
+                                   videos will be used
         """
         root = env_settings().trackingnet_dir if root is None else root
         super().__init__(root, image_loader)
@@ -63,20 +67,27 @@ class TrackingNet(BaseDataset):
         # video_name for each sequence
         self.sequence_list = list_sequences(self.root, self.set_ids)
 
+        if data_fraction is not None:
+            self.sequence_list = random.sample(self.sequence_list, int(len(self.sequence_list) * data_fraction))
+
     def get_name(self):
         return 'trackingnet'
 
-    def _read_anno(self, seq_id):
+    def _read_bb_anno(self, seq_id):
         set_id = self.sequence_list[seq_id][0]
         vid_name = self.sequence_list[seq_id][1]
-        anno_file = os.path.join(self.root, "TRAIN_" + str(set_id), "anno", vid_name + ".txt")
-        gt = pandas.read_csv(anno_file, delimiter=',', header=None, dtype=np.float32, na_filter=False, low_memory=False).values
+        bb_anno_file = os.path.join(self.root, "TRAIN_" + str(set_id), "anno", vid_name + ".txt")
+        gt = pandas.read_csv(bb_anno_file, delimiter=',', header=None, dtype=np.float32, na_filter=False, low_memory=False).values
+
         return torch.tensor(gt)
 
     def get_sequence_info(self, seq_id):
-        anno = self._read_anno(seq_id)
-        target_visible = (anno[:,2]>0) & (anno[:,3]>0)
-        return anno, target_visible
+        bbox = self._read_bb_anno(seq_id)
+
+        valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
+        visible = valid.clone()
+
+        return {'bbox': bbox, 'valid': valid, 'visible': visible}
 
     def _get_frame(self, seq_id, frame_id):
         set_id = self.sequence_list[seq_id][0]
@@ -88,10 +99,12 @@ class TrackingNet(BaseDataset):
         frame_list = [self._get_frame(seq_id, f) for f in frame_ids]
 
         if anno is None:
-            anno = self._read_anno(seq_id)
+            anno = self.get_sequence_info(seq_id)
 
-        # Return as list of tensors
-        anno_frames = [anno[f_id, :] for f_id in frame_ids]
+        # Create anno dict
+        anno_frames = {}
+        for key, value in anno.items():
+            anno_frames[key] = [value[f_id, ...].clone() for f_id in frame_ids]
 
         object_meta = OrderedDict({'object_class': None,
                                    'motion_class': None,

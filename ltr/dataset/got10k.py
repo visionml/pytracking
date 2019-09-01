@@ -4,6 +4,7 @@ import numpy as np
 import torch
 import csv
 import pandas
+import random
 from collections import OrderedDict
 from .base_dataset import BaseDataset
 from ltr.data.image_loader import default_image_loader
@@ -22,17 +23,20 @@ class Got10k(BaseDataset):
     Download dataset from http://got-10k.aitestunion.com/downloads
     """
 
-    def __init__(self, root=None, image_loader=default_image_loader, split=None, seq_ids=None):
+    def __init__(self, root=None, image_loader=default_image_loader, split=None, seq_ids=None, data_fraction=None):
         """
         args:
             root - path to the got-10k training data. Note: This should point to the 'train' folder inside GOT-10k
-            image_loader (jpeg4py_loader) -  The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
-                                            is used by default.
+            image_loader (default_image_loader) -  The function to read the images. If installed,
+                                                   jpeg4py (https://github.com/ajkxyz/jpeg4py) is used by default. Else,
+                                                   opencv's imread is used.
             split - 'train' or 'val'. Note: The validation split here is a subset of the official got-10k train split,
                     not NOT the official got-10k validation split. To use the official validation split, provide that as
                     the root folder instead.
             seq_ids - List containing the ids of the videos to be used for training. Note: Only one of 'split' or 'seq_ids'
                         options can be used at the same time.
+            data_fraction (None) - Fraction of videos to be used. The videos are selected randomly. If None, all the videos
+                                   will be used
         """
         root = env_settings().got10k_dir if root is None else root
         super().__init__(root, image_loader)
@@ -61,6 +65,9 @@ class Got10k(BaseDataset):
         # self.seq_ids = seq_ids
 
         self.sequence_list = [self.sequence_list[i] for i in seq_ids]
+
+        if data_fraction is not None:
+            self.sequence_list = random.sample(self.sequence_list, int(len(self.sequence_list)*data_fraction))
 
         self.sequence_meta_info = self._load_meta_info()
 
@@ -95,9 +102,10 @@ class Got10k(BaseDataset):
         dir_list = [dir_name[0] for dir_name in dir_list]
         return dir_list
 
-    def _read_anno(self, seq_path):
-        anno_file = os.path.join(seq_path, "groundtruth.txt")
-        gt = pandas.read_csv(anno_file, delimiter=',', header=None, dtype=np.float32, na_filter=False, low_memory=False).values
+    def _read_bb_anno(self, seq_path):
+        bb_anno_file = os.path.join(seq_path, "groundtruth.txt")
+        gt = pandas.read_csv(bb_anno_file, delimiter=',', header=None, dtype=np.float32, na_filter=False,
+                             low_memory=False).values
         return torch.tensor(gt)
 
     def _read_target_visible(self, seq_path, anno):
@@ -110,19 +118,23 @@ class Got10k(BaseDataset):
         with open(cover_file, 'r', newline='') as f:
             cover = torch.ByteTensor([int(v[0]) for v in csv.reader(f)])
 
-        target_visible = ~occlusion & (cover>0) & (anno[:,2]>0) & (anno[:,3]>0)
+        target_visible = ~occlusion & (cover>0)
 
-        return target_visible
+        visible_ratio = cover.float() / 8
+        return target_visible,  visible_ratio
 
     def _get_sequence_path(self, seq_id):
         return os.path.join(self.root, self.sequence_list[seq_id])
 
     def get_sequence_info(self, seq_id):
         seq_path = self._get_sequence_path(seq_id)
-        anno = self._read_anno(seq_path)
-        target_visible = self._read_target_visible(seq_path, anno)
+        bbox = self._read_bb_anno(seq_path)
 
-        return anno, target_visible
+        valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
+        visible, visible_ratio = self._read_target_visible(seq_path)
+        visible = visible & valid
+
+        return {'bbox': bbox, 'valid': valid, 'visible': visible, 'visible_ratio': visible_ratio}
 
     def _get_frame_path(self, seq_path, frame_id):
         return os.path.join(seq_path, '{:08}.jpg'.format(frame_id+1))    # frames start from 1
@@ -137,9 +149,11 @@ class Got10k(BaseDataset):
         frame_list = [self._get_frame(seq_path, f_id) for f_id in frame_ids]
 
         if anno is None:
-            anno = self._read_anno(seq_path)
+            anno = self.get_sequence_info(seq_id)
 
-        # Return as list of tensors
-        anno_frames = [anno[f_id, :] for f_id in frame_ids]
+        # Create anno dict
+        anno_frames = {}
+        for key, value in anno.items():
+            anno_frames[key] = [value[f_id, ...].clone() for f_id in frame_ids]
 
         return frame_list, anno_frames, obj_meta

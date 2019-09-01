@@ -61,9 +61,11 @@ class BaseDataset(torch.utils.data.Dataset):
             seq_id - index of the sequence
 
         returns:
-            Tensor - Annotation for the sequence. A 2d tensor of shape (num_frames, 4).
-                    Format [top_left_x, top_left_y, width, height]
-            Tensor - 1d Tensor specifying whether target is present (=1 )for each frame. shape (num_frames,)
+            Dict containing following fields
+                bbox -  Annotation for the sequence. A 2d tensor of shape (num_frames, 4).
+                        Format [top_left_x, top_left_y, width, height]
+                valid - A 1d tensor of shape (num_frames,) denoting whether the annotation is valid
+                visible - A 1d tensor of shape (num_frames,) denoting whether the target is visible in the frame
             """
         raise NotImplementedError
 
@@ -77,7 +79,7 @@ class BaseDataset(torch.utils.data.Dataset):
 
         returns:
             list - List of frames corresponding to frame_ids
-            list - List of annotations (tensor of shape (4,)) for each frame
+            dict - A dict containing annotations for the frames
             dict - A dict containing meta information about the sequence, e.g. class of the target object.
 
         """

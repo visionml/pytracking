@@ -4,6 +4,7 @@ from ltr.data.image_loader import default_image_loader
 import xml.etree.ElementTree as ET
 import json
 import torch
+import random
 from collections import OrderedDict
 from ltr.admin.environment import env_settings
 
@@ -30,8 +31,9 @@ class ImagenetVID(BaseDataset):
         """
         args:
             root - path to the imagenet vid dataset.
-            image_loader (jpeg4py_loader) -  The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
-                                            is used by default.
+            image_loader (default_image_loader) -  The function to read the images. If installed,
+                                                   jpeg4py (https://github.com/ajkxyz/jpeg4py) is used by default. Else,
+                                                   opencv's imread is used.
             min_length - Minimum allowed sequence length.
             max_target_area - max allowed ratio between target area and image area. Can be used to filter out targets
                                 which cover complete image.
@@ -64,8 +66,10 @@ class ImagenetVID(BaseDataset):
         return len(self.sequence_list)
 
     def get_sequence_info(self, seq_id):
-        return torch.Tensor(self.sequence_list[seq_id]['anno']), \
-               torch.Tensor(self.sequence_list[seq_id]['target_visible'])
+        bb_anno = torch.Tensor(self.sequence_list[seq_id]['anno'])
+        valid = (bb_anno[:, 2] > 0) & (bb_anno[:, 3] > 0)
+        visible = torch.Tensor(self.sequence_list[seq_id]['target_visible']) & valid
+        return {'bbox': bb_anno, 'valid': valid, 'visible': visible}
 
     def _get_frame(self, sequence, frame_id):
         set_name = 'ILSVRC2015_VID_train_{:04d}'.format(sequence['set_id'])
@@ -82,10 +86,12 @@ class ImagenetVID(BaseDataset):
         frame_list = [self._get_frame(sequence, f) for f in frame_ids]
 
         if anno is None:
-            anno = sequence['anno']
+            anno = self.get_sequence_info(seq_id)
 
-        # Return as list of tensors
-        anno_frames = [anno[f_id, :] for f_id in frame_ids]
+        # Create anno dict
+        anno_frames = {}
+        for key, value in anno.items():
+            anno_frames[key] = [value[f_id, ...].clone() for f_id in frame_ids]
 
         # added the class info to the meta info
         object_meta = OrderedDict({'object_class': sequence['class_name'],
