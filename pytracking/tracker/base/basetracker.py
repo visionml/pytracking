@@ -30,6 +30,13 @@ class BaseTracker:
             try:
                 self.visdom = Visdom(self.params.debug, {'handler': self.visdom_ui_handler, 'win_id':  'Tracking'},
                                      visdom_info=self.params.visdom_info)
+
+                # Show help
+                help_text = 'You can pause/unpause the tracker by pressing ''space'' with the ''Tracking'' window ' \
+                            'selected. During paused mode, you can track for one frame by pressing the right arrow key.' \
+                            'To enable/disable plotting of a data block, tick/untick the corresponding entry in ' \
+                            'block list.'
+                self.visdom.register(help_text, 'text', 1, 'Help')
             except:
                 time.sleep(0.5)
                 print('!!! WARNING: Visdom could not start, so using matplotlib visualization instead !!!\n'

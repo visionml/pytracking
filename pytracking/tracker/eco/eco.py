@@ -150,7 +150,7 @@ class ECO(BaseTracker):
         # Do joint optimization
         self.joint_problem = FactorizedConvProblem(self.init_training_samples, self.yf, self.reg_filter, self.projection_matrix, self.params, self.init_sample_weights)
         joint_var = self.filter.concat(self.projection_matrix)
-        self.joint_optimizer = GaussNewtonCG(self.joint_problem, joint_var, debug=(self.params.debug>=3))
+        self.joint_optimizer = GaussNewtonCG(self.joint_problem, joint_var, debug=(self.params.debug>=1), visdom=self.visdom)
 
         if self.params.update_projection_matrix:
             self.joint_optimizer.run(self.params.init_CG_iter // self.params.init_GN_iter, self.params.init_GN_iter)
@@ -177,8 +177,10 @@ class ECO(BaseTracker):
 
 
     def track(self, image) -> dict:
+        self.debug_info = {}
 
         self.frame_num += 1
+        self.debug_info['frame_num'] = self.frame_num
 
         # Convert image
         im = numpy_to_torch(image)
@@ -198,11 +200,19 @@ class ECO(BaseTracker):
         # Update position and scale
         self.update_state(sample_pos + translation_vec, self.target_scale * scale_change_factor)
 
-        if self.params.debug >= 2:
-            show_tensor(s[scale_ind,...], 5)
-        if self.params.debug >= 3:
-            for i, hf in enumerate(self.filter):
-                show_tensor(fourier.sample_fs(hf).abs().mean(1), 6+i)
+        score_map = s[scale_ind, ...]
+        max_score = torch.max(score_map).item()
+        self.debug_info['max_score'] = max_score
+
+        if self.visdom is not None:
+            self.visdom.register(score_map, 'heatmap', 2, 'Score Map')
+            self.visdom.register(self.debug_info, 'info_dict', 1, 'Status')
+        elif self.params.debug >= 2:
+            show_tensor(score_map, 5, title='Max score = {:.2f}'.format(max_score))
+
+        # if self.params.debug >= 3:
+        #     for i, hf in enumerate(self.filter):
+        #         show_tensor(fourier.sample_fs(hf).abs().mean(1), 6+i)
 
 
         # ------- UPDATE ------- #

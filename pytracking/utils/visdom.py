@@ -113,10 +113,11 @@ class VisLinePlot(VisBase):
         if isinstance(self.raw_data, (list, tuple)):
             data_y = self.raw_data[0].clone()
             data_x = self.raw_data[1].clone()
-            self.visdom.line(data_y, data_x, opts={'title': self.title}, win=self.title)
         else:
-            data = self.raw_data.clone()
-            self.visdom.line(data, opts={'title': self.title}, win=self.title)
+            data_y = self.raw_data.clone()
+            data_x = torch.arange(data_y.shape[0])
+
+        self.visdom.line(data_y, data_x, opts={'title': self.title}, win=self.title)
 
 
 class VisTracking(VisBase):
@@ -177,7 +178,9 @@ class Visdom:
         if title not in self.registered_blocks.keys():
             show_data = self.debug >= debug_level
 
-            self.blocks_list.append({'type': 'checkbox', 'name': title, 'value': show_data})
+            if title is not 'Tracking':
+                self.blocks_list.append({'type': 'checkbox', 'name': title, 'value': show_data})
+
             self.visdom.properties(self.blocks_list, opts={'title': 'Block List'}, win='block_list')
 
             if mode == 'image':
