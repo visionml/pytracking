@@ -69,7 +69,7 @@ python run_webcam.py atom default
 ## Trackers
 The toolkit contains the implementation of the following trackers.  
 
-### [DiMP] 
+### DiMP
 [[Paper]](https://arxiv.org/pdf/1904.07220v1.pdf) [[Raw results]](https://drive.google.com/drive/folders/15mpUAJmzxemnOC6gmvMTCDJ-0v6hxJ7y)
  [[Models]](TODO) [[Training Code]](./ltr/README.md#DiMP) [[Tracker Code]](./pytracking/README.md#DiMP)  
 Official implementation of the **DiMP** tracker. DiMP is an end-to-end tracking architecture, capable
@@ -81,7 +81,7 @@ includes an initializer network that efficiently provides an initial estimate of
 
 ![DiMP overview figure](pytracking/utils/dimp_overview.png)
  
-### [ATOM]
+### ATOM
 [[Paper]](https://arxiv.org/pdf/1811.07628.pdf) [[Raw results]](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_)
  [[Models]](https://drive.google.com/open?id=1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU) [[Training Code]](TODO) [[Tracker Code]](TODO)  
 Official implementation of the **ATOM** tracker. ATOM is based on 
@@ -92,7 +92,7 @@ optimization techniques to discriminate between the target object and background
  
 ![ATOM overview figure](pytracking/utils/atom_overview.png)
  
-### [ECO]
+### ECO
 [[Paper]](https://arxiv.org/pdf/1611.09224.pdf)  
 An unofficial implementation of the **ECO** tracker. It is implemented based on an extensive and general library for [complex operations](pytracking/libs/complex.py) and [Fourier tools](pytracking/libs/fourier.py). The implementation differs from the version used in the original paper in a few important aspects. 
 1. This implementation uses features from vgg-m layer 1 and resnet18 residual block 3.   
