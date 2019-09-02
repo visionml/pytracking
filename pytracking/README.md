@@ -1,14 +1,6 @@
 # PyTracking
 
-A general python library for visual tracking algorithms. The following trackers are integrated with the toolkit,  
-
-1. **ATOM**: Accurate Tracking by Overlap Maximization.  
-Martin Danelljan, Goutam Bhat, Fahad Shahbaz Khan, and Michael Felsberg.  
-In: CVPR 2019. \[[Paper](https://arxiv.org/pdf/1811.07628.pdf)\] \[[Raw results](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_)\]
-2. **ECO**: Efficient Convolution Operators for Tracking.  
-Martin Danelljan, Goutam Bhat, Fahad Shahbaz Khan, and Michael Felsberg.  
-In: CVPR 2017. \[[Paper](https://arxiv.org/pdf/1611.09224.pdf)\] \[[Github](https://github.com/martin-danelljan/ECO)\]
-
+A general python library for visual tracking algorithms. 
 ## Table of Contents
 
 * [Running a tracker](#running-a-tracker)
@@ -50,6 +42,11 @@ python run_experiment.py experiment_module experiment_name --dataset_name datase
 ```  
 Here, ```experiment_module```  is the name of the experiment setting file, e.g. ```myexperiments``` , and ``` experiment_name```  is the name of the experiment setting, e.g. ``` atom_nfs_uav``` .
 
+
+All trackers support [Visdom](https://github.com/facebookresearch/visdom) for debug visualizations. To use visdom, start the visdom
+server on a seperate shell with the command ```visdom```. Run the tracker with ```debug > 0```. The debug 
+output can be accessed by going to ```http://localhost:8097``` in your browser.  
+
 ## Overview
 The tookit consists of the following sub-modules.  
  -  [evaluation](evaluation): Contains the necessary scripts for running a tracker on a dataset. It also contains integration of a number of standard tracking datasets, namely  [OTB-100](http://cvlab.hanyang.ac.kr/tracker_benchmark/index.html), [NFS](http://ci2cv.net/nfs/index.html),
@@ -59,21 +56,14 @@ The tookit consists of the following sub-modules.
  - [libs](libs): Includes libraries for optimization, dcf, etc.  
  - [parameter](parameter): Contains the parameter settings for different trackers.  
  - [tracker](tracker): Contains the implementations of different trackers.  
- - [utils](utils): Some uitl functions.  
+ - [utils](utils): Some util functions.  
  
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
 
-### [DiMP](tracker/dimp)
-Official implementation of the **DiMP** tracker. DiMP is an end-to-end tracking architecture, capable
-of fully exploiting both target and background appearance
-information for target model prediction. It is based on a target model prediction network, which is derived from a discriminative
-learning loss by applying an iterative optimization procedure. The model prediction network employs a steepest descent 
-based methodology that computes an optimal step length in each iteration to provide fast convergence. The model predictor also
-includes an initializer network that efficiently provides an initial estimate of the model weights.  
+### DiMP
+The official implementation for the DiMP tracker can be found at [tracker.dimp](tracker/dimp). 
 
-![DiMP overview figure](utils/dimp_overview.png)
- 
 ##### Parameter Files
 Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
 * **[dimp18](parameter/dimp/dimp18.py)**: The default parameter setting with ResNet-18 backbone which was used to produce all DiMP-18 results in the paper, except on VOT.  
@@ -81,16 +71,10 @@ Four parameter settings are provided. These can be used to reproduce the results
 * **[dimp50](parameter/dimp/dimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all DiMP-50 results in the paper, except on VOT.  
 * **[dimp50_vot](parameter/dimp/dimp50_vot.py)**: The parameters settings used to generate the DiMP-50 VOT2018 results in the paper.  
 
-The difference between these two stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```dimp18_vot``` and ```dimp50_vot``` settings thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
+The difference between the vot and the non-vot settings stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```dimp18_vot``` and ```dimp50_vot``` settings thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
  
-##### Raw Results
-The raw results used in the paper are available in this [google drive folder](https://drive.google.com/drive/folders/15mpUAJmzxemnOC6gmvMTCDJ-0v6hxJ7y).  
-**Note**: Due to the stochastic nature of the tracker, results can vary slightly between different runs. The results reported in the paper are hence an average over 5 runs for NFS, UAV123, OTB-100 and LaSOT datasets, 3 runs for GOT-10k, 1 run for TrackingNet, and 15 runs for VOT2018. 
-
-### [ATOM](tracker/atom)
-Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. ATOM is based on (i) a **target estimation** module that is trained offline, and (ii) **target classification** module that is trained online. The target estimation module is trained to predict the intersection-over-union (IoU) overlap between the target and a bounding box estimate. The target classification module is learned online using dedicated optimization techniques to discriminate between the target object and background.
- 
-![ATOM overview figure](utils/atom_overview.png)
+### ATOM
+The official implementation for the ATOM tracker can be found at [tracker.atom](tracker/atom).  
  
 ##### Parameter Files
 Two parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
@@ -99,18 +83,10 @@ Two parameter settings are provided. These can be used to reproduce the results 
 
 The difference between these two stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```default_vot``` setting thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
 
-##### Raw Results
- The raw results used in the paper are available in this [google drive folder](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_).  
- **Note**: Due to the stochastic nature of the tracker, results can vary slightly between different runs. The results reported in the paper are hence an average over 5 runs for NFS, UAV123, OTB-100 and LaSOT datasets, and 15 runs for VOT2018. 
  
-### [ECO](tracker/eco)
-An unofficial implementation of the [**ECO**](https://arxiv.org/pdf/1611.09224.pdf) tracker. It is implemented based on an extensive and general library for [complex operations](libs/complex.py) and [Fourier tools](libs/fourier.py). The implementation differs from the version used in the original paper in a few important aspects. 
-1. This implementation uses features from vgg-m layer 1 and resnet18 residual block 3.   
-2. As in our later [UPDT tracker](https://arxiv.org/pdf/1804.06833.pdf), seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in the first frame.  
-3. The GMM memory module is not implemented, instead the raw projected samples are stored.  
+### ECO
+An unofficial implementation of the ECO tracker can be found at [tracker.eco](tracker/eco). 
 
-Please refer to the [official implementation of ECO](https://github.com/martin-danelljan/ECO) if you are looking to reproduce the results in the ECO paper or download the raw results.
- 
 ## Libs
 The pytracking repository includes some general libraries for implementing and developing different kinds of visual trackers, including deep learning based, optimization based and correlation filter based. The following libs are included:
 
