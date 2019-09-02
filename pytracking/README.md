@@ -14,6 +14,7 @@ In: CVPR 2017. \[[Paper](https://arxiv.org/pdf/1611.09224.pdf)\] \[[Github](http
 * [Running a tracker](#running-a-tracker)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [DiMP](#DiMP)
    * [ATOM](#ATOM)
    * [ECO](#ECO)
 * [Libs](#libs)
@@ -71,7 +72,7 @@ learning loss by applying an iterative optimization procedure. The model predict
 based methodology that computes an optimal step length in each iteration to provide fast convergence. The model predictor also
 includes an initializer network that efficiently provides an initial estimate of the model weights.  
 
-![DiMP overview figure](utils/dimp_overview.png)
+![DiMP overview figure](utils/dimp_overview_new.png)
  
 ##### Parameter Files
 Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
