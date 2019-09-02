@@ -62,6 +62,25 @@ The tookit consists of the following sub-modules.
  
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
+
+### [DiMP](tracker/dimp)
+Official implementation of the **DiMP** tracker. DiMP is an end-to-end tracking architecture, capable
+of fully exploiting both target and background appearance
+information for target model prediction. It is based on a target model prediction network, which is derived from a discriminative
+learning loss by applying an iterative optimization procedure. The model prediction network employs a steepest descent 
+based methodology that computes an optimal step length in each iteration to provide fast convergence. The model predictor also
+includes an initializer network that efficiently provides an initial estimate of the model weights.  
+
+![DiMP overview figure](utils/dimp_overview.png)
+ 
+##### Parameter Files
+Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
+* **[dimp18](parameter/dimp/dimp18.py)**: The default parameter setting with ResNet-18 backbone which was used to produce all DiMP-18 results in the paper, except on VOT.  
+* **[dimp18_vot](parameter/dimp/dimp18_vot.py)**: The parameters settings used to generate the DiMP-18 VOT2018 results in the paper.  
+* **[dimp50](parameter/dimp/dimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all DiMP-50 results in the paper, except on VOT.  
+* **[dimp50_vot](parameter/dimp/dimp50_vot.py)**: The parameters settings used to generate the DiMP-50 VOT2018 results in the paper.  
+
+The difference between these two stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```default_vot``` setting thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
  
  
 ### [ATOM](tracker/atom)

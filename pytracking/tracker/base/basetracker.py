@@ -324,7 +324,7 @@ class BaseTracker:
                     break
                 else:
                     time.sleep(0.1)
-                    
+
             image_path = handle.frame()
             if not image_path:
                 break
