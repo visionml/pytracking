@@ -83,7 +83,7 @@ includes an initializer network that efficiently provides an initial estimate of
  
 ### ATOM
 [[Paper]](https://arxiv.org/pdf/1811.07628.pdf) [[Raw results]](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_)
- [[Models]](https://drive.google.com/open?id=1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU) [[Training Code]](TODO) [[Tracker Code]](TODO)  
+ [[Models]](https://drive.google.com/open?id=1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU) [[Training Code]](./ltr/README.md#ATOM) [[Tracker Code]](./pytracking/README.md#ATOM)  
 Official implementation of the **ATOM** tracker. ATOM is based on 
 (i) a **target estimation** module that is trained offline, and (ii) **target classification** module that is 
 trained online. The target estimation module is trained to predict the intersection-over-union (IoU) overlap 
@@ -93,7 +93,7 @@ optimization techniques to discriminate between the target object and background
 ![ATOM overview figure](pytracking/utils/atom_overview.png)
  
 ### ECO
-[[Paper]](https://arxiv.org/pdf/1611.09224.pdf)  
+[[Paper]](https://arxiv.org/pdf/1611.09224.pdf) [[Tracker Code]](./pytracking/README.md#ECO)  
 An unofficial implementation of the **ECO** tracker. It is implemented based on an extensive and general library for [complex operations](pytracking/libs/complex.py) and [Fourier tools](pytracking/libs/fourier.py). The implementation differs from the version used in the original paper in a few important aspects. 
 1. This implementation uses features from vgg-m layer 1 and resnet18 residual block 3.   
 2. As in our later [UPDT tracker](https://arxiv.org/pdf/1804.06833.pdf), seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in the first frame.  

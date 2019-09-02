@@ -5,7 +5,7 @@ A general PyTorch based framework for learning tracking representations.
 
 * [Quick Start](#quick-start)
 * [Overview](#overview)
-* [Train Settings](#train-settings)
+* [Trackers](#trackers)
    * [DiMP](#DiMP)
    * [ATOM](#ATOM)
 * [Training your own networks](#training-your-own-networks)
@@ -38,14 +38,16 @@ The framework consists of the following sub-modules.
  - [trainers](trainers): The main class which runs the training.  
  - [train_settings](train_settings): Contains settings files, specifying the training of a network.   
  
-## Train Settings
- The framework currently contains the training settings for the following trackers.
+## Trackers
+ The framework currently contains the training code for the following trackers.
  
 ### DiMP
+ The following setting files can be used train the DiMP networks, or to know the exact training details. 
  - [dimp.dimp18](train_settings/dimp/dimp18.py): The default settings used for training the DiMP model with ResNet-18 backbone.
  - [dimp.dimp50](train_settings/dimp/dimp50.py): The default settings used for training the DiMP model with ResNet-50 backbone.
  
 ### ATOM
+ The following setting file can be used train the ATOM network, or to know the exact training details. 
  - [bbreg.atom_default](train_settings/bbreg/atom_default.py): The default settings used for training the network in ATOM.
  
 ## Training your own networks
