@@ -55,6 +55,11 @@ class AtomIoUNet(nn.Module):
                 nn.init.kaiming_normal_(m.weight.data, mode='fan_in')
                 if m.bias is not None:
                     m.bias.data.zero_()
+            elif isinstance(m, nn.BatchNorm2d):
+                # In earlier versions batch norm parameters was initialized with default initialization,
+                # which changed in pytorch 1.2. In 1.1 and earlier the weight was set to U(0,1).
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
 
     def forward(self, feat1, feat2, bb1, proposals2):
         """Runs the ATOM IoUNet during training operation.
