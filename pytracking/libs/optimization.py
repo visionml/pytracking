@@ -200,14 +200,15 @@ class ConjugateGradient(ConjugateGradientBase):
     """Conjugate Gradient optimizer, performing single linearization of the residuals in the start."""
 
     def __init__(self, problem: L2Problem, variable: TensorList, cg_eps = 0.0, fletcher_reeves = True,
-                 standard_alpha = True, direction_forget_factor = 0, debug = False, plotting = False, fig_num=(10,11)):
+                 standard_alpha = True, direction_forget_factor = 0, debug = False, plotting = False, visdom=None):
         super().__init__(fletcher_reeves, standard_alpha, direction_forget_factor, debug or plotting)
 
         self.problem = problem
         self.x = variable
 
         self.plotting = plotting
-        self.fig_num = fig_num
+        self.fig_num = (10,11)
+        self.visdom = visdom
 
         self.cg_eps = cg_eps
         self.f0 = None
@@ -263,7 +264,10 @@ class ConjugateGradient(ConjugateGradientBase):
             lossvec[-1] = self.problem.ip_output(self.f0, self.f0)
             self.residuals = torch.cat((self.residuals, res))
             self.losses = torch.cat((self.losses, lossvec))
-            if self.plotting:
+            if self.visdom is not None:
+                self.visdom.register(self.losses, 'lineplot', 3, 'Loss')
+                self.visdom.register(self.residuals, 'lineplot', 3, 'CG residuals')
+            elif self.plotting:
                 plot_graph(self.losses, self.fig_num[0], title='Loss')
                 plot_graph(self.residuals, self.fig_num[1], title='CG residuals')
 
@@ -291,7 +295,7 @@ class GaussNewtonCG(ConjugateGradientBase):
 
     def __init__(self, problem: L2Problem, variable: TensorList, cg_eps = 0.0, fletcher_reeves = True,
                  standard_alpha = True, direction_forget_factor = 0, debug = False, analyze = False, plotting = False,
-                 fig_num=(10,11,12)):
+                 visdom=None):
         super().__init__(fletcher_reeves, standard_alpha, direction_forget_factor, debug or analyze or plotting)
 
         self.problem = problem
@@ -299,7 +303,8 @@ class GaussNewtonCG(ConjugateGradientBase):
 
         self.analyze_convergence = analyze
         self.plotting = plotting
-        self.fig_num = fig_num
+        self.fig_num = (10,11,12)
+        self.visdom = visdom
 
         self.cg_eps = cg_eps
         self.f0 = None
@@ -350,7 +355,13 @@ class GaussNewtonCG(ConjugateGradientBase):
                 loss = self.problem.ip_output(self.f0, self.f0)
                 self.losses = torch.cat((self.losses, loss.detach().cpu().view(-1)))
 
-            if self.plotting:
+            if self.visdom is not None:
+                self.visdom.register(self.losses, 'lineplot', 3, 'Loss')
+                self.visdom.register(self.residuals, 'lineplot', 3, 'CG residuals')
+
+                if self.analyze_convergence:
+                    self.visdom.register(self.gradient_mags, 'lineplot', 4, 'Gradient magnitude')
+            elif self.plotting:
                 plot_graph(self.losses, self.fig_num[0], title='Loss')
                 plot_graph(self.residuals, self.fig_num[1], title='CG residuals')
                 if self.analyze_convergence:
@@ -427,7 +438,7 @@ class GaussNewtonCG(ConjugateGradientBase):
 class GradientDescentL2:
     """Gradient descent with momentum for L2 problems."""
 
-    def __init__(self, problem: L2Problem, variable: TensorList, step_length: float, momentum: float = 0.0, debug = False, plotting = False, fig_num=(10,11)):
+    def __init__(self, problem: L2Problem, variable: TensorList, step_length: float, momentum: float = 0.0, debug = False, plotting = False, visdom=None):
 
         self.problem = problem
         self.x = variable
@@ -437,8 +448,8 @@ class GradientDescentL2:
 
         self.debug = debug or plotting
         self.plotting = plotting
-        self.fig_num = fig_num
-
+        self.fig_num = (10,11)
+        self.visdom = visdom
         self.losses = torch.zeros(0)
         self.gradient_mags = torch.zeros(0)
         self.residuals = None
@@ -495,7 +506,11 @@ class GradientDescentL2:
             grad_mags[-1] = sum(grad.view(-1) @ grad.view(-1)).cpu().sqrt().item()
             self.losses = torch.cat((self.losses, lossvec))
             self.gradient_mags = torch.cat((self.gradient_mags, grad_mags))
-            if self.plotting:
+
+            if self.visdom is not None:
+                self.visdom.register(self.losses, 'lineplot', 3, 'Loss')
+                self.visdom.register(self.gradient_mags, 'lineplot', 4, 'Gradient magnitude')
+            elif self.plotting:
                 plot_graph(self.losses, self.fig_num[0], title='Loss')
                 plot_graph(self.gradient_mags, self.fig_num[1], title='Gradient magnitude')
 

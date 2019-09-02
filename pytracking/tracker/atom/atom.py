@@ -161,9 +161,12 @@ class ATOM(BaseTracker):
             # Initialize optimizer
             analyze_convergence = getattr(self.params, 'analyze_convergence', False)
             if optimizer == 'GaussNewtonCG':
-                self.joint_optimizer = GaussNewtonCG(self.joint_problem, joint_var, plotting=(self.params.debug >= 3), analyze=analyze_convergence, fig_num=(12, 13, 14))
+                self.joint_optimizer = GaussNewtonCG(self.joint_problem, joint_var, debug=(self.params.debug >= 1),
+                                                     plotting=(self.params.debug >= 3), analyze=analyze_convergence,
+                                                     visdom=self.visdom)
             elif optimizer == 'GradientDescentL2':
-                self.joint_optimizer = GradientDescentL2(self.joint_problem, joint_var, self.params.optimizer_step_length, self.params.optimizer_momentum, plotting=(self.params.debug >= 3), debug=analyze_convergence, fig_num=(12, 13))
+                self.joint_optimizer = GradientDescentL2(self.joint_problem, joint_var, self.params.optimizer_step_length, self.params.optimizer_momentum, plotting=(self.params.debug >= 3), debug=(self.params.debug >= 1),
+                                                         visdom=self.visdom)
 
             # Do joint optimization
             if isinstance(self.params.init_CG_iter, (list, tuple)):
@@ -192,9 +195,12 @@ class ATOM(BaseTracker):
 
         if optimizer == 'GaussNewtonCG':
             self.filter_optimizer = ConjugateGradient(self.conv_problem, self.filter, fletcher_reeves=self.params.fletcher_reeves,
-                                                      direction_forget_factor=self.params.direction_forget_factor, debug=(self.params.debug>=3), fig_num=(12,13))
+                                                      direction_forget_factor=self.params.direction_forget_factor, debug=(self.params.debug>=1),
+                                                      plotting=(self.params.debug>=3), visdom=self.visdom)
         elif optimizer == 'GradientDescentL2':
-            self.filter_optimizer = GradientDescentL2(self.conv_problem, self.filter, self.params.optimizer_step_length, self.params.optimizer_momentum, debug=(self.params.debug >= 3), fig_num=12)
+            self.filter_optimizer = GradientDescentL2(self.conv_problem, self.filter, self.params.optimizer_step_length,
+                                                      self.params.optimizer_momentum, debug=(self.params.debug >= 1),
+                                                      plotting=(self.params.debug>=3), visdom=self.visdom)
 
         # Transfer losses from previous optimization
         if self.params.update_projection_matrix:
@@ -214,8 +220,10 @@ class ATOM(BaseTracker):
 
 
     def track(self, image) -> dict:
+        self.debug_info = {}
 
         self.frame_num += 1
+        self.debug_info['frame_num'] = self.frame_num
 
         # Convert image
         im = numpy_to_torch(image)
@@ -242,9 +250,16 @@ class ATOM(BaseTracker):
             elif getattr(self.params, 'use_classifier', True):
                 self.update_state(sample_pos + translation_vec, sample_scales[scale_ind])
 
-        if self.params.debug >= 2:
-            show_tensor(s[scale_ind,...], 5, title='Max score = {:.2f}'.format(torch.max(s[scale_ind,...]).item()))
+        score_map = s[scale_ind, ...]
+        max_score = torch.max(score_map).item()
+        self.debug_info['max_score'] = max_score
+        self.debug_info['flag'] = flag
 
+        if self.visdom is not None:
+            self.visdom.register(score_map, 'heatmap', 2, 'Score Map')
+            self.visdom.register(self.debug_info, 'info_dict', 1, 'Status')
+        elif self.params.debug >= 2:
+            show_tensor(score_map, 5, title='Max score = {:.2f}'.format(max_score))
 
         # ------- UPDATE ------- #
 
