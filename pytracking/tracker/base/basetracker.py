@@ -4,9 +4,16 @@ import cv2 as cv
 import os
 import time
 import torch
+from pytracking.utils.convert_vot_anno_to_rect import convert_vot_anno_to_rect
 from pytracking.utils.visdom import Visdom
 from pytracking.features.preprocessing import torch_to_numpy
 from pytracking.utils.plotting import draw_figure
+
+try:
+    # Only needed when running vot
+    import pytracking.VOT.vot as vot
+except:
+    pass
 
 
 class BaseTracker:
@@ -277,6 +284,59 @@ class BaseTracker:
         # When everything done, release the capture
         cap.release()
         cv.destroyAllWindows()
+
+    def track_vot(self):
+        """Run tracker on VOT."""
+        def _convert_anno_to_list(vot_anno):
+            vot_anno = [vot_anno[0][0][0], vot_anno[0][0][1], vot_anno[0][1][0], vot_anno[0][1][1],
+                        vot_anno[0][2][0], vot_anno[0][2][1], vot_anno[0][3][0], vot_anno[0][3][1]]
+            return vot_anno
+
+        def _convert_image_path(image_path):
+            image_path_new = image_path[20:- 2]
+            return "".join(image_path_new)
+
+        handle = vot.VOT("polygon")
+
+        vot_anno_polygon = handle.region()
+        vot_anno_polygon = _convert_anno_to_list(vot_anno_polygon)
+
+        init_state = convert_vot_anno_to_rect(vot_anno_polygon, self.params.vot_anno_conversion_type)
+
+        image_path = handle.frame()
+        if not image_path:
+            return
+        image_path = _convert_image_path(image_path)
+
+        image = self._read_image(image_path)
+        self.initialize(image, {'init_bbox': init_state})
+
+        if self.visdom is not None:
+            self.visdom.register((image, init_state), 'Tracking', 1, 'Tracking')
+
+        # Track
+        while True:
+            while True:
+                if not self.pause_mode:
+                    break
+                elif self.step:
+                    self.step = False
+                    break
+                else:
+                    time.sleep(0.1)
+                    
+            image_path = handle.frame()
+            if not image_path:
+                break
+            image_path = _convert_image_path(image_path)
+
+            image = self._read_image(image_path)
+            out = self.track(image)
+            state = out['target_bbox']
+
+            if self.visdom is not None:
+                self.visdom.register((image, state), 'Tracking', 1, 'Tracking')
+            handle.report(vot.Rectangle(state[0], state[1], state[2], state[3]))
 
     def reset_tracker(self):
         pass

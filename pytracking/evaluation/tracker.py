@@ -99,7 +99,26 @@ class Tracker:
         tracker = self.tracker_class(params)
 
         tracker.track_webcam()
-        
+
+    def run_vot(self, debug=None, visdom_info=None):
+        """ Run on vot"""
+        visdom_info = {} if visdom_info is None else visdom_info
+        params = self.get_parameters()
+
+        debug_ = debug
+        if debug is None:
+            debug_ = getattr(params, 'debug', 0)
+        params.debug = debug_
+
+        params.tracker_name = self.name
+        params.param_name = self.parameter_name
+        params.run_id = self.run_id
+        params.visdom_info = visdom_info
+
+        tracker = self.tracker_class(params)
+        tracker.initialize_features()
+        tracker.track_vot()
+
     def get_parameters(self):
         """Get parameters."""
 
