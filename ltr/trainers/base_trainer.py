@@ -67,16 +67,17 @@ class BaseTrainer:
                 for epoch in range(self.epoch+1, max_epochs+1):
                     self.epoch = epoch
 
+                    self.train_epoch()
+
                     if self.lr_scheduler is not None:
                         self.lr_scheduler.step()
-
-                    self.train_epoch()
 
                     if self._checkpoint_dir:
                         self.save_checkpoint()
             except:
                 print('Training crashed at epoch {}'.format(epoch))
                 if fail_safe:
+                    self.epoch -= 1
                     load_latest = True
                     print('Traceback for the error!')
                     print(traceback.format_exc())
@@ -147,7 +148,14 @@ class BaseTrainer:
                                                                  net_type, checkpoint)
         elif isinstance(checkpoint, str):
             # checkpoint is the path
-            checkpoint_path = os.path.expanduser(checkpoint)
+            if os.path.isdir(checkpoint):
+                checkpoint_list = sorted(glob.glob('{}/*_ep*.pth.tar'.format(checkpoint)))
+                if checkpoint_list:
+                    checkpoint_path = checkpoint_list[-1]
+                else:
+                    raise Exception('No checkpoint found')
+            else:
+                checkpoint_path = os.path.expanduser(checkpoint)
         else:
             raise TypeError
 
@@ -186,7 +194,3 @@ class BaseTrainer:
             self.lr_scheduler.last_epoch = self.epoch
 
         return True
-
-
-
-

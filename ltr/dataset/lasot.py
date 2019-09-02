@@ -73,7 +73,7 @@ class Lasot(BaseDataset):
         gt = pandas.read_csv(bb_anno_file, delimiter=',', header=None, dtype=np.float32, na_filter=False, low_memory=False).values
         return torch.tensor(gt)
 
-    def _read_target_visible(self, seq_path, anno):
+    def _read_target_visible(self, seq_path):
         # Read full occlusion and out_of_view
         occlusion_file = os.path.join(seq_path, "full_occlusion.txt")
         out_of_view_file = os.path.join(seq_path, "out_of_view.txt")
@@ -99,7 +99,7 @@ class Lasot(BaseDataset):
         bbox = self._read_bb_anno(seq_path)
 
         valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
-        visible = self._read_target_visible(seq_path) & valid
+        visible = self._read_target_visible(seq_path) & valid.byte()
 
         return {'bbox': bbox, 'valid': valid, 'visible': visible}
 

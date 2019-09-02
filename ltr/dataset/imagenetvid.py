@@ -68,7 +68,7 @@ class ImagenetVID(BaseDataset):
     def get_sequence_info(self, seq_id):
         bb_anno = torch.Tensor(self.sequence_list[seq_id]['anno'])
         valid = (bb_anno[:, 2] > 0) & (bb_anno[:, 3] > 0)
-        visible = torch.Tensor(self.sequence_list[seq_id]['target_visible']) & valid
+        visible = torch.ByteTensor(self.sequence_list[seq_id]['target_visible']) & valid.byte()
         return {'bbox': bb_anno, 'valid': valid, 'visible': visible}
 
     def _get_frame(self, sequence, frame_id):

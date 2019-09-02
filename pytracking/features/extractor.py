@@ -57,7 +57,7 @@ class MultiResolutionExtractor(ExtractorBase):
         self.is_color = None
 
     def stride(self):
-        return torch.Tensor(TensorList([f.stride() for f in self.features if self._return_feature(f)]).unroll())
+        return torch.Tensor(TensorList([f.stride() for f in self.features if self._return_feature(f)]).unroll().list())
 
     def size(self, input_sz):
         return TensorList([f.size(input_sz) for f in self.features if self._return_feature(f)]).unroll()

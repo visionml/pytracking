@@ -9,7 +9,10 @@ from pytracking import TensorDict, TensorList
 def _check_use_shared_memory():
     if hasattr(torch.utils.data.dataloader, '_use_shared_memory'):
         return getattr(torch.utils.data.dataloader, '_use_shared_memory')
-    return importlib.import_module('torch.utils.data._utils.collate')._use_shared_memory
+    collate_lib = importlib.import_module('torch.utils.data._utils.collate')
+    if hasattr(collate_lib, '_use_shared_memory'):
+        return getattr(collate_lib, '_use_shared_memory')
+    return torch.utils.data.get_worker_info() is not None
 
 
 def ltr_collate(batch):

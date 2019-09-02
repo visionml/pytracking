@@ -16,7 +16,7 @@ conda activate pytracking
 #### Install PyTorch  
 Install PyTorch with cuda10.  
 ```bash
-conda install pytorch=1.1 torchvision cudatoolkit=10.0 -c pytorch
+conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
 ```
 
 **Note:**  
