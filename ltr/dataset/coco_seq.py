@@ -74,7 +74,7 @@ class MSCOCOSeq(BaseDataset):
 
         bbox = torch.Tensor(anno['bbox']).view(1, 4)
         valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
-        visible = valid.clone()
+        visible = valid.clone().byte()
 
         return {'bbox': bbox, 'valid': valid, 'visible': visible}
 

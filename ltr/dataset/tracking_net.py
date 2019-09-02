@@ -85,7 +85,7 @@ class TrackingNet(BaseDataset):
         bbox = self._read_bb_anno(seq_id)
 
         valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
-        visible = valid.clone()
+        visible = valid.clone().byte()
 
         return {'bbox': bbox, 'valid': valid, 'visible': visible}
 
