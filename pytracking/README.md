@@ -81,9 +81,12 @@ Four parameter settings are provided. These can be used to reproduce the results
 * **[dimp50](parameter/dimp/dimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all DiMP-50 results in the paper, except on VOT.  
 * **[dimp50_vot](parameter/dimp/dimp50_vot.py)**: The parameters settings used to generate the DiMP-50 VOT2018 results in the paper.  
 
-The difference between these two stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```default_vot``` setting thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
+The difference between these two stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```dimp18_vot``` and ```dimp50_vot``` settings thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
  
- 
+##### Raw Results
+The raw results used in the paper are available in this [google drive folder](https://drive.google.com/drive/folders/15mpUAJmzxemnOC6gmvMTCDJ-0v6hxJ7y).  
+**Note**: Due to the stochastic nature of the tracker, results can vary slightly between different runs. The results reported in the paper are hence an average over 5 runs for NFS, UAV123, OTB-100 and LaSOT datasets, 3 runs for GOT-10k, 1 run for TrackingNet, and 15 runs for VOT2018. 
+
 ### [ATOM](tracker/atom)
 Official implementation of the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker. ATOM is based on (i) a **target estimation** module that is trained offline, and (ii) **target classification** module that is trained online. The target estimation module is trained to predict the intersection-over-union (IoU) overlap between the target and a bounding box estimate. The target classification module is learned online using dedicated optimization techniques to discriminate between the target object and background.
  
