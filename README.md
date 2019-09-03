@@ -31,6 +31,7 @@ General framework for training networks for visual tracking.
    * [DiMP](#DiMP)
    * [ATOM](#ATOM)
    * [ECO](#ECO)
+* [Model Zoo](#model-zoo)
 * [What's next](#What's-next)
 * [Contributors](#contributors)
 
@@ -98,6 +99,10 @@ An unofficial implementation of the **ECO** tracker. It is implemented based on 
 3. The GMM memory module is not implemented, instead the raw projected samples are stored.  
 
 Please refer to the [official implementation of ECO](https://github.com/martin-danelljan/ECO) if you are looking to reproduce the results in the ECO paper or download the raw results.
+
+## Model Zoo
+The tracker models trained using PyTracking, along with their results on standard tracking 
+benchmarks are provided in the [model zoo](MODEL_ZOO.md). 
 
 ## What's next?
 

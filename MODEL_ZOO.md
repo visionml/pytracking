@@ -57,16 +57,16 @@ as per the VOT protocol. As TrackingNet results are obtained using the online ev
 single run was used for TrackingNet. For GOT-10k, 3 runs are used as per protocol.
 
 ## Plots
-Here, we report the success plots for our trained models on the standard tracking datasets.  
+The success plots for our trained models on the standard tracking datasets are shown below.  
 
 ##### LaSOT
-![LaSOT](.figs/LaSOT.png)  
+![LaSOT](pytracking/.figs/LaSOT.png)  
 
 ##### OTB-100
-![OTB-100](.figs/OTB-100.png)  
+![OTB-100](pytracking/.figs/OTB-100.png)  
 
 ##### NFS
-![NFS](.figs/NFS.png)  
+![NFS](pytracking/.figs/NFS.png)  
 
 ##### UAV123
-![UAV123](.figs/UAV123.png)  
+![UAV123](pytracking/.figs/UAV123.png)  
