@@ -56,8 +56,8 @@ optimization techniques to discriminate between the target object and background
 ![ATOM overview figure](pytracking/.figs/atom_overview.png)
  
 ### ECO
-**[[Paper]](https://arxiv.org/pdf/1611.09224.pdf)  [[Tracker Code]](./pytracking/README.md#ECO)**
-  
+**[[Paper]](https://arxiv.org/pdf/1611.09224.pdf)  [[Models]](https://drive.google.com/open?id=1aWC4waLv_te-BULoy0k-n_zS-ONms21S)  [[Tracker Code]](./pytracking/README.md#ECO)**  
+
 An unofficial implementation of the **ECO** tracker. It is implemented based on an extensive and general library for [complex operations](pytracking/libs/complex.py) and [Fourier tools](pytracking/libs/fourier.py). The implementation differs from the version used in the original paper in a few important aspects. 
 1. This implementation uses features from vgg-m layer 1 and resnet18 residual block 3.   
 2. As in our later [UPDT tracker](https://arxiv.org/pdf/1804.06833.pdf), seperate filters are trained for shallow and deep features, and extensive data augmentation is employed in the first frame.  
