@@ -225,7 +225,7 @@ class ConjugateGradient(ConjugateGradientBase):
 
 
     def run(self, num_cg_iter):
-        """Run the oprimizer with the provided number of iterations."""
+        """Run the optimizer with the provided number of iterations."""
 
         if num_cg_iter == 0:
             return
