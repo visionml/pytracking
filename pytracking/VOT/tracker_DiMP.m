@@ -9,8 +9,8 @@ pytracking_path = 'PATH_TO_VISIONML/pytracking';
 % compilation information
 trax_path = 'PATH_TO_VOT_TOOLKIT/native/trax';
 
-tracker_name = 'dimp';
-runfile_name = 'dimp18_vot';
+tracker_name = 'dimp';          % Name of the tracker to evaluate
+runfile_name = 'dimp18_vot';    % Name of the parameter file to use
 debug = 0;
 
 %%

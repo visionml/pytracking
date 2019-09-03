@@ -10,6 +10,7 @@ A general python library for visual tracking algorithms.
    * [ATOM](#ATOM)
    * [ECO](#ECO)
 * [Libs](#libs)
+* [VOT Integration](#vot-integration)
 * [Integrating a new tracker](#integrating-a-new-tracker)
 
 
@@ -50,19 +51,21 @@ output can be accessed by going to ```http://localhost:8097``` in your browser.
 ## Overview
 The tookit consists of the following sub-modules.  
  -  [evaluation](evaluation): Contains the necessary scripts for running a tracker on a dataset. It also contains integration of a number of standard tracking datasets, namely  [OTB-100](http://cvlab.hanyang.ac.kr/tracker_benchmark/index.html), [NFS](http://ci2cv.net/nfs/index.html),
- [UAV123](https://ivul.kaust.edu.sa/Pages/pub-benchmark-simulator-uav.aspx), [Temple128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html), [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](https://cis.temple.edu/lasot/), and [VOT2018](http://www.votchallenge.net/vot2018/).  
+ [UAV123](https://ivul.kaust.edu.sa/Pages/pub-benchmark-simulator-uav.aspx), [Temple128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html), [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](https://cis.temple.edu/lasot/), [VOT2018](http://www.votchallenge.net/vot2018/), and [Temple Color 128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html).  
  - [experiments](experiments): The experiment setting files must be stored here,  
  - [features](features): Contains functions useful for feature extraction, including various data augmentation methods.  
  - [libs](libs): Includes libraries for optimization, dcf, etc.  
  - [parameter](parameter): Contains the parameter settings for different trackers.  
  - [tracker](tracker): Contains the implementations of different trackers.  
- - [utils](utils): Some util functions.  
+ - [utils](utils): Some util functions. 
+ - [VOT](vot): VOT Integration.  
  
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
 
 ### DiMP
-The official implementation for the DiMP tracker can be found at [tracker.dimp](tracker/dimp). 
+The official implementation for the DiMP tracker ([paper](https://arxiv.org/abs/1904.07220)). 
+The tracker implementation file can be found at [tracker.dimp](tracker/dimp). 
 
 ##### Parameter Files
 Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
@@ -71,18 +74,18 @@ Four parameter settings are provided. These can be used to reproduce the results
 * **[dimp50](parameter/dimp/dimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all DiMP-50 results in the paper, except on VOT.  
 * **[dimp50_vot](parameter/dimp/dimp50_vot.py)**: The parameters settings used to generate the DiMP-50 VOT2018 results in the paper.  
 
-The difference between the vot and the non-vot settings stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```dimp18_vot``` and ```dimp50_vot``` settings thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
+The difference between the vot and the non-vot settings stems from the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```dimp18_vot``` and ```dimp50_vot``` settings thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
  
 ### ATOM
-The official implementation for the ATOM tracker can be found at [tracker.atom](tracker/atom).  
+The official implementation for the ATOM tracker ([paper](https://arxiv.org/abs/1811.07628)). 
+The tracker implementation file can be found at [tracker.atom](tracker/atom).  
  
 ##### Parameter Files
 Two parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
 * **[default](parameter/atom/default.py)**: The default parameter setting that was used to produce all ATOM results in the paper, except on VOT.  
 * **[default_vot](parameter/atom/default_vot.py)**: The parameters settings used to generate the VOT2018 results in the paper.  
 
-The difference between these two stems for the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```default_vot``` setting thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
-
+The difference between these two settings stems from the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks.
  
 ### ECO
 An unofficial implementation of the ECO tracker can be found at [tracker.eco](tracker/eco). 
@@ -94,7 +97,22 @@ The pytracking repository includes some general libraries for implementing and d
 * [**Complex**](libs/complex.py): Complex tensors and operations for PyTorch, which can be used for DCF trackers.
 * [**Fourier**](libs/fourier.py): Fourier tools and operations, which can be used for implementing DCF trackers.
 * [**DCF**](libs/dcf.py): Some general tools for DCF trackers.
- 
+
+## VOT Integration
+An example configuration file to integrate the trackers in the [VOT toolkit](https://github.com/votchallenge/vot-toolkit) is provided at [VOT/tracker_DiMP.m](VOT/tracker_DiMP.m). 
+Copy the configuration file to your VOT workspace and set the paths in the configuration file. You need to install [TraX](https://github.com/votchallenge/trax) 
+in order to run the trackers on VOT. This can be done with the following commands.
+
+```bash
+cd VOT_TOOLKIT_PATH/native/trax
+mkdir build
+cd build
+cmake -DBUILD_OPENCV=ON -DBUILD_CLIENT=ON ..
+make   
+``` 
+
+See https://trax.readthedocs.io/en/latest/index.html for more details about TraX.
+
 ## Integrating a new tracker  
  To implement a new tracker, create a new module in "tracker" folder with name your_tracker_name. This folder must contain the implementation of your tracker. Note that your tracker class must inherit from the base tracker class ```tracker.base.BaseTracker```.
  The "\_\_init\_\_.py" inside your tracker folder must contain the following lines,  

@@ -5,7 +5,7 @@ A general python framework for training and running visual object trackers, base
  
 ## Highlights
 
-### The DiMP and ATOM Trackers
+### DiMP and ATOM Trackers
 
 Official implementation of the **DiMP** (ICCV 2019), and 
 **ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
@@ -23,8 +23,6 @@ General framework for training networks for visual tracking.
 
 * All common training datasets for visual tracking.
 * Functions for data sampling, processing etc.
-* Integration of ATOM models
-* More to come ... ;)
 
 ## Table of Contents
 
@@ -63,7 +61,7 @@ Activate the conda environment and run the script pytracking/run_webcam.py to ru
 ```bash
 conda activate pytracking
 cd pytracking
-python run_webcam.py atom default    
+python run_webcam.py dimp dimp50    
 ```  
 
 ## Trackers
@@ -71,7 +69,7 @@ The toolkit contains the implementation of the following trackers.
 
 ### DiMP
 [[Paper]](https://arxiv.org/pdf/1904.07220v1.pdf) [[Raw results]](https://drive.google.com/drive/folders/15mpUAJmzxemnOC6gmvMTCDJ-0v6hxJ7y)
- [[Models]](TODO) [[Training Code]](./ltr/README.md#DiMP) [[Tracker Code]](./pytracking/README.md#DiMP)  
+ [[Models]](https://drive.google.com/open?id=1YEJySjhFokyQ6zgQg6vFAnzEFi1Onq7G) [[Training Code]](./ltr/README.md#DiMP) [[Tracker Code]](./pytracking/README.md#DiMP)  
 Official implementation of the **DiMP** tracker. DiMP is an end-to-end tracking architecture, capable
 of fully exploiting both target and background appearance
 information for target model prediction. It is based on a target model prediction network, which is derived from a discriminative
@@ -79,18 +77,18 @@ learning loss by applying an iterative optimization procedure. The model predict
 based methodology that computes an optimal step length in each iteration to provide fast convergence. The model predictor also
 includes an initializer network that efficiently provides an initial estimate of the model weights.  
 
-![DiMP overview figure](pytracking/utils/dimp_overview.png)
+![DiMP overview figure](pytracking/.figs/dimp_overview.png)
  
 ### ATOM
 [[Paper]](https://arxiv.org/pdf/1811.07628.pdf) [[Raw results]](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_)
- [[Models]](https://drive.google.com/open?id=1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU) [[Training Code]](./ltr/README.md#ATOM) [[Tracker Code]](./pytracking/README.md#ATOM)  
+ [[Models]](https://drive.google.com/open?id=1EsNSQr25qfXHYLqjZaVZElbGdUg-nyzd) [[Training Code]](./ltr/README.md#ATOM) [[Tracker Code]](./pytracking/README.md#ATOM)  
 Official implementation of the **ATOM** tracker. ATOM is based on 
 (i) a **target estimation** module that is trained offline, and (ii) **target classification** module that is 
 trained online. The target estimation module is trained to predict the intersection-over-union (IoU) overlap 
 between the target and a bounding box estimate. The target classification module is learned online using dedicated 
 optimization techniques to discriminate between the target object and background.
  
-![ATOM overview figure](pytracking/utils/atom_overview.png)
+![ATOM overview figure](pytracking/.figs/atom_overview.png)
  
 ### ECO
 [[Paper]](https://arxiv.org/pdf/1611.09224.pdf) [[Tracker Code]](./pytracking/README.md#ECO)  
