@@ -10,6 +10,7 @@ A general python library for visual tracking algorithms.
    * [ATOM](#ATOM)
    * [ECO](#ECO)
 * [Libs](#libs)
+* [Visdom](#visdom)
 * [VOT Integration](#vot-integration)
 * [Integrating a new tracker](#integrating-a-new-tracker)
 
@@ -42,11 +43,6 @@ This is done using the run_experiment script. To use this, first you need to cre
 python run_experiment.py experiment_module experiment_name --dataset_name dataset_name --sequence sequence  --debug debug --threads threads
 ```  
 Here, ```experiment_module```  is the name of the experiment setting file, e.g. ```myexperiments``` , and ``` experiment_name```  is the name of the experiment setting, e.g. ``` atom_nfs_uav``` .
-
-
-All trackers support [Visdom](https://github.com/facebookresearch/visdom) for debug visualizations. To use visdom, start the visdom
-server on a seperate shell with the command ```visdom```. Run the tracker with ```debug > 0```. The debug 
-output can be accessed by going to ```http://localhost:8097``` in your browser.  
 
 ## Overview
 The tookit consists of the following sub-modules.  
@@ -97,6 +93,21 @@ The pytracking repository includes some general libraries for implementing and d
 * [**Complex**](libs/complex.py): Complex tensors and operations for PyTorch, which can be used for DCF trackers.
 * [**Fourier**](libs/fourier.py): Fourier tools and operations, which can be used for implementing DCF trackers.
 * [**DCF**](libs/dcf.py): Some general tools for DCF trackers.
+
+## Visdom
+
+All trackers support [Visdom](https://github.com/facebookresearch/visdom) for debug visualizations. To use visdom, start the visdom
+server from a seperate command line: 
+
+```bash
+visdom
+```  
+
+Run the tracker with the ```debug``` argument > 0. The debug output from the tracker can be 
+accessed by going to ```http://localhost:8097``` in your browser. Further, you can pause the execution of the tracker,
+or step through frames using keyboard inputs. 
+
+![visdom](.figs/visdom.png)
 
 ## VOT Integration
 An example configuration file to integrate the trackers in the [VOT toolkit](https://github.com/votchallenge/vot-toolkit) is provided at [VOT/tracker_DiMP.m](VOT/tracker_DiMP.m). 
