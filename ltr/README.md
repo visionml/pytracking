@@ -1,12 +1,13 @@
 # LTR
 
-A general PyTorch based framework for learning tracking representations. The repository contains the code for training the [**ATOM**](https://arxiv.org/pdf/1811.07628.pdf) tracker.
-
+A general PyTorch based framework for learning tracking representations. 
 ## Table of Contents
 
 * [Quick Start](#quick-start)
 * [Overview](#overview)
-* [Train Settings](#train-settings)
+* [Trackers](#trackers)
+   * [DiMP](#DiMP)
+   * [ATOM](#ATOM)
 * [Training your own networks](#training-your-own-networks)
 
 ## Quick Start
@@ -37,10 +38,17 @@ The framework consists of the following sub-modules.
  - [trainers](trainers): The main class which runs the training.  
  - [train_settings](train_settings): Contains settings files, specifying the training of a network.   
  
-## Train Settings
- The framework currently contains the following training settings:  
- - [bbreg.atom_default](train_settings/bbreg/atom_default.py): The default settings used for training the network in [ATOM](https://arxiv.org/pdf/1811.07628.pdf).
+## Trackers
+ The framework currently contains the training code for the following trackers.
  
+### DiMP
+ The following setting files can be used train the DiMP networks, or to know the exact training details. 
+ - [dimp.dimp18](train_settings/dimp/dimp18.py): The default settings used for training the DiMP model with ResNet-18 backbone.
+ - [dimp.dimp50](train_settings/dimp/dimp50.py): The default settings used for training the DiMP model with ResNet-50 backbone.
+ 
+### ATOM
+ The following setting file can be used train the ATOM network, or to know the exact training details. 
+ - [bbreg.atom_default](train_settings/bbreg/atom_default.py): The default settings used for training the network in ATOM.
  
 ## Training your own networks
 To train a custom network using the toolkit, the following components need to be specified in the train settings. For reference, see [atom_default.py](train_settings/bbreg/atom_default.py).  

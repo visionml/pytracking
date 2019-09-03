@@ -9,42 +9,45 @@ def parameters():
 
     params.use_gpu = True
 
-    params.image_sample_size = 18*16
-    params.search_area_scale = 5
+    params.image_sample_size = 14 * 16
+    params.search_area_scale = 4
 
     # Learning parameters
-    params.sample_memory_size = 50
-    params.learning_rate = 0.01
-    params.init_samples_minimum_weight = 0.25
-    params.train_skipping = 20
+    params.sample_memory_size = 250
+    params.learning_rate = 0.0075
+    params.init_samples_minimum_weight = 0.0
+    params.train_skipping = 10
 
     # Net optimization params
     params.update_classifier = True
-    params.net_opt_iter = 10
-    params.net_opt_update_iter = 2
-    params.net_opt_hn_iter = 1
+    params.net_opt_iter = 25
+    params.net_opt_update_iter = 3
+    params.net_opt_hn_iter = 3
 
     # Detection parameters
-    params.window_output = False
+    params.window_output = True
 
     # Init augmentation parameters
     params.use_augmentation = True
     params.augmentation = {'fliplr': True,
-                           'rotate': [10, -10, 45, -45],
-                           'blur': [(3,1), (1, 3), (2, 2)],
-                           'relativeshift': [(0.6, 0.6), (-0.6, 0.6), (0.6, -0.6), (-0.6,-0.6)],
-                           'dropout': (2, 0.2)}
+                           'rotate': [5, -5, 10, -10, 20, -20, 30, -30, 45, -45, -60, 60],
+                           'blur': [(2, 0.2), (0.2, 2), (3, 1), (1, 3), (2, 2)],
+                           'relativeshift': [(0.6, 0.6), (-0.6, 0.6), (0.6, -0.6), (-0.6, -0.6)],
+                           'dropout': (7, 0.2)}
 
     params.augmentation_expansion_factor = 2
     params.random_shift_factor = 1/3
 
     # Advanced localization parameters
     params.advanced_localization = True
-    params.target_not_found_threshold = 0.25
-    params.distractor_threshold = 0.8
-    params.hard_negative_threshold = 0.5
+    params.target_not_found_threshold = 0.0
+    params.distractor_threshold = 100
+    params.hard_negative_threshold = 0.45
     params.target_neighborhood_scale = 2.2
-    params.dispalcement_scale = 0.8
+    params.dispalcement_scale = 0.7
+
+    params.perform_hn_without_windowing = True
+
     params.hard_negative_learning_rate = 0.02
     params.update_scale_when_uncertain = True
 

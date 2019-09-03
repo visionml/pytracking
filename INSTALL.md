@@ -72,10 +72,16 @@ You can modify these files to set the paths to datasets, results paths etc.
 
 
 #### Download the pre-trained networks  
-You can download the pre-trained networks from the [google drive folder](https://drive.google.com/drive/folders/1WVhJqvdu-_JG1U-V0IqfxTUa1SBPnL0O). The networks shoud be saved in the directory set by "network_path" in "pytracking/evaluation/local.py". By default, it is set to pytracking/networks.
+You can download the pre-trained networks from the [google drive folder](https://drive.google.com/drive/folders/1WVhJqvdu-_JG1U-V0IqfxTUa1SBPnL0O). 
+The networks shoud be saved in the directory set by "network_path" in "pytracking/evaluation/local.py". By default, it is set to 
+pytracking/networks.
 You can also download the networks using the gdrive_download bash script.
 
 ```bash
+# Download the default network for DiMP-50 and DiMP-18
+bash pytracking/utils/gdrive_download 1qgachgqks2UGjKx-GdO1qylBDdB1f9KN pytracking/networks/dimp50.pth
+bash pytracking/utils/gdrive_download 1MAjrRJDCbL0DSjUKFyDkUuYS1-cYBNjk pytracking/networks/dimp18.pth
+
 # Download the default network for ATOM
 bash pytracking/utils/gdrive_download 1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU pytracking/networks/atom_default.pth
 

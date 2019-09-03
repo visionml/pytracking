@@ -65,6 +65,7 @@ pip install jpeg4py
 echo ""
 echo ""
 echo "****************** Installing ninja-build to compile PreROIPooling ******************"
+echo "************************* Need sudo privilege ******************"
 sudo apt-get install ninja-build
 
 echo ""
@@ -74,13 +75,19 @@ mkdir pytracking/networks
 
 echo ""
 echo ""
-echo "****************** ATOM Network ******************"
-bash pytracking/utils/gdrive_download 1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU pytracking/networks/atom_default.pth
+echo "****************** DiMP50 Network ******************"
+bash pytracking/utils/gdrive_download 1qgachgqks2UGjKx-GdO1qylBDdB1f9KN pytracking/networks/dimp50.pth
+# bash pytracking/utils/gdrive_download 1MAjrRJDCbL0DSjUKFyDkUuYS1-cYBNjk pytracking/networks/dimp18.pth
 
-echo ""
-echo ""
-echo "****************** ECO Network ******************"
-bash pytracking/utils/gdrive_download 1aWC4waLv_te-BULoy0k-n_zS-ONms21S pytracking/networks/resnet18_vggmconv1.pth
+# echo ""
+# echo ""
+# echo "****************** ATOM Network ******************"
+# bash pytracking/utils/gdrive_download 1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU pytracking/networks/atom_default.pth
+
+# echo ""
+# echo ""
+# echo "****************** ECO Network ******************"
+# bash pytracking/utils/gdrive_download 1aWC4waLv_te-BULoy0k-n_zS-ONms21S pytracking/networks/resnet18_vggmconv1.pth
 
 echo ""
 echo ""
@@ -104,3 +111,8 @@ done
 echo ""
 echo ""
 echo "****************** Installation complete! ******************"
+
+echo ""
+echo ""
+echo "****************** More networks can be downloaded from the google drive folder https://drive.google.com/drive/folders/1WVhJqvdu-_JG1U-V0IqfxTUa1SBPnL0O ******************"
+echo "****************** Or, visit the model zoo at https://github.com/visionml/pytracking/blob/master/MODEL_ZOO.md ******************"
