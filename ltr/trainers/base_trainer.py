@@ -2,7 +2,7 @@ import os
 import glob
 import torch
 import traceback
-from ltr.admin import loading
+from ltr.admin import loading, multigpu
 
 
 class BaseTrainer:
@@ -95,15 +95,17 @@ class BaseTrainer:
     def save_checkpoint(self):
         """Saves a checkpoint of the network and other variables."""
 
+        net = self.actor.net.module if multigpu.is_multi_gpu(self.actor.net) else self.actor.net
+
         actor_type = type(self.actor).__name__
-        net_type = type(self.actor.net).__name__
+        net_type = type(net).__name__
         state = {
             'epoch': self.epoch,
             'actor_type': actor_type,
             'net_type': net_type,
-            'net': self.actor.net.state_dict(),
-            'net_info': getattr(self.actor.net, 'info', None),
-            'constructor': getattr(self.actor.net, 'constructor', None),
+            'net': net.state_dict(),
+            'net_info': getattr(net, 'info', None),
+            'constructor': getattr(net, 'constructor', None),
             'optimizer': self.optimizer.state_dict(),
             'stats': self.stats,
             'settings': self.settings
@@ -130,8 +132,10 @@ class BaseTrainer:
                 Loads the file from the given absolute path (str).
         """
 
+        net = self.actor.net.module if multigpu.is_multi_gpu(self.actor.net) else self.actor.net
+
         actor_type = type(self.actor).__name__
-        net_type = type(self.actor.net).__name__
+        net_type = type(net).__name__
 
         if checkpoint is None:
             # Load most recent checkpoint
@@ -177,7 +181,7 @@ class BaseTrainer:
             if key in ignore_fields:
                 continue
             if key == 'net':
-                self.actor.net.load_state_dict(checkpoint_dict[key])
+                net.load_state_dict(checkpoint_dict[key])
             elif key == 'optimizer':
                 self.optimizer.load_state_dict(checkpoint_dict[key])
             else:
@@ -185,9 +189,9 @@ class BaseTrainer:
 
         # Set the net info
         if load_constructor and 'constructor' in checkpoint_dict and checkpoint_dict['constructor'] is not None:
-            self.actor.net.constructor = checkpoint_dict['constructor']
+            net.constructor = checkpoint_dict['constructor']
         if 'net_info' in checkpoint_dict and checkpoint_dict['net_info'] is not None:
-            self.actor.net.info = checkpoint_dict['net_info']
+            net.info = checkpoint_dict['net_info']
 
         # Update the epoch in lr scheduler
         if 'epoch' in fields:
