@@ -9,12 +9,14 @@ import ltr.models.loss as ltr_losses
 from ltr import actors
 from ltr.trainers import LTRTrainer
 import ltr.data.transforms as dltransforms
+from ltr import MultiGPU
 
 
 def run(settings):
     settings.description = 'Default train settings for DiMP with ResNet18 as backbone.'
     settings.batch_size = 26
     settings.num_workers = 8
+    settings.multi_gpu = False
     settings.print_interval = 1
     settings.normalize_mean = [0.485, 0.456, 0.406]
     settings.normalize_std = [0.229, 0.224, 0.225]
@@ -92,6 +94,10 @@ def run(settings):
                             clf_feat_norm=True, final_conv=True, optim_init_step=0.9, optim_init_reg=0.1,
                             init_gauss_sigma=output_sigma * settings.feature_sz, num_dist_bins=100,
                             bin_displacement=0.1, mask_init_factor=3.0, target_mask_act='sigmoid', score_act='relu')
+
+    # Wrap the network for multi GPU training
+    if settings.multi_gpu:
+        net = MultiGPU(net, dim=1)
 
     objective = {'iou': nn.MSELoss(), 'test_clf': ltr_losses.LBHinge(threshold=settings.hinge_threshold)}
 

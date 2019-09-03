@@ -58,7 +58,9 @@ class AtomIoUNet(nn.Module):
             elif isinstance(m, nn.BatchNorm2d):
                 # In earlier versions batch norm parameters was initialized with default initialization,
                 # which changed in pytorch 1.2. In 1.1 and earlier the weight was set to U(0,1).
-                m.weight.data.fill_(1)
+                # So we use the same initialization here.
+                # m.weight.data.fill_(1)
+                m.weight.data.uniform_()
                 m.bias.data.zero_()
 
     def forward(self, feat1, feat2, bb1, proposals2):
