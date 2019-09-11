@@ -136,7 +136,7 @@ class DiMPSteepestDescentGN(nn.Module):
             residuals = sample_weight * (scores_act - label_map)
 
             if compute_losses:
-                losses.append((residuals**2).sum() + reg_weight * (weights**2).sum())
+                losses.append(((residuals**2).sum() + reg_weight * (weights**2).sum())/num_sequences)
 
             # Compute gradient
             residuals_mapped = score_mask * (sample_weight * residuals)
@@ -161,6 +161,6 @@ class DiMPSteepestDescentGN(nn.Module):
         if compute_losses:
             scores = filter_layer.apply_filter(feat, weights)
             scores = self.score_activation(scores, target_mask)
-            losses.append(((sample_weight * (scores - label_map))**2).sum() + reg_weight * (weights**2).sum())
+            losses.append((((sample_weight * (scores - label_map))**2).sum() + reg_weight * (weights**2).sum())/num_sequences)
 
         return weights, weight_iterates, losses
