@@ -73,12 +73,13 @@ class AtomIoUNet(nn.Module):
             proposals2:  Proposal boxes for which the IoU will be predicted (images, sequences, num_proposals, 4)."""
 
         assert bb1.dim() == 3
+        assert proposals2.dim() == 4
 
-        num_images = bb1.shape[0]
-        num_sequences = bb1.shape[1]
+        num_images = proposals2.shape[0]
+        num_sequences = proposals2.shape[1]
 
         # Extract first train sample
-        feat1 = [f[0,...] if f.dim()==5 else f.view(num_images, num_sequences, *f.shape[-3:])[0,...] for f in feat1]
+        feat1 = [f[0,...] if f.dim()==5 else f.view(-1, num_sequences, *f.shape[-3:])[0,...] for f in feat1]
         bb1 = bb1[0,...]
 
         # Get modulation vector
