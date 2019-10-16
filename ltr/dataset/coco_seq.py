@@ -23,8 +23,7 @@ class MSCOCOSeq(BaseDataset):
         - coco_root
             - annotations
                 - instances_train2014.json
-            - images
-                - train2014
+            - train2014
 
     Note: You also have to install the coco pythonAPI from https://github.com/cocodataset/cocoapi.
     """
