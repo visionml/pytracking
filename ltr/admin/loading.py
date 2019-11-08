@@ -105,6 +105,8 @@ def _setup_legacy_env():
     importlib.import_module('ltr')
     sys.modules['dlframework'] = sys.modules['ltr']
     sys.modules['dlframework.common'] = sys.modules['ltr']
+    importlib.import_module('ltr.admin')
+    sys.modules['dlframework.common.utils'] = sys.modules['ltr.admin']
     for m in ('model_constructor', 'stats', 'settings', 'local'):
         importlib.import_module('ltr.admin.'+m)
         sys.modules['dlframework.common.utils.'+m] = sys.modules['ltr.admin.'+m]
