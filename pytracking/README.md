@@ -61,7 +61,7 @@ The tookit consists of the following sub-modules.
  - [parameter](parameter): Contains the parameter settings for different trackers.  
  - [tracker](tracker): Contains the implementations of different trackers.  
  - [utils](utils): Some util functions. 
- - [VOT](vot): VOT Integration.  
+ - [VOT](VOT): VOT Integration.  
  
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
