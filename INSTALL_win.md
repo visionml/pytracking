@@ -1,6 +1,6 @@
 # Windows Installation
 
-This document contains detailed instructions for installing the necessary dependencies for PyTracking on Windows. The instructions have been tested on a Windows 10 system with Visual Studio 2015. **Notice that Windows installation is much more complex. [Installation on Linux (Ubuntu) is highly recommended.](INSTALL.md).**
+This document contains detailed instructions for installing the necessary dependencies for PyTracking on Windows. The instructions have been tested on a Windows 10 system with Visual Studio 2015. **Notice that Windows installation is much more complex. [Installation on Linux (Ubuntu) is highly recommended.](INSTALL.md)**
 
 ### Requirements  
 * Conda 64 installation with Python 3.7. If not already installed, install from https://www.anaconda.com/distribution/. 
@@ -43,9 +43,9 @@ pip install pycocotools
 
 This is thecomplicated part. There are two options:
 
-##### 1: Install pre-build Precise ROI pooling package
+##### Install pre-build Precise ROI pooling package
 
-DiMP and ATOM trackers need Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling). You can download the [pre-build binary file](https://visionml.github.io/dimp/prroi_pool.pyd) (build on Windows 10) and install it. Or you could build your own package by following [Build Precise ROI pooling with Visual Studio (Optional)](#2: Build Precise ROI pooling with Visual Studio (Optional)). 
+DiMP and ATOM trackers need Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling). You can download the [pre-build binary file](https://visionml.github.io/dimp/prroi_pool.pyd) (build on Windows 10) and install it. Or you could build your own package by following [Build Precise ROI pooling with Visual Studio (Optional)](#build-precise-roi-pooling-with-visual-studio-optional). 
 
 + The package is built with VS2015, so in some cases (such as you don't have VS2015) you will need to install [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145) from Microsoft. 
 
@@ -107,7 +107,7 @@ DiMP and ATOM trackers need Precise ROI pooling module (https://github.com/vacan
 
 + If the pre-build package don't work on your platform, you can build your own package as described in the next section.
 
-##### 2: Build Precise ROI pooling with Visual Studio (Optional)
+##### Build Precise ROI pooling with Visual Studio (Optional)
 
 To compile the Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling) on Windows, you need Visual Studio with CUDA installed.  
 
@@ -187,10 +187,9 @@ To compile the Precise ROI pooling module (https://github.com/vacancy/PreciseRoI
 
   then build the package with **`Release` and `x64`**. You will get a `*.pyd` file. Rename it as `prroi_pool.pyd`. 
 
-+ Last but not least, follow the step in [Install pre-build Precise ROI pooling package](#Install pre-build Precise ROI pooling package). 
++ Last but not least, follow the step in [Install pre-build Precise ROI pooling package](#install-pre-build-precise-roi-pooling-package). 
 
   In case of issues, we refer to https://github.com/vacancy/PreciseRoIPooling.  
-
 
 #### Install jpeg4py  
 In order to use [jpeg4py](https://github.com/ajkxyz/jpeg4py) for loading the images instead of OpenCV's imread(), install jpeg4py in the following way,  
