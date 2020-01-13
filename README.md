@@ -100,6 +100,7 @@ This script will also download the default networks and set-up the environment.
 
 **Note:** The install script has been tested on an Ubuntu 18.04 system. In case of issues, check the [detailed installation instructions](INSTALL.md). 
 
+**Windows:** (NOT Recommended!) Check [these installation instructions](INSTALL_win.md). 
 
 #### Let's test it!
 Activate the conda environment and run the script pytracking/run_webcam.py to run ATOM using the webcam input.  
@@ -116,7 +117,7 @@ python run_webcam.py dimp dimp50
 
 #### [ltr](ltr) - for training your tracker
 
-## Contributors
+## Main Contributors
 
 * [Martin Danelljan](https://martin-danelljan.github.io/)  
 * [Goutam Bhat](https://www.vision.ee.ethz.ch/en/members/detail/407/)
