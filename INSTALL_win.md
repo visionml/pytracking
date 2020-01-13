@@ -1,12 +1,12 @@
-# Installation
+# Windows Installation
 
-This document contains detailed instructions for installing the necessary dependencies for PyTracking. The instructions have been tested on an Windows10 system with Visual Studio 2015. **Be notice that install it on windows is much more complex, compared with [installation](INSTALL.md) on Ubuntu is convenient.**
+This document contains detailed instructions for installing the necessary dependencies for PyTracking on Windows. The instructions have been tested on a Windows 10 system with Visual Studio 2015. **Notice that Windows installation is much more complex. [Installation on Linux (Ubuntu) is highly recommended.](INSTALL.md).**
 
 ### Requirements  
-* Conda 64it installation with Python 3.7. If not already installed, install from https://www.anaconda.com/distribution/. 
+* Conda 64 installation with Python 3.7. If not already installed, install from https://www.anaconda.com/distribution/. 
 * Nvidia GPU.
 * Visual Studio 2015 or newer.
-* Pre install CUDA 10.0(not necessarily v10) with VS support.
+* Pre install CUDA 10.0 (not necessarily v10) with VS support.
 
 ## Step-by-step instructions  
 #### Create and activate a conda environment
@@ -22,7 +22,7 @@ conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
 ```
 
 **Note:**  
-- It is possible to use any PyTorch supported version of CUDA (not necessarily v10), but better be the same version with your preinstalled CUDA incase of    
+- It is possible to use any PyTorch supported version of CUDA (not necessarily v10), but better be the same version with your preinstalled CUDA (if you have one)    
 - For more details about PyTorch installation, see https://pytorch.org/get-started/previous-versions/.  
 
 #### Install matplotlib, pandas, opencv, visdom and tensorboadX  
@@ -41,19 +41,21 @@ pip install pycocotools
 
 #### Install Precise ROI pooling
 
-###### Install pre-build Precise ROI pooling package
+This is thecomplicated part. There are two options:
 
-DiMP and ATOM trackers need Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling). You can download the [pre-build binary file](https://visionml.github.io/dimp/prroi_pool.pyd) (build on Windows10) and install it. Or you could build your own package by following [Build Precise ROI pooling with Visual Studio (Optional)](#Build Precise ROI pooling with Visual Studio (Optional)). 
+##### 1: Install pre-build Precise ROI pooling package
 
-+ The package is build with VS2015, so in some cases (such as you don't have VS2015) you will need to install [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145) from microsoft. 
+DiMP and ATOM trackers need Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling). You can download the [pre-build binary file](https://visionml.github.io/dimp/prroi_pool.pyd) (build on Windows 10) and install it. Or you could build your own package by following [Build Precise ROI pooling with Visual Studio (Optional)](#2: Build Precise ROI pooling with Visual Studio (Optional)). 
 
-+ Add `Anaconda3\envs\pytracking\Lib\site-packages\torch\lib` to users path (Right click this PC --> Properties --> Advanced System settings --> Environment Variables -->User variables --> Path). 
++ The package is built with VS2015, so in some cases (such as you don't have VS2015) you will need to install [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145) from Microsoft. 
+
++ Add `Anaconda3\envs\pytracking\Lib\site-packages\torch\lib` to users path (Right click this PC --> Properties --> Advanced System settings --> Environment Variables --> User variables --> Path). 
 
 + Copy the `prroi_pool.pyd` file to the conda environment python path (such as `Anaconda3\envs\pytracking\Lib\site-packages\`). This will take action after restart the shell.
 
-+ Add some codes to `pytracking\ltr\external\PreciseRoIPooling\pytorch\prroi_pool\functional.py` :
++ Add this code to `pytracking\ltr\external\PreciseRoIPooling\pytorch\prroi_pool\functional.py`:
 
-  ```
+  ```python
   ...
   def _import_prroi_pooling():
       global _prroi_pooling
@@ -66,9 +68,9 @@ DiMP and ATOM trackers need Precise ROI pooling module (https://github.com/vacan
   ...
   ```
 
-  which looks like:
+  which should then look like:
 
-  ```
+  ```python
   import torch
   import torch.autograd as ag
   
@@ -103,19 +105,19 @@ DiMP and ATOM trackers need Precise ROI pooling module (https://github.com/vacan
   ...
   ```
 
-+ If the pre-build package don't work on your platform, you can build your own package following steps.
++ If the pre-build package don't work on your platform, you can build your own package as described in the next section.
 
-###### Build Precise ROI pooling with Visual Studio (Optional)
+##### 2: Build Precise ROI pooling with Visual Studio (Optional)
 
-To compile the Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling) on windows, you need Visual Studio with CUDA installed.  
+To compile the Precise ROI pooling module (https://github.com/vacancy/PreciseRoIPooling) on Windows, you need Visual Studio with CUDA installed.  
 
 + First make a DLL project by the following step.  
 
   1. Download the Precise ROI pooling module with `git clone https://github.com/vacancy/PreciseRoIPooling `. 
   2. Download pybind11 `git clone https://github.com/pybind/pybind11 `
   3. Open Visual Studio and start a new C++ `Empty project`. 
-  4. add `PreciseRoIPooling\src\prroi_pooling_gpu_impl.cu` and `PreciseRoIPooling\pytorch\prroi_pool\src\prroi_pooling_gpu.c` to the `Source File` and change the name `prroi_pooling_gpu.c` to `prroi_pooling_gpu.cpp`. 
-  5. add `PreciseRoIPooling\src\prroi_pooling_gpu_impl.cuh` and `PreciseRoIPooling\pytorch\prroi_pool\src\prroi_pooling_gpu.h` to the `Header File`. 
+  4. Add `PreciseRoIPooling\src\prroi_pooling_gpu_impl.cu` and `PreciseRoIPooling\pytorch\prroi_pool\src\prroi_pooling_gpu.c` to the `Source File` and change the name `prroi_pooling_gpu.c` to `prroi_pooling_gpu.cpp`. 
+  5. Add `PreciseRoIPooling\src\prroi_pooling_gpu_impl.cuh` and `PreciseRoIPooling\pytorch\prroi_pool\src\prroi_pooling_gpu.h` to the `Header File`. 
   6. Right click the project --> Property. **Change Configuration to `Release` and `x64`**.
       Then Configuration Properties --> General --> change Configuration Type to `.dll` and Target Extension to `.pyd` .
 
