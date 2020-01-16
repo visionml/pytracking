@@ -39,5 +39,4 @@ def conv1x1(input: torch.Tensor, weight: torch.Tensor):
     if weight is None:
         return input
 
-    return torch.matmul(weight.view(weight.shape[0], weight.shape[1]),
-                        input.view(input.shape[0], input.shape[1], -1)).view(input.shape[0], weight.shape[0], input.shape[2], input.shape[3])
+    return torch.conv2d(input, weight)

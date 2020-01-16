@@ -39,8 +39,8 @@ pip install opencv-python
 
 echo ""
 echo ""
-echo "****************** Installing tensorboardX ******************"
-pip install tensorboardX
+echo "****************** Installing tensorboard ******************"
+pip install tb-nightly
 
 echo ""
 echo ""

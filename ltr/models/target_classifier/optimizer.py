@@ -148,7 +148,7 @@ class DiMPSteepestDescentGN(nn.Module):
             scores_grad = sample_weight * (score_mask * scores_grad)
 
             # Compute optimal step length
-            alpha_num = (weights_grad * weights_grad).view(num_sequences, -1).sum(dim=1)
+            alpha_num = (weights_grad * weights_grad).sum(dim=(1,2,3))
             alpha_den = ((scores_grad * scores_grad).view(num_images, num_sequences, -1).sum(dim=(0,2)) + reg_weight * alpha_num).clamp(1e-8)
             alpha = alpha_num / alpha_den
 

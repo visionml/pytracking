@@ -3,7 +3,15 @@ import os
 import sys
 from pathlib import Path
 import importlib
+import inspect
 
+
+def load_trained_network(workspace_dir, network_path, checkpoint=None):
+    checkpoint_dir = os.path.join(workspace_dir, 'checkpoints')
+    directory = '{}/{}'.format(checkpoint_dir, network_path)
+
+    net, _ = load_network(directory, checkpoint)
+    return net
 
 def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, constructor_module=None, **kwargs):
         """Loads a network checkpoint file.
@@ -17,6 +25,7 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
 
         The extra keyword arguments are supplied to the network constructor to replace saved ones.
         """
+
 
         if network_dir is not None:
             net_path = Path(network_dir)
@@ -58,14 +67,16 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
                 net_constr.fun_name = constructor_fun_name
             if constructor_module is not None:
                 net_constr.fun_module = constructor_module
-            for arg, val in kwargs.items():
-                if arg in net_constr.kwds.keys():
-                    net_constr.kwds[arg] = val
-                else:
-                    print('WARNING: Keyword argument "{}" not found when loading network.'.format(arg))
             # Legacy networks before refactoring
             if net_constr.fun_module.startswith('dlframework.'):
                 net_constr.fun_module = net_constr.fun_module[len('dlframework.'):]
+            net_fun = getattr(importlib.import_module(net_constr.fun_module), net_constr.fun_name)
+            net_fun_args = list(inspect.signature(net_fun).parameters.keys())
+            for arg, val in kwargs.items():
+                if arg in net_fun_args:
+                    net_constr.kwds[arg] = val
+                else:
+                    print('WARNING: Keyword argument "{}" not found when loading network. It was ignored.'.format(arg))
             net = net_constr.get()
         else:
             raise RuntimeError('No constructor for the given network.')

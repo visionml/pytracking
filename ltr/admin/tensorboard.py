@@ -1,6 +1,6 @@
 import os
 from collections import OrderedDict
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 
 
 class TensorboardWriter:
