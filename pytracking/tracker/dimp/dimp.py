@@ -520,7 +520,7 @@ class DiMP(BaseTracker):
         if plot_loss:
             if isinstance(losses, dict):
                 losses = losses['train']
-            self.losses = torch.stack(losses)
+            self.losses = torch.cat(losses)
             if self.visdom is not None:
                 self.visdom.register((self.losses, torch.arange(self.losses.numel())), 'lineplot', 3, 'Training Loss')
             elif self.params.debug >= 3:
@@ -564,7 +564,7 @@ class DiMP(BaseTracker):
             if plot_loss:
                 if isinstance(losses, dict):
                     losses = losses['train']
-                self.losses = torch.cat((self.losses, torch.stack(losses)))
+                self.losses = torch.cat((self.losses, torch.cat(losses)))
                 if self.visdom is not None:
                     self.visdom.register((self.losses, torch.arange(self.losses.numel())), 'lineplot', 3, 'Training Loss')
                 elif self.params.debug >= 3:
