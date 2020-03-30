@@ -1,5 +1,10 @@
 # PyTracking
 A general python framework for training and running visual object trackers, based on **PyTorch**.
+
+### News:
+* Check out our CVPR 2020 paper [Probabilistic Regression for Visual Tracking](https://arxiv.org/abs/2003.12565). Code coming here soon.
+* We are currently integrating support for segmentation (VOS) and multiple objects.    
+* Check out our paper [Learning What to Learn for Video Object Segmentation](https://arxiv.org/abs/2003.11540). Code will be released here.  
  
 ## Highlights
 
