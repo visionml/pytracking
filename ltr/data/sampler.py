@@ -21,7 +21,6 @@ class ATOMSampler(torch.utils.data.Dataset):
 
     The sampled frames are then passed through the input 'processing' function for the necessary processing-
     """
-
     def __init__(self, datasets, p_datasets, samples_per_epoch, max_gap, num_test_frames=1, processing=no_processing,
                  frame_sample_mode='default'):
         """
@@ -103,7 +102,7 @@ class ATOMSampler(torch.utils.data.Dataset):
             visible = seq_info_dict['visible']
 
             num_visible = visible.type(torch.int64).sum().item()
-            enough_visible_frames = ((not is_video_dataset) and num_visible > 0) or (num_visible > min_visible_frames and len(visible) >= 20)
+            enough_visible_frames = not is_video_dataset or (num_visible > min_visible_frames and len(visible) >= 20)
 
         if is_video_dataset:
             train_frame_ids = None
@@ -289,6 +288,7 @@ class DiMPSampler(torch.utils.data.Dataset):
                            'train_anno': train_anno['bbox'],
                            'test_images': test_frames,
                            'test_anno': test_anno['bbox'],
-                           'dataset': dataset.get_name()})
+                           'dataset': dataset.get_name(),
+                           'test_class': meta_obj_test.get('object_class_name')})
 
         return self.processing(data)
