@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 from collections import OrderedDict
 from torchvision.models.resnet import BasicBlock
+from .base import Backbone
 
 
 class SpatialCrossMapLRN(nn.Module):
@@ -34,11 +35,11 @@ class SpatialCrossMapLRN(nn.Module):
         return x
 
 
-class ResNetVGGm1(nn.Module):
-    """ ResNet network module, with vgg-m conv1 layer """
-    def __init__(self, block, layers, output_layers, num_classes=1000):
+class ResNetVGGm1(Backbone):
+
+    def __init__(self, block, layers, output_layers, num_classes=1000, frozen_layers=()):
         self.inplanes = 64
-        super(ResNetVGGm1, self).__init__()
+        super(ResNetVGGm1, self).__init__(frozen_layers=frozen_layers)
         self.output_layers = output_layers
         self.vggmconv1 = nn.Conv2d(3,96,(7, 7),(2, 2), padding=3)
         self.vgglrn = SpatialCrossMapLRN(5, 0.0005, 0.75, 2)
@@ -140,7 +141,7 @@ class ResNetVGGm1(nn.Module):
         raise ValueError('output_layer is wrong.')
 
 
-def resnet18_vggmconv1(output_layers=None, path=None):
+def resnet18_vggmconv1(output_layers=None, path=None, **kwargs):
     """Constructs a ResNet-18 model with first-layer VGGm features.
     """
 
@@ -151,7 +152,7 @@ def resnet18_vggmconv1(output_layers=None, path=None):
             if l not in ['vggconv1', 'conv1', 'layer1', 'layer2', 'layer3', 'layer4', 'fc']:
                 raise ValueError('Unknown layer: {}'.format(l))
 
-    model = ResNetVGGm1(BasicBlock, [2, 2, 2, 2], output_layers)
+    model = ResNetVGGm1(BasicBlock, [2, 2, 2, 2], output_layers, **kwargs)
 
     if path is not None:
         model.load_state_dict(torch.load(path), strict=False)

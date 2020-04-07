@@ -126,7 +126,7 @@ class FilterInitializerLinear(nn.Module):
         conv_ksz:  Kernel size of the conv layer before pooling."""
 
     def __init__(self, filter_size=1, feature_dim=256, feature_stride=16, pool_square=False, filter_norm=True,
-                 conv_ksz=3):
+                 conv_ksz=3, init_weights='default'):
         super().__init__()
 
         self.filter_conv = nn.Conv2d(feature_dim, feature_dim, kernel_size=conv_ksz, padding=conv_ksz // 2)
@@ -136,8 +136,11 @@ class FilterInitializerLinear(nn.Module):
         # Init weights
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                m.weight.data.normal_(0, math.sqrt(2. / n))
+                if init_weights == 'default':
+                    n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                    m.weight.data.normal_(0, math.sqrt(2. / n))
+                elif init_weights == 'zero':
+                    m.weight.data.zero_()
                 if m.bias is not None:
                     m.bias.data.zero_()
             elif isinstance(m, nn.BatchNorm2d):

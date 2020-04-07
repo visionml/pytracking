@@ -2,11 +2,11 @@ import torch
 import torch.nn.functional as F
 
 
-def apply_filter(feat, filter):
-    """Applies the filter on the input features (feat).
+def apply_filter(feat, filter, dilation_factors=None):
+    """Applies the filter on the input features (feat). The number of groups is automatically calculated.
     args:
         feat: These are the input features. Must have dimensions (images_in_sequence, sequences, feat_dim, H, W)
-        filter: The filter to apply. Must have dimensions (sequences, feat_dim, fH, fW) or (sequences, filters, feat_dim, fH, fW)
+        filter: The filter to apply. Must have dimensions (sequences, feat_dim, fH, fW) or (sequences, filters, feat_dim/groups, fH, fW)
     output:
         scores: Output of filtering. Dimensions (images_in_sequence, sequences, yH, yW) or (images_in_sequence, sequences, filters, yH, yW)
     """
@@ -17,12 +17,36 @@ def apply_filter(feat, filter):
 
     num_images = feat.shape[0]
     num_sequences = feat.shape[1] if feat.dim() == 5 else 1
+    num_filters = filter.shape[1] if multiple_filters else 1
+    num_channels = feat.shape[-3]
+    groups = num_channels // filter.shape[-3]
+
+    assert num_filters % groups == 0 and num_channels % groups == 0
 
     if multiple_filters:
-        scores = F.conv2d(feat.view(num_images, -1, feat.shape[-2], feat.shape[-1]), filter.view(-1, *filter.shape[-3:]),
-                          padding=padding, groups=num_sequences)
+        if dilation_factors is None:
+            scores = F.conv2d(feat.view(num_images, -1, feat.shape[-2], feat.shape[-1]), filter.view(-1, *filter.shape[-3:]),
+                              padding=padding, groups=num_sequences*groups)
 
-        return scores.view(num_images, num_sequences, -1, scores.shape[-2], scores.shape[-1])
+            return scores.view(num_images, num_sequences, -1, scores.shape[-2], scores.shape[-1])
+        else:
+            scores_all = []
+            start_id = 0
+
+            for d_factor, num_filters_with_d in dilation_factors.items():
+                f_d = filter[:, start_id:start_id+num_filters_with_d, ...].contiguous()
+
+                padding_d = [p+d_factor-1 for p in padding]
+                scores_d = F.conv2d(feat.view(num_images, -1, feat.shape[-2], feat.shape[-1]),
+                                    f_d.view(-1, *f_d.shape[-3:]),
+                                    padding=padding_d, groups=num_sequences * groups,
+                                    dilation=d_factor)
+                scores_d = scores_d.view(num_images, num_sequences, -1, scores_d.shape[-2], scores_d.shape[-1])
+                scores_all.append(scores_d)
+                start_id += num_filters_with_d
+
+            scores = torch.cat(scores_all, dim=2)
+            return scores
 
     scores = F.conv2d(feat.view(num_images, -1, feat.shape[-2], feat.shape[-1]), filter,
                       padding=padding, groups=num_sequences)
@@ -30,7 +54,7 @@ def apply_filter(feat, filter):
     return scores.view(num_images, num_sequences, scores.shape[-2], scores.shape[-1])
 
 
-def apply_feat_transpose(feat, input, filter_ksz, training=True):
+def apply_feat_transpose(feat, input, filter_ksz, training=True, groups=1):
     """Applies the transposed operation off apply_filter w.r.t. filter itself. Can be used to compute the filter gradient.
     args:
         feat: These are the input features. Must have dimensions (images_in_sequence, sequences, feat_dim, H, W)
@@ -40,6 +64,9 @@ def apply_feat_transpose(feat, input, filter_ksz, training=True):
     output:
         Output of transposed operation. Dimensions (sequences, feat_dim, fH, fW)
     """
+
+    if groups != 1:
+        raise NotImplementedError('Not implemented other values of group.')
 
     if training or input.dim() == 5:
         return _apply_feat_transpose_v3(feat, input, filter_ksz)

@@ -48,10 +48,10 @@ The framework consists of the following sub-modules.
  
 ### ATOM
  The following setting file can be used train the ATOM network, or to know the exact training details. 
- - [bbreg.atom_default](train_settings/bbreg/atom_default.py): The default settings used for training the network in ATOM.
+ - [bbreg.atom](train_settings/bbreg/atom.py): The default settings used for training the network in ATOM.
  
 ## Training your own networks
-To train a custom network using the toolkit, the following components need to be specified in the train settings. For reference, see [atom_default.py](train_settings/bbreg/atom_default.py).  
+To train a custom network using the toolkit, the following components need to be specified in the train settings. For reference, see [atom.py](train_settings/bbreg/atom.py).  
 - Datasets: The datasets to be used for training. A number of standard tracking datasets are already available in ```dataset``` module.  
 - Processing: This function should perform the necessary post-processing of the data, e.g. cropping of target region, data augmentations etc.  
 - Sampler: Determines how the frames are sampled from a video sequence to form the batches.  

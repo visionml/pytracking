@@ -1,23 +1,23 @@
 import torch.utils.data
-from ltr.data.image_loader import default_image_loader
+from ltr.data.image_loader import jpeg4py_loader
 
 
-class BaseDataset(torch.utils.data.Dataset):
-    """ Base class for datasets """
+class BaseVideoDataset(torch.utils.data.Dataset):
+    """ Base class for video datasets """
 
-    def __init__(self, root, image_loader=default_image_loader):
+    def __init__(self, name, root, image_loader=jpeg4py_loader):
         """
         args:
             root - The root path to the dataset
             image_loader (jpeg4py_loader) -  The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
                                             is used by default.
         """
-        if root == '':
-            raise Exception('The dataset path is not setup. Check your "ltr/admin/local.py".')
+        self.name = name
         self.root = root
         self.image_loader = image_loader
 
         self.sequence_list = []     # Contains the list of sequences.
+        self.class_list = []
 
     def __len__(self):
         """ Returns size of the dataset
@@ -39,6 +39,14 @@ class BaseDataset(torch.utils.data.Dataset):
         """
         return True
 
+    def is_synthetic_video_dataset(self):
+        """ Returns whether the dataset contains real videos or synthetic
+
+        returns:
+            bool - True if a video dataset
+        """
+        return False
+
     def get_name(self):
         """ Name of the dataset
 
@@ -54,6 +62,24 @@ class BaseDataset(torch.utils.data.Dataset):
             int - number of sequences in the dataset."""
         return len(self.sequence_list)
 
+    def has_class_info(self):
+        return False
+
+    def has_occlusion_info(self):
+        return False
+
+    def get_num_classes(self):
+        return len(self.class_list)
+
+    def get_class_list(self):
+        return self.class_list
+
+    def get_sequences_in_class(self, class_name):
+        raise NotImplementedError
+
+    def has_segmentation_info(self):
+        return False
+
     def get_sequence_info(self, seq_id):
         """ Returns information about a particular sequences,
 
@@ -61,11 +87,7 @@ class BaseDataset(torch.utils.data.Dataset):
             seq_id - index of the sequence
 
         returns:
-            Dict containing following fields
-                bbox -  Annotation for the sequence. A 2d tensor of shape (num_frames, 4).
-                        Format [top_left_x, top_left_y, width, height]
-                valid - A 1d tensor of shape (num_frames,) denoting whether the annotation is valid
-                visible - A 1d tensor of shape (num_frames,) denoting whether the target is visible in the frame
+            Dict
             """
         raise NotImplementedError
 
@@ -79,7 +101,7 @@ class BaseDataset(torch.utils.data.Dataset):
 
         returns:
             list - List of frames corresponding to frame_ids
-            dict - A dict containing annotations for the frames
+            list - List of dicts for each frame
             dict - A dict containing meta information about the sequence, e.g. class of the target object.
 
         """

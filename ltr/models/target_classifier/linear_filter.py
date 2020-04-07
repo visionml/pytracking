@@ -1,8 +1,6 @@
 import torch.nn as nn
-import torch
 import ltr.models.layers.filter as filter_layer
 import math
-
 
 
 class LinearFilter(nn.Module):
@@ -95,7 +93,7 @@ class LinearFilter(nn.Module):
             weights:  The final oprimized weights. Dims (sequences, feat_dim, wH, wW).
             weight_iterates:  The weights computed in each iteration (including initial input and final output).
             losses:  Train losses."""
-        
+
         weights = self.filter_initializer(feat, bb)
 
         if self.filter_optimizer is not None:
@@ -105,3 +103,29 @@ class LinearFilter(nn.Module):
             losses = None
 
         return weights, weights_iter, losses
+
+    def train_classifier(self, backbone_feat, bb):
+        num_sequences = bb.shape[1]
+
+        if backbone_feat.dim() == 5:
+            backbone_feat = backbone_feat.view(-1, *backbone_feat.shape[-3:])
+
+        # Extract features
+        train_feat = self.extract_classification_feat(backbone_feat, num_sequences)
+
+        # Get filters from each iteration
+        final_filter, _, train_losses = self.get_filter(train_feat, bb)
+        return final_filter, train_losses
+
+    def track_frame(self, filter_weights, backbone_feat):
+        if backbone_feat.dim() == 5:
+            num_sequences = backbone_feat.shape[1]
+            backbone_feat = backbone_feat.view(-1, *backbone_feat.shape[-3:])
+        else:
+            num_sequences = None
+
+        test_feat = self.extract_classification_feat(backbone_feat, num_sequences)
+
+        scores = filter_layer.apply_filter(test_feat, filter_weights)
+
+        return scores

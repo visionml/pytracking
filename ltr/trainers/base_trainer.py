@@ -116,8 +116,14 @@ class BaseTrainer:
         if not os.path.exists(directory):
             os.makedirs(directory)
 
+        # First save as a tmp file
+        tmp_file_path = '{}/{}_ep{:04d}.tmp'.format(directory, net_type, self.epoch)
+        torch.save(state, tmp_file_path)
+
         file_path = '{}/{}_ep{:04d}.pth.tar'.format(directory, net_type, self.epoch)
-        torch.save(state, file_path)
+
+        # Now rename to actual checkpoint. os.rename seems to be atomic if files are on same filesystem. Not 100% sure
+        os.rename(tmp_file_path, file_path)
 
 
     def load_checkpoint(self, checkpoint = None, fields = None, ignore_fields = None, load_constructor = False):
