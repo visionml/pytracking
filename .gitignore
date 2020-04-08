@@ -7,6 +7,7 @@
 ltr/admin/local.py
 ltr/run_ltr_local.py
 ltr/train_settings/*/debug.py
+pytracking/parameter/*/debug.py
 pytracking/networks/
 pytracking/tracking_results/
 pytracking/evaluation/local.py

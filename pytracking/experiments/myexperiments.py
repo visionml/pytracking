@@ -1,18 +1,19 @@
-from pytracking.evaluation import Tracker, OTBDataset, NFSDataset, UAVDataset, TPLDataset, VOTDataset, TrackingNetDataset, LaSOTDataset
+from pytracking.evaluation import Tracker, get_dataset, trackerlist
 
 
 def atom_nfs_uav():
     # Run three runs of ATOM on NFS and UAV datasets
-    trackers = [Tracker('atom', 'default', i) for i in range(3)]
+    trackers = trackerlist('atom', 'default', range(3))
 
-    dataset = NFSDataset() + UAVDataset()
+    dataset = get_dataset('nfs', 'uav')
     return trackers, dataset
 
 
 def uav_test():
-    # Run ATOM and ECO on the UAV dataset
-    trackers = [Tracker('atom', 'default', i) for i in range(1)] + \
-               [Tracker('eco', 'default', i) for i in range(1)]
+    # Run DiMP18, ATOM and ECO on the UAV dataset
+    trackers = trackerlist('dimp', 'dimp18', range(1)) + \
+               trackerlist('atom', 'default', range(1)) + \
+               trackerlist('eco', 'default', range(1))
 
-    dataset = UAVDataset()
+    dataset = get_dataset('uav')
     return trackers, dataset

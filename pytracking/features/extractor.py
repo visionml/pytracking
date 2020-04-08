@@ -51,9 +51,10 @@ class MultiResolutionExtractor(ExtractorBase):
     args:
         features: List of features.
     """
-    def __init__(self, features, patch_mode='replicate'):
+    def __init__(self, features, patch_mode='replicate', max_scale_change=None):
         super().__init__(features)
         self.patch_mode = patch_mode
+        self.max_scale_change = max_scale_change
         self.is_color = None
 
     def stride(self):
@@ -105,7 +106,8 @@ class MultiResolutionExtractor(ExtractorBase):
             scales = [scales]
 
         # Get image patches
-        patch_iter, coord_iter = zip(*(sample_patch(im, pos, s*image_sz, image_sz, mode=self.patch_mode) for s in scales))
+        patch_iter, coord_iter = zip(*(sample_patch(im, pos, s*image_sz, image_sz, mode=self.patch_mode,
+                                                    max_scale_change=self.max_scale_change) for s in scales))
         im_patches = torch.cat(list(patch_iter))
         patch_coords = torch.cat(list(coord_iter))
 
