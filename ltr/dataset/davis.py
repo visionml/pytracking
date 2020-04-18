@@ -6,20 +6,29 @@ from ltr.data.image_loader import jpeg4py_loader
 
 
 class Davis(VOSDatasetBase):
+    """ The Davis VOS dataset
 
-    """The DAVIS VOS dataset"""
+        Publication:
+            A Benchmark Dataset and Evaluation Methodology for Video Object Segmentation
+            F. Perazzi, J. Pont-Tuset, B. McWilliams, L. Van Gool, M. Gross, and A. Sorkine-Hornung
+            CVPR, 2016
+            http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Perazzi_A_Benchmark_Dataset_CVPR_2016_paper.pdf
 
+        Download the dataset from https://davischallenge.org/davis2017/code.html
+        """
     def __init__(self, root=None, sequences=None, version='2017', split='train', multiobj=True,
                  vis_threshold=10, image_loader=jpeg4py_loader):
         """
-        :param root:            Dataset root path. If unset, it uses the path in your local.py config.
-        :param sequences:       List of sequence names. Limit to a subset of sequences if not None.
-        :param version:         '2016' or '2017
-        :param split:           Any name in DAVIS/ImageSets/<year>
-        :param multiobj:        Whether the dataset will return all objects in a sequence or
-                                multiple sequences with one object in each.
-        :param vis_threshold:   Minimum number of pixels required to consider a target object "visible".
-        :param image_loader:    Image loader.
+        args:
+             root - Dataset root path. If unset, it uses the path in your local.py config.
+             sequences - List of sequence names. Limit to a subset of sequences if not None.
+             version - '2016' or '2017
+             split - Any name in DAVIS/ImageSets/<year>
+             multiobj - Whether the dataset will return all objects in a sequence or multiple sequences with one object
+                        in each.
+             vis_threshold - Minimum number of pixels required to consider a target object "visible".
+             image_loader (jpeg4py_loader) - The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
+                                            is used by default.
         """
         if version == '2017':
             if split in ['train', 'val']:

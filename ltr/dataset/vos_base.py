@@ -10,9 +10,7 @@ from ltr.data.image_loader import jpeg4py_loader, imread_indexed
 from ltr.data.bounding_box_utils import masks_to_bboxes
 
 
-
 class VOSMeta:
-
     def __init__(self, data=None, filename=None):
         if filename is not None:
             self.load(filename)
@@ -78,7 +76,6 @@ class VOSMeta:
             anno_paths = list(sorted((dset_annos_path / seq).glob("*.png")))
 
             # Extract information from the given label frames
-
             for path in anno_paths:
                 f_id = path.stem
 
@@ -95,7 +92,6 @@ class VOSMeta:
                 obj_sizes2[f_id] = OrderedDict(zip(obj_ids, obj_sizes))
 
                 # Generate per-label bounding boxes
-
                 for obj_id in obj_ids:
                     bboxes[f_id][obj_id] = cls._mask_to_bbox(labels == int(obj_id))
 
@@ -132,7 +128,6 @@ class VOSMeta:
         return d2
 
     def select_split(self, dataset_name, split):
-
         ltr_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
         sequences = set([s.strip() for s in open(os.path.join(ltr_path, 'data_specs', dataset_name + '_' + split + '.txt')).readlines()])
         all_sequences = set(self._data.keys())
@@ -204,14 +199,6 @@ class VOSMeta:
 
     @staticmethod
     def generate_datasets_meta(src, dst=Path("~/vosdataset_meta").expanduser()):
-        # VOSMeta.generate("DAVIS", src / "DAVIS/JPEGImages/480p", src / "DAVIS/Annotations/480p").save(dst / "DAVIS" / "generated_meta.json")
-        # for split in ["2019/train", "2019/valid", "2019/test"]:
-        #     VOSMeta.generate("YouTubeVOS", src / "YouTubeVOS" / split / "JPEGImages",
-        #                      src / "YouTubeVOS" / split / "Annotations").save(dst / "YouTubeVOS" / split / "generated_meta.json")
-
-        #for split in ["2018/train", "2018/valid", "2018/test"]:
-        #    VOSMeta.generate("YouTubeVOS", src / "YouTubeVOS" / split / "JPEGImages",
-        #                     src / "YouTubeVOS" / split / "Annotations").save(dst / "YouTubeVOS" / split / "generated_meta.json")
         VOSMeta.generate("SyntheticCoco", src / "JPEGImages", src / "Annotations").save(src / "generated_meta.json")
 
 
@@ -282,7 +269,6 @@ class VOSDatasetBase(BaseVideoDataset):
         o2i = {o: i for i, o in enumerate(obj_ids)}  # Object id to matrix index
 
         # Get a matrix of object sizes: shape=(frames, objects)
-
         obj_sizes = torch.zeros((len(f_names), len(obj_ids)), dtype=torch.int)
         sizes_per_object = m.get_obj_sizes_per_object(seq_name)
 
@@ -310,9 +296,7 @@ class VOSDatasetBase(BaseVideoDataset):
 
         # Find the frames where ground truth is available and
         # get the bounding boxes and segmentation labels of those frames
-
         all_bboxes = self.gmeta.get_bboxes_per_frame(seq_name)
-        # gt_labels = [str(annos_root / (f + ".png")) for f in all_bboxes.keys()]
         gt_labels = [str(annos_root / (f + ".png")) if f in all_bboxes.keys() else None for f in frame_names]
 
         gt_bboxes = OrderedDict()
@@ -357,7 +341,6 @@ class VOSDatasetBase(BaseVideoDataset):
         labels = [self._load_anno(self._anno_path / seq_name / (frame_names[f] + ".png")) for f in frame_ids]
 
         # Generate bounding boxes for the requested objects
-
         bboxes = []
         for lb in labels:
             lb = torch.from_numpy(lb.squeeze())
@@ -370,14 +353,12 @@ class VOSDatasetBase(BaseVideoDataset):
             bboxes.append(frame_bbs)
 
         # Insert empty bboxes for missing object ids
-
         for bbox in bboxes:
             for obj_id in obj_ids:
                 if obj_id not in bbox:
                     bbox[obj_id] = torch.zeros(4, dtype=torch.float32)
 
         # Remap to object id 1, if requested - for training
-
         if not self.multiobj:
             assert len(obj_ids) == 1
             obj_id = obj_ids[0]

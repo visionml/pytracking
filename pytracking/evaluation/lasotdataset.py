@@ -4,7 +4,17 @@ from pytracking.utils.load_text import load_text
 
 
 class LaSOTDataset(BaseDataset):
+    """
+    LaSOT test set consisting of 280 videos (see Protocol-II in the LaSOT paper)
 
+    Publication:
+        LaSOT: A High-quality Benchmark for Large-scale Single Object Tracking
+        Heng Fan, Liting Lin, Fan Yang, Peng Chu, Ge Deng, Sijia Yu, Hexin Bai, Yong Xu, Chunyuan Liao and Haibin Ling
+        CVPR, 2019
+        https://arxiv.org/pdf/1809.07845.pdf
+
+    Download the dataset from https://cis.temple.edu/lasot/download.html
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.lasot_path
@@ -38,9 +48,6 @@ class LaSOTDataset(BaseDataset):
         target_visible = np.logical_and(full_occlusion == 0, out_of_view == 0)
 
         frames_path = '{}/{}/{}/img'.format(self.base_path, class_name, sequence_name)
-        # frame_list = [frame for frame in os.listdir(frames_path) if frame.endswith(".jpg")]
-        # frame_list.sort(key=lambda f: int(f[:-4]))
-        # frames_list = [os.path.join(frames_path, frame) for frame in frame_list]
 
         frames_list = ['{}/{:08d}.jpg'.format(frames_path, frame_number) for frame_number in range(1, ground_truth_rect.shape[0] + 1)]
 

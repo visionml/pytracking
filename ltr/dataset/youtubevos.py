@@ -8,7 +8,6 @@ from ltr.data.image_loader import jpeg4py_loader
 
 
 class YouTubeVOSMeta:
-
     """ Thin wrapper for YouTubeVOS meta data
     meta.json
     {
@@ -59,22 +58,35 @@ class YouTubeVOSMeta:
 
 
 class YouTubeVOS(VOSDatasetBase):
+    """
+    YoutubeVOS video object segmentation dataset.
 
+    Publication:
+        YouTube-VOS: A Large-Scale Video Object Segmentation Benchmark
+        Ning Xu, Linjie Yang, Yuchen Fan, Dingcheng Yue, Yuchen Liang, Jianchao Yang, and Thomas Huang
+        ECCV, 2018
+        https://arxiv.org/pdf/1809.03327.pdf
+
+    Download dataset from: https://youtube-vos.org/dataset/
+    """
     def __init__(self, root=None, version='2019', split='train', cleanup=None, all_frames=False, sequences=None,
                  multiobj=True, vis_threshold=10, image_loader=jpeg4py_loader):
         """
-        :param root        Dataset root path. If unset, it uses the path in your local.py config.
-        :param version:    '2018' or '2019'
-        :param split:      'test', 'train', 'valid', or 'jjtrain', 'jjvalid'
-        :param cleanup:    List of actions to take to to clean up known problems in the dataset.
-                           'aspects': remove frames with weird aspect ratios,
-                           'starts': fix up start frames from original meta data
-        :param all_frames  Whether to use an "all_frames" split.
-        :param sequences:  List of sequence names. Limit to a subset of sequences if not None.
-        :param multiobj:        Whether the dataset will return all objects in a sequence or
-                                multiple sequences with one object in each.
-        :param vis_threshold:   Minimum number of pixels required to consider a target object "visible".
-        :param image_loader:    Image loader.
+        args:
+            root - Dataset root path. If unset, it uses the path in your local.py config.
+            version - '2018' or '2019'
+            split - 'test', 'train', 'valid', or 'jjtrain', 'jjvalid'. 'jjvalid' corresponds to a custom validation
+                    dataset consisting of 300 videos randomly sampled from the train set. 'jjtrain' contains the
+                    remaining videos used for training.
+            cleanup - List of actions to take to to clean up known problems in the dataset.
+                      'aspects': remove frames with weird aspect ratios,
+                      'starts': fix up start frames from original meta data
+            all_frames - Whether to use an "all_frames" split.
+            sequences - List of sequence names. Limit to a subset of sequences if not None.
+            multiobj - Whether the dataset will return all objects in a sequence or multiple sequences with one
+                       object in each.
+            vis_threshold - Minimum number of pixels required to consider a target object "visible".
+            image_loader - Image loader.
         """
         root = env_settings().youtubevos_dir if root is None else root
         super().__init__(name="YouTubeVOS", root=Path(root), version=version, split=split, multiobj=multiobj,

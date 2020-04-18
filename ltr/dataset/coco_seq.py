@@ -1,6 +1,4 @@
 import os
-import numpy as np
-import copy
 from .base_video_dataset import BaseVideoDataset
 from ltr.data.image_loader import jpeg4py_loader
 import torch
@@ -34,10 +32,21 @@ class MSCOCOSeq(BaseVideoDataset):
     """
 
     def __init__(self, root=None, image_loader=jpeg4py_loader, data_fraction=None, split="train", version="2014"):
+        """
+        args:
+            root - path to the coco dataset.
+            image_loader (default_image_loader) -  The function to read the images. If installed,
+                                                   jpeg4py (https://github.com/ajkxyz/jpeg4py) is used by default. Else,
+                                                   opencv's imread is used.
+            data_fraction (None) - Fraction of images to be used. The images are selected randomly. If None, all the
+                                  images  will be used
+            split - 'train' or 'val'.
+            version - version of coco dataset (2014 or 2017)
+        """
         root = env_settings().coco_dir if root is None else root
         super().__init__('COCO', root, image_loader)
 
-        self.img_pth = os.path.join(root, '{}{}/'.format(split, version))
+        self.img_pth = os.path.join(root, 'images/{}{}/'.format(split, version))
         self.anno_path = os.path.join(root, 'annotations/instances_{}{}.json'.format(split, version))
 
         # Load the COCO set.
@@ -45,7 +54,7 @@ class MSCOCOSeq(BaseVideoDataset):
 
         self.cats = self.coco_set.cats
 
-        self.class_list = self.get_class_list()     # the parent class thing would happen in the sampler
+        self.class_list = self.get_class_list()
 
         self.sequence_list = self._get_sequence_list()
 

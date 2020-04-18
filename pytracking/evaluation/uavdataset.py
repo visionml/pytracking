@@ -4,7 +4,16 @@ from pytracking.utils.load_text import load_text
 
 
 class UAVDataset(BaseDataset):
-    """UAV."""
+    """ UAV123 dataset.
+
+    Publication:
+        A Benchmark and Simulator for UAV Tracking.
+        Matthias Mueller, Neil Smith and Bernard Ghanem
+        ECCV, 2016
+        https://ivul.kaust.edu.sa/Documents/Publications/2016/A%20Benchmark%20and%20Simulator%20for%20UAV%20Tracking.pdf
+
+    Download the dataset from https://ivul.kaust.edu.sa/Pages/pub-benchmark-simulator-uav.aspx
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.uav_path
@@ -36,7 +45,6 @@ class UAVDataset(BaseDataset):
 
     def __len__(self):
         return len(self.sequence_info_list)
-
 
     def _get_sequence_info_list(self):
         sequence_info_list = [

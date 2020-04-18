@@ -3,7 +3,18 @@ from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
 
 
 class VOTDataset(BaseDataset):
-    """VOT."""
+    """
+    VOT2018 dataset
+
+    Publication:
+        The sixth Visual Object Tracking VOT2018 challenge results.
+        Matej Kristan, Ales Leonardis, Jiri Matas, Michael Felsberg, Roman Pfugfelder, Luka Cehovin Zajc, Tomas Vojir,
+        Goutam Bhat, Alan Lukezic et al.
+        ECCV, 2018
+        https://prints.vicos.si/publications/365
+
+    Download the dataset from http://www.votchallenge.net/vot2018/dataset.html
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.vot_path

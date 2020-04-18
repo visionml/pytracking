@@ -47,7 +47,6 @@ class VisImage(VisBase):
     def save_data(self, data, title=None):
         data = data.float()
         self.raw_data = data
-        self.title = title
 
     def draw_data(self):
         self.visdom.image(self.raw_data.clone(), opts={'title': self.title}, win=self.title)

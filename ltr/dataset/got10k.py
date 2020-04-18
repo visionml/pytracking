@@ -34,6 +34,7 @@ class Got10k(BaseVideoDataset):
                     the root folder instead.
             seq_ids - List containing the ids of the videos to be used for training. Note: Only one of 'split' or 'seq_ids'
                         options can be used at the same time.
+            data_fraction - Fraction of dataset to be used. The complete dataset is used by default
         """
         root = env_settings().got10k_dir if root is None else root
         super().__init__('GOT10k', root, image_loader)
@@ -59,7 +60,6 @@ class Got10k(BaseVideoDataset):
             seq_ids = pandas.read_csv(file_path, header=None, squeeze=True, dtype=np.int64).values.tolist()
         elif seq_ids is None:
             seq_ids = list(range(0, len(self.sequence_list)))
-        # self.seq_ids = seq_ids
 
         self.sequence_list = [self.sequence_list[i] for i in seq_ids]
 
@@ -119,7 +119,6 @@ class Got10k(BaseVideoDataset):
 
     def _get_sequence_list(self):
         with open(os.path.join(self.root, 'list.txt')) as f:
-            # dir_names = f.readlines()
             dir_list = list(csv.reader(f))
         dir_list = [dir_name[0] for dir_name in dir_list]
         return dir_list

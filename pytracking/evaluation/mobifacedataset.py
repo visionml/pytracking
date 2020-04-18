@@ -16,7 +16,6 @@ class MobifaceDataset(BaseDataset):
 
         Download dataset from https://mobiface.github.io/
     """
-
     def __init__(self, split):
         """
         args:
@@ -34,37 +33,36 @@ class MobifaceDataset(BaseDataset):
 
         self.train_meta_fn = osp.join(self.base_path, 'train.meta.csv')
         self.test_meta_fn = osp.join(self.base_path, 'test.meta.csv')
-        self.train_meta = pd.read_csv(self.train_meta_fn, index_col=0).transpose().to_dict()
-        self.test_meta = pd.read_csv(self.test_meta_fn, index_col=0).transpose().to_dict()
+        self.train_meta = pd.read_csv(self.train_meta_fn,index_col=0).transpose().to_dict()
+        self.test_meta = pd.read_csv(self.test_meta_fn,index_col=0).transpose().to_dict()
         if split == 'train':
             self.meta = self.train_meta
         elif split == 'test':
             self.meta = self.test_meta
         else:
-            self.meta = {**self.train_meta, **self.test_meta}  # In Python 3.5 or greater
+            self.meta = {**self.train_meta, **self.test_meta} # In Python 3.5 or greater
         self.meta = OrderedDict(sorted(self.meta.items(), key=lambda t: t[0]))
         self.anno_files = []
-        for k, v in self.meta.items():
+        for k,v in self.meta.items():
             if k in self.train_meta.keys():
-                self.anno_files.append(osp.abspath(osp.join(self.base_path, 'train', k + '.annot.csv')))
+                self.anno_files.append(osp.abspath(osp.join(self.base_path,'train', k+'.annot.csv')))
             else:
-                self.anno_files.append(osp.abspath(osp.join(self.base_path, 'test', k + '.annot.csv')))
+                self.anno_files.append(osp.abspath(osp.join(self.base_path,'test', k+'.annot.csv')))
         self.seq_names = sorted(list(self.meta.keys()))
         self.seq_dirs = [fn[:-len('.annot.csv')] for fn in self.anno_files]
         return self.seq_names
 
     def _construct_sequence(self, sequence_name):
         index = self.seq_names.index(sequence_name)
-        img_files = sorted(glob.glob(self.seq_dirs[index] + '/*.jpg'))
+        img_files = sorted(glob.glob(self.seq_dirs[index]+'/*.jpg'))
         if len(img_files) == 0:
-            img_files = sorted(glob.glob(self.seq_dirs[index] + '.png'))
+            img_files = sorted(glob.glob(self.seq_dirs[index]+'.png'))
         with open(self.anno_files[index], 'r') as f:
             anno = np.loadtxt(f, delimiter=',', skiprows=1, dtype=int)
-        anno = anno[:, 1:]
+        anno = anno[:,1:]
         assert anno.shape[1] == 4
 
         return Sequence(sequence_name, img_files, anno.reshape(-1, 4))
 
     def __len__(self):
-        '''Overload this function in your evaluation. This should return number of sequences in the evaluation '''
         return len(self.sequence_list)

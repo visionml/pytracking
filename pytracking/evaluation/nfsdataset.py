@@ -4,7 +4,16 @@ from pytracking.utils.load_text import load_text
 
 
 class NFSDataset(BaseDataset):
-    '''NFS.'''
+    """ NFS dataset.
+
+    Publication:
+        Need for Speed: A Benchmark for Higher Frame Rate Object Tracking
+        H. Kiani Galoogahi, A. Fagg, C. Huang, D. Ramanan, and S.Lucey
+        ICCV, 2017
+        http://openaccess.thecvf.com/content_ICCV_2017/papers/Galoogahi_Need_for_Speed_ICCV_2017_paper.pdf
+
+    Download the dataset from http://ci2cv.net/nfs/index.html
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.nfs_path
@@ -35,7 +44,6 @@ class NFSDataset(BaseDataset):
                         object_class=sequence_info['object_class'])
 
     def __len__(self):
-        '''Overload this function in your evaluation. This should return number of sequences in the evaluation '''
         return len(self.sequence_info_list)
 
     def _get_sequence_info_list(self):

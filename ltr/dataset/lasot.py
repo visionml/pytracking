@@ -8,7 +8,6 @@ import random
 from collections import OrderedDict
 from .base_video_dataset import BaseVideoDataset
 from ltr.data.image_loader import jpeg4py_loader
-import copy
 from ltr.admin.environment import env_settings
 
 
@@ -34,6 +33,7 @@ class Lasot(BaseVideoDataset):
                     videos with subscripts -1, -3, and -5 from each class will be used for training.
             split - If split='train', the official train split (protocol-II) is used for training. Note: Only one of
                     vid_ids or split option can be used at a time.
+            data_fraction - Fraction of dataset to be used. The complete dataset is used by default
         """
         root = env_settings().lasot_dir if root is None else root
         super().__init__('LaSOT', root, image_loader)
@@ -41,9 +41,6 @@ class Lasot(BaseVideoDataset):
         # Keep a list of all classes
         self.class_list = [f for f in os.listdir(self.root)]
         self.class_to_id = {cls_name: cls_id for cls_id, cls_name in enumerate(self.class_list)}
-
-        # Dont know why this is here: GB
-        self.class_list.sort()
 
         self.sequence_list = self._build_sequence_list(vid_ids, split)
 

@@ -4,15 +4,28 @@ from pytracking.utils.load_text import load_text
 
 
 class TPLDataset(BaseDataset):
-    '''Temple.'''
+    """
+    Temple Color 128 dataset
+
+    Publication:
+        Encoding Color Information for Visual Tracking: Algorithms and Benchmark
+        P. Liang, E. Blasch, and H. Ling
+        TIP, 2015
+        http://www.dabi.temple.edu/~hbling/publication/TColor-128.pdf
+
+    Download the dataset from http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html
+    """
     def __init__(self, exclude_otb=False):
+        """
+        args:
+            exclude_otb (bool) - If True, sequences overlapping with the OTB dataset are excluded
+        """
         super().__init__()
         self.base_path = self.env_settings.tpl_path
         self.sequence_info_list = self._get_sequence_info_list(exclude_otb)
 
     def get_sequence_list(self):
         return SequenceList([self._construct_sequence(s) for s in self.sequence_info_list])
-
 
     def _construct_sequence(self, sequence_info):
         sequence_path = sequence_info['path']
@@ -35,9 +48,7 @@ class TPLDataset(BaseDataset):
         return Sequence(sequence_info['name'], frames, 'tpl', ground_truth_rect[init_omit:,:])
 
     def __len__(self):
-        '''Overload this function in your evaluation. This should return number of sequences in the evaluation '''
         return len(self.sequence_info_list)
-
 
     def _get_sequence_info_list(self, exclude_otb=False):
         sequence_info_list = [

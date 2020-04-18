@@ -4,7 +4,16 @@ from pytracking.utils.load_text import load_text
 
 
 class OTBDataset(BaseDataset):
-    '''OTB-2015.'''
+    """ OTB-2015 dataset
+
+    Publication:
+        Object Tracking Benchmark
+        Wu, Yi, Jongwoo Lim, and Ming-hsuan Yan
+        TPAMI, 2015
+        http://faculty.ucmerced.edu/mhyang/papers/pami15_tracking_benchmark.pdf
+
+    Download the dataset from http://cvlab.hanyang.ac.kr/tracker_benchmark/index.html
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.otb_path
@@ -36,9 +45,7 @@ class OTBDataset(BaseDataset):
                         object_class=sequence_info['object_class'])
 
     def __len__(self):
-        '''Overload this function in your evaluation. This should return number of sequences in the evaluation '''
         return len(self.sequence_info_list)
-
 
     def _get_sequence_info_list(self):
         sequence_info_list = [

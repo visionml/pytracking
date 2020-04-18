@@ -1,9 +1,6 @@
-import os
-import numpy as np
 from .base_image_dataset import BaseImageDataset
-from ltr.data.image_loader import jpeg4py_loader, imread_indexed, jpeg4py_loader_w_failsafe
+from ltr.data.image_loader import jpeg4py_loader_w_failsafe
 import torch
-import random
 from collections import OrderedDict
 import os
 from scipy.io import loadmat
@@ -13,7 +10,26 @@ from ltr.admin.environment import env_settings
 
 
 class SBD(BaseImageDataset):
+    """
+    Semantic Boundaries Dataset and Benchmark (SBD)
+
+    Publication:
+        Semantic contours from inverse detectors
+        Bharath Hariharan, Pablo Arbelaez, Lubomir Bourdev, Subhransu Maji and Jitendra Malik
+        ICCV, 2011
+        http://home.bharathh.info/pubs/pdfs/BharathICCV2011.pdf
+
+    Download dataset from: http://home.bharathh.info/pubs/codes/SBD/download.html
+    """
     def __init__(self, root=None, image_loader=jpeg4py_loader_w_failsafe, data_fraction=None, split="train"):
+        """
+        args:
+            root - path to SBD root folder
+            image_loader - The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
+                           is used by default.
+            data_fraction - Fraction of dataset to be used. The complete dataset is used by default
+            split - dataset split ("train", "train_noval", "val")
+        """
         root = env_settings().sbd_dir if root is None else root
         super().__init__('SBD', root, image_loader)
 

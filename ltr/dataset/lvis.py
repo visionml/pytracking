@@ -9,10 +9,13 @@ from ltr.admin.environment import env_settings
 
 
 class LVIS(BaseImageDataset):
-    """ The LVIS dataset. LVIS is an image dataset. Thus, we treat each image as a sequence of length 1.
+    """ The LVIS object detection dataset
 
     Publication:
-
+        LVIS: A Dataset for Large Vocabulary Instance Segmentation
+        Agrim Gupta, Piotr Dollár, and Ross Girshick
+        CVPR, 2019
+        https://arxiv.org/pdf/1908.03195.pdf
 
     Download the images along with annotations from https://www.lvisdataset.org/dataset. The root folder should be
     organized as follows.
@@ -28,6 +31,15 @@ class LVIS(BaseImageDataset):
     """
 
     def __init__(self, root=None, image_loader=jpeg4py_loader_w_failsafe, data_fraction=None, min_area=None, split="train"):
+        """
+        args:
+            root - path to lvis root folder
+            image_loader (jpeg4py_loader) - The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
+                                            is used by default.
+            data_fraction - Fraction of dataset to be used. The complete dataset is used by default
+            min_area - Objects with area less than min_area are filtered out. Default is 0.0
+            split - 'train' or 'val'.
+        """
         root = env_settings().lvis_dir if root is None else root
         super().__init__('LVIS', root, image_loader)
 

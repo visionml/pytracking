@@ -1,12 +1,11 @@
 import os
 from .base_video_dataset import BaseVideoDataset
-from ltr.data.image_loader import jpeg4py_loader
+from ltr.data.image_loader import default_image_loader
 import xml.etree.ElementTree as ET
 import json
 import torch
+import random
 from collections import OrderedDict
-import nltk
-from nltk.corpus import wordnet
 from ltr.admin.environment import env_settings
 
 
@@ -28,9 +27,19 @@ class ImagenetVID(BaseVideoDataset):
 
     Download the dataset from http://image-net.org/
     """
-    def __init__(self, root=None, image_loader=jpeg4py_loader, min_length=0, max_target_area=1, use_target_visible=False):
+    def __init__(self, root=None, image_loader=default_image_loader, min_length=0, max_target_area=1):
+        """
+        args:
+            root - path to the imagenet vid dataset.
+            image_loader (default_image_loader) -  The function to read the images. If installed,
+                                                   jpeg4py (https://github.com/ajkxyz/jpeg4py) is used by default. Else,
+                                                   opencv's imread is used.
+            min_length - Minimum allowed sequence length.
+            max_target_area - max allowed ratio between target area and image area. Can be used to filter out targets
+                                which cover complete image.
+        """
         root = env_settings().imagenet_dir if root is None else root
-        super().__init__('ImagenetVID', root, image_loader)
+        super().__init__(root, image_loader)
 
         cache_file = os.path.join(root, 'cache.json')
         if os.path.isfile(cache_file):
@@ -50,47 +59,11 @@ class ImagenetVID(BaseVideoDataset):
         self.sequence_list = [x for x in self.sequence_list if len(x['anno']) >= min_length and
                               get_target_to_image_ratio(x) < max_target_area]
 
-        if not use_target_visible:
-            raise NotImplementedError
-
-        # TODO add the class info
-        # we do not have the class_lists for the tracking net
-        self.class_list = self._get_class_list()
-        # self.class_list_non_unique = self._get_class_list_non_unique()
-
-    def _get_class_list(self):
-        # sequence list is a
-        class_list = []
-        for x in self.sequence_list:
-            class_list.append(x['class_name'])
-        class_list = list(set(class_list))
-        class_list.sort()
-        return class_list
-
-    def _get_class_list_non_unique(self):
-        # sequence list is a
-        class_list = []
-        for x in self.sequence_list:
-            class_list.append(x['class_name'])
-        # class_list = list(set(class_list))
-        class_list.sort()
-        return class_list
-
     def get_name(self):
         return 'imagenetvid'
 
-    def has_class_info(self):
-        return False
-
     def get_num_sequences(self):
         return len(self.sequence_list)
-
-    def get_num_classes(self):
-        return -1
-
-    # TODO implement
-    def get_sequences_in_class(self, class_id):
-        return None
 
     def get_sequence_info(self, seq_id):
         bb_anno = torch.Tensor(self.sequence_list[seq_id]['anno'])
@@ -115,12 +88,13 @@ class ImagenetVID(BaseVideoDataset):
         if anno is None:
             anno = self.get_sequence_info(seq_id)
 
+        # Create anno dict
         anno_frames = {}
         for key, value in anno.items():
             anno_frames[key] = [value[f_id, ...].clone() for f_id in frame_ids]
 
         # added the class info to the meta info
-        object_meta = OrderedDict({'object_class_name': sequence['class_name'],
+        object_meta = OrderedDict({'object_class': sequence['class_name'],
                                    'motion_class': None,
                                    'major_class': None,
                                    'root_class': None,
@@ -128,15 +102,8 @@ class ImagenetVID(BaseVideoDataset):
 
         return frame_list, anno_frames, object_meta
 
-    def _get_class_name_from_id(self, class_name_id):
-        pos = class_name_id[0]
-        offset = int(class_name_id[2:len(class_name_id)])
-        syns = wordnet.synset_from_pos_and_offset(pos, offset)
-        return syns.name()[:-5]
-
     def _process_anno(self, root):
         # Builds individual tracklets
-        nltk.download('wordnet')
         base_vid_anno_path = os.path.join(root, 'Annotations', 'VID', 'train')
 
         all_sequences = []
@@ -165,15 +132,14 @@ class ImagenetVID(BaseVideoDataset):
                 for tracklet_id, tracklet_start in tracklets.items():
                     tracklet_anno = []
                     target_visible = []
-                    class_name = None
+                    class_name_id = None
 
                     for f_id in range(tracklet_start, len(objects)):
                         found = False
                         for target in objects[f_id]:
                             if target.find('trackid').text == tracklet_id:
-                                if not class_name:
+                                if not class_name_id:
                                     class_name_id = target.find('name').text
-                                    class_name = self._get_class_name_from_id(class_name_id)
                                 x1 = int(target.find('bndbox/xmin').text)
                                 y1 = int(target.find('bndbox/ymin').text)
                                 x2 = int(target.find('bndbox/xmax').text)
@@ -187,7 +153,7 @@ class ImagenetVID(BaseVideoDataset):
                         if not found:
                             break
 
-                    new_sequence = {'set_id': set_id, 'vid_id': vid_id, 'class_name': class_name,
+                    new_sequence = {'set_id': set_id, 'vid_id': vid_id, 'class_name': class_name_id,
                                     'start_frame': tracklet_start, 'anno': tracklet_anno,
                                     'target_visible': target_visible, 'image_size': image_size}
                     all_sequences.append(new_sequence)

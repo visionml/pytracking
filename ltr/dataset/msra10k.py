@@ -1,9 +1,7 @@
 import os
 from .base_image_dataset import BaseImageDataset
-from ltr.data.image_loader import jpeg4py_loader, opencv_loader, imread_indexed
+from ltr.data.image_loader import jpeg4py_loader, imread_indexed
 import torch
-from pycocotools.coco import COCO
-import random
 from collections import OrderedDict
 from ltr.admin.environment import env_settings
 from ltr.data.bounding_box_utils import masks_to_bboxes
@@ -11,11 +9,26 @@ from ltr.data.bounding_box_utils import masks_to_bboxes
 
 class MSRA10k(BaseImageDataset):
     """
+    MSRA10k salient object detection dataset
 
-    Args:
+    Publication:
+        Global contrast based salient region detection
+        Ming-Ming Cheng, Niloy J. Mitra, Xiaolei Huang, Philip H. S. Torr, and Shi-Min Hu
+        TPAMI, 2015
+        https://mmcheng.net/mftp/Papers/SaliencyTPAMI.pdf
+
+    Download dataset from https://mmcheng.net/msra10k/
     """
 
     def __init__(self, root=None, image_loader=jpeg4py_loader, data_fraction=None, min_area=None):
+        """
+        args:
+            root - path to MSRA10k root folder
+            image_loader (jpeg4py_loader) - The function to read the images. jpeg4py (https://github.com/ajkxyz/jpeg4py)
+                                            is used by default.
+            data_fraction - Fraction of dataset to be used. The complete dataset is used by default
+            min_area - Objects with area less than min_area are filtered out. Default is 0.0
+        """
         root = env_settings().msra10k_dir if root is None else root
         super().__init__('MSRA10k', root, image_loader)
 
@@ -34,7 +47,6 @@ class MSRA10k(BaseImageDataset):
             a = imread_indexed(os.path.join(self.root, 'Imgs', '{}.png'.format(f)))
 
             if min_area is None or (a > 0).sum() > min_area:
-                # im = self.image_loader(os.path.join(self.root, 'Imgs', '{}.jpg'.format(f)))
                 images.append(f)
 
         return images

@@ -51,6 +51,7 @@ class TrackingNet(BaseVideoDataset):
                                             is used by default.
             set_ids (None) - List containing the ids of the TrackingNet sets to be used for training. If None, all the
                             sets (0 - 11) will be used.
+            data_fraction - Fraction of dataset to be used. The complete dataset is used by default
         """
         root = env_settings().trackingnet_dir if root is None else root
         super().__init__('TrackingNet', root, image_loader)

@@ -27,35 +27,38 @@ def _save_tracker_output(seq: Sequence, tracker: Tracker, output: dict):
         exec_times = np.array(data).astype(float)
         np.savetxt(file, exec_times, delimiter='\t', fmt='%f')
 
+    def _convert_dict(input_dict):
+        data_dict = {}
+        for elem in input_dict:
+            for k, v in elem.items():
+                if k in data_dict.keys():
+                    data_dict[k].append(v)
+                else:
+                    data_dict[k] = [v, ]
+        return data_dict
+
     for key, data in output.items():
         # If data is empty
         if not data:
             continue
 
         if key == 'target_bbox':
-            if isinstance(data, (dict, OrderedDict)):
-                for obj_id, d in data.items():
-                    bbox_file = '{}_{}.txt'.format(base_results_path, obj_id)
-                    save_bb(bbox_file, d)
-            elif isinstance(data[0], (dict, OrderedDict)):
-                data_dict = {}
-                for elem in data:
-                    for k, v in elem.items():
-                        if k in data_dict.keys():
-                            data_dict[k].append(v)
-                        else:
-                            data_dict[k] = [v, ]
+            if isinstance(data[0], (dict, OrderedDict)):
+                data_dict = _convert_dict(data)
 
                 for obj_id, d in data_dict.items():
                     bbox_file = '{}_{}.txt'.format(base_results_path, obj_id)
                     save_bb(bbox_file, d)
             else:
+                # Single-object mode
                 bbox_file = '{}.txt'.format(base_results_path)
                 save_bb(bbox_file, data)
 
         elif key == 'time':
-            if isinstance(data, dict):
-                for obj_id, d in data.items():
+            if isinstance(data[0], dict):
+                data_dict = _convert_dict(data)
+
+                for obj_id, d in data_dict.items():
                     timings_file = '{}_{}_time.txt'.format(base_results_path, obj_id)
                     save_time(timings_file, d)
             else:
@@ -82,9 +85,7 @@ def run_sequence(seq: Sequence, tracker: Tracker, debug=False, visdom_info=None)
             missing = [not os.path.isfile(f) for f in bbox_files]
             return sum(missing) == 0
 
-
     visdom_info = {} if visdom_info is None else visdom_info
-
 
     if _results_exist() and not debug:
         print('FPS: {}'.format(-1))
@@ -103,9 +104,9 @@ def run_sequence(seq: Sequence, tracker: Tracker, debug=False, visdom_info=None)
 
     sys.stdout.flush()
 
-    if isinstance(output['time'], dict):
-        exec_time = sum([sum(times) for times in output['time'].values()])
-        num_frames = max([len(times) for times in output['time'].values()])
+    if isinstance(output['time'][0], (dict, OrderedDict)):
+        exec_time = sum([sum(times.values()) for times in output['time']])
+        num_frames = len(output['time'])
     else:
         exec_time = sum(output['time'])
         num_frames = len(output['time'])
