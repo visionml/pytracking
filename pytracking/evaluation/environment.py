@@ -20,6 +20,11 @@ class EnvSettings:
         self.davis_dir = ''
         self.youtubevos_dir = ''
 
+        self.got_packed_results_path = ''
+        self.got_reports_path = ''
+        self.tn_packed_results_path = ''
+
+        self.perf_mat_path = ''
 
 def create_default_local_file():
     comment = {'results_path': 'Where to store tracking results',
