@@ -67,7 +67,7 @@ class GNSteepestDescent(nn.Module):
             alpha = ip_gg / (ip_hh + self.steplength_reg * ip_gg).clamp(1e-8)
 
             # Compute optimization step
-            step = g.apply(lambda e: alpha.view([-1 if d==self._parameter_batch_dim else 1 for d in range(e.dim())]) * e)
+            step = g.apply(lambda e: alpha.reshape([-1 if d==self._parameter_batch_dim else 1 for d in range(e.dim())]) * e)
 
             # Add step to parameter
             meta_parameter = meta_parameter - step

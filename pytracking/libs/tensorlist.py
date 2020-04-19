@@ -1,5 +1,6 @@
 import functools
 import torch
+import copy
 
 
 class TensorList(list):
@@ -9,6 +10,9 @@ class TensorList(list):
         if list_of_tensors is None:
             list_of_tensors = list()
         super(TensorList, self).__init__(list_of_tensors)
+
+    def __deepcopy__(self, memodict={}):
+        return TensorList(copy.deepcopy(list(self), memodict))
 
     def __getitem__(self, item):
         if isinstance(item, int):

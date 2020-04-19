@@ -27,9 +27,9 @@ class FilterPool(nn.Module):
             pooled_feat:  Pooled features. Dims (num_samples, feat_dim, wH, wW)."""
 
         # Add batch_index to rois
-        bb = bb.view(-1,4)
+        bb = bb.reshape(-1,4)
         num_images_total = bb.shape[0]
-        batch_index = torch.arange(num_images_total, dtype=torch.float32).view(-1, 1).to(bb.device)
+        batch_index = torch.arange(num_images_total, dtype=torch.float32).reshape(-1, 1).to(bb.device)
 
         # input bb is in format xywh, convert it to x0y0x1y1 format
         pool_bb = bb.clone()
@@ -101,13 +101,13 @@ class FilterInitializer(nn.Module):
         num_images = bb.shape[0] if bb.dim() == 3 else 1
 
         if self.filter_pre_layers is not None:
-            feat = self.filter_pre_layers(feat.view(-1, feat.shape[-3], feat.shape[-2], feat.shape[-1]))
+            feat = self.filter_pre_layers(feat.reshape(-1, feat.shape[-3], feat.shape[-2], feat.shape[-1]))
 
         feat_post = self.filter_pool(feat, bb)
         weights = self.filter_post_layers(feat_post)
 
         if num_images > 1:
-            weights = torch.mean(weights.view(num_images, -1, weights.shape[-3], weights.shape[-2], weights.shape[-1]), dim=0)
+            weights = torch.mean(weights.reshape(num_images, -1, weights.shape[-3], weights.shape[-2], weights.shape[-1]), dim=0)
 
         if self.filter_norm:
             weights = weights / (weights.shape[1] * weights.shape[2] * weights.shape[3])
@@ -159,13 +159,13 @@ class FilterInitializerLinear(nn.Module):
 
         num_images = feat.shape[0]
 
-        feat = self.filter_conv(feat.view(-1, feat.shape[-3], feat.shape[-2], feat.shape[-1]))
+        feat = self.filter_conv(feat.reshape(-1, feat.shape[-3], feat.shape[-2], feat.shape[-1]))
 
         weights = self.filter_pool(feat, bb)
 
         # If multiple input images, compute the initial filter as the average filter.
         if num_images > 1:
-            weights = torch.mean(weights.view(num_images, -1, weights.shape[-3], weights.shape[-2], weights.shape[-1]), dim=0)
+            weights = torch.mean(weights.reshape(num_images, -1, weights.shape[-3], weights.shape[-2], weights.shape[-1]), dim=0)
 
         if self.filter_norm:
             weights = weights / (weights.shape[1] * weights.shape[2] * weights.shape[3])
@@ -236,11 +236,11 @@ class FilterInitializerSiamese(nn.Module):
 
         num_images = feat.shape[0]
 
-        feat = feat.view(-1, feat.shape[-3], feat.shape[-2], feat.shape[-1])
+        feat = feat.reshape(-1, feat.shape[-3], feat.shape[-2], feat.shape[-1])
         weights = self.filter_pool(feat, bb)
 
         if num_images > 1:
-            weights = torch.mean(weights.view(num_images, -1, weights.shape[-3], weights.shape[-2], weights.shape[-1]), dim=0)
+            weights = torch.mean(weights.reshape(num_images, -1, weights.shape[-3], weights.shape[-2], weights.shape[-1]), dim=0)
 
         if self.filter_norm:
             weights = weights / (weights.shape[1] * weights.shape[2] * weights.shape[3])

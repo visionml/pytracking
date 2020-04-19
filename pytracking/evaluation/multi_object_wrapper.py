@@ -20,9 +20,13 @@ class MultiObjectWrapper:
                 self.tracker_copy.initialize_features()
 
     def create_tracker(self):
+        tracker = None
         if self.fast_load:
-            tracker = copy.deepcopy(self.tracker_copy)
-        else:
+            try:
+                tracker = copy.deepcopy(self.tracker_copy)
+            except:
+                pass
+        if tracker is None:
             tracker = self.base_tracker_class(self.params)
         tracker.visdom = self.visdom
         return tracker

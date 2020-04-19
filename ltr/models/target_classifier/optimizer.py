@@ -44,7 +44,7 @@ class DiMPSteepestDescentGN(nn.Module):
         self.alpha_eps = alpha_eps
 
         # Distance coordinates
-        d = torch.arange(num_dist_bins, dtype=torch.float32).view(1,-1,1,1) * bin_displacement
+        d = torch.arange(num_dist_bins, dtype=torch.float32).reshape(1,-1,1,1) * bin_displacement
         if init_gauss_sigma == 0:
             init_gauss = torch.zeros_like(d)
             init_gauss[0,0,0,0] = 1
@@ -110,19 +110,19 @@ class DiMPSteepestDescentGN(nn.Module):
 
         # Compute distance map
         dmap_offset = (torch.Tensor(filter_sz).to(bb.device) % 2) / 2.0
-        center = ((bb[..., :2] + bb[..., 2:] / 2) / self.feat_stride).view(-1, 2).flip((1,)) - dmap_offset
+        center = ((bb[..., :2] + bb[..., 2:] / 2) / self.feat_stride).reshape(-1, 2).flip((1,)) - dmap_offset
         dist_map = self.distance_map(center, output_sz)
 
         # Compute label map masks and weight
-        label_map = self.label_map_predictor(dist_map).view(num_images, num_sequences, *dist_map.shape[-2:])
-        target_mask = self.target_mask_predictor(dist_map).view(num_images, num_sequences, *dist_map.shape[-2:])
-        spatial_weight = self.spatial_weight_predictor(dist_map).view(num_images, num_sequences, *dist_map.shape[-2:])
+        label_map = self.label_map_predictor(dist_map).reshape(num_images, num_sequences, *dist_map.shape[-2:])
+        target_mask = self.target_mask_predictor(dist_map).reshape(num_images, num_sequences, *dist_map.shape[-2:])
+        spatial_weight = self.spatial_weight_predictor(dist_map).reshape(num_images, num_sequences, *dist_map.shape[-2:])
 
         # Get total sample weights
         if sample_weight is None:
             sample_weight = math.sqrt(1.0 / num_images) * spatial_weight
         elif isinstance(sample_weight, torch.Tensor):
-            sample_weight = sample_weight.sqrt().view(num_images, num_sequences, 1, 1) * spatial_weight
+            sample_weight = sample_weight.sqrt().reshape(num_images, num_sequences, 1, 1) * spatial_weight
 
         backprop_through_learning = (self.detach_length > 0)
 
@@ -153,11 +153,11 @@ class DiMPSteepestDescentGN(nn.Module):
 
             # Compute optimal step length
             alpha_num = (weights_grad * weights_grad).sum(dim=(1,2,3))
-            alpha_den = ((scores_grad * scores_grad).view(num_images, num_sequences, -1).sum(dim=(0,2)) + (reg_weight + self.alpha_eps) * alpha_num).clamp(1e-8)
+            alpha_den = ((scores_grad * scores_grad).reshape(num_images, num_sequences, -1).sum(dim=(0,2)) + (reg_weight + self.alpha_eps) * alpha_num).clamp(1e-8)
             alpha = alpha_num / alpha_den
 
             # Update filter
-            weights = weights - (step_length_factor * alpha.view(-1, 1, 1, 1)) * weights_grad
+            weights = weights - (step_length_factor * alpha.reshape(-1, 1, 1, 1)) * weights_grad
 
             # Add the weight iterate
             weight_iterates.append(weights)
@@ -199,11 +199,11 @@ class DiMPL2SteepestDescentGN(nn.Module):
         self.alpha_eps = alpha_eps
 
     def get_label(self, center, output_sz):
-        center = center.view(center.shape[0], -1, center.shape[-1])
-        k0 = torch.arange(output_sz[0], dtype=torch.float32).view(1, 1, -1, 1).to(center.device)
-        k1 = torch.arange(output_sz[1], dtype=torch.float32).view(1, 1, 1, -1).to(center.device)
-        g0 = torch.exp(-1.0 / (2 * self.gauss_sigma ** 2) * (k0 - center[:,:,0].view(*center.shape[:2], 1, 1)) ** 2)
-        g1 = torch.exp(-1.0 / (2 * self.gauss_sigma ** 2) * (k1 - center[:,:,1].view(*center.shape[:2], 1, 1)) ** 2)
+        center = center.reshape(center.shape[0], -1, center.shape[-1])
+        k0 = torch.arange(output_sz[0], dtype=torch.float32).reshape(1, 1, -1, 1).to(center.device)
+        k1 = torch.arange(output_sz[1], dtype=torch.float32).reshape(1, 1, 1, -1).to(center.device)
+        g0 = torch.exp(-1.0 / (2 * self.gauss_sigma ** 2) * (k0 - center[:,:,0].reshape(*center.shape[:2], 1, 1)) ** 2)
+        g1 = torch.exp(-1.0 / (2 * self.gauss_sigma ** 2) * (k1 - center[:,:,1].reshape(*center.shape[:2], 1, 1)) ** 2)
         gauss = g0 * g1
         return gauss
 
@@ -245,7 +245,7 @@ class DiMPL2SteepestDescentGN(nn.Module):
         if sample_weight is None:
             sample_weight = math.sqrt(1.0 / num_images)
         elif isinstance(sample_weight, torch.Tensor):
-            sample_weight = sample_weight.sqrt().view(num_images, num_sequences, 1, 1)
+            sample_weight = sample_weight.sqrt().reshape(num_images, num_sequences, 1, 1)
 
         weight_iterates = [weights]
         losses = []
@@ -274,11 +274,11 @@ class DiMPL2SteepestDescentGN(nn.Module):
 
             # Compute optimal step length
             alpha_num = (weights_grad * weights_grad).sum(dim=(1,2,3))
-            alpha_den = ((scores_grad * scores_grad).view(num_images, num_sequences, -1).sum(dim=(0,2)) + (reg_weight + self.alpha_eps) * alpha_num).clamp(1e-8)
+            alpha_den = ((scores_grad * scores_grad).reshape(num_images, num_sequences, -1).sum(dim=(0,2)) + (reg_weight + self.alpha_eps) * alpha_num).clamp(1e-8)
             alpha = alpha_num / alpha_den
 
             # Update filter
-            weights = weights - (step_length_factor * alpha.view(-1, 1, 1, 1)) * weights_grad
+            weights = weights - (step_length_factor * alpha.reshape(-1, 1, 1, 1)) * weights_grad
 
             # Add the weight iterate
             weight_iterates.append(weights)
@@ -329,19 +329,19 @@ class PrDiMPSteepestDescentNewton(nn.Module):
         self.label_threshold = label_threshold
 
     def get_label_density(self, center, output_sz):
-        center = center.view(center.shape[0], -1, center.shape[-1])
-        k0 = torch.arange(output_sz[0], dtype=torch.float32).view(1, 1, -1, 1).to(center.device)
-        k1 = torch.arange(output_sz[1], dtype=torch.float32).view(1, 1, 1, -1).to(center.device)
-        dist0 = (k0 - center[:,:,0].view(*center.shape[:2], 1, 1)) ** 2
-        dist1 = (k1 - center[:,:,1].view(*center.shape[:2], 1, 1)) ** 2
+        center = center.reshape(center.shape[0], -1, center.shape[-1])
+        k0 = torch.arange(output_sz[0], dtype=torch.float32).reshape(1, 1, -1, 1).to(center.device)
+        k1 = torch.arange(output_sz[1], dtype=torch.float32).reshape(1, 1, 1, -1).to(center.device)
+        dist0 = (k0 - center[:,:,0].reshape(*center.shape[:2], 1, 1)) ** 2
+        dist1 = (k1 - center[:,:,1].reshape(*center.shape[:2], 1, 1)) ** 2
         if self.gauss_sigma == 0:
-            dist0_view = dist0.view(-1, dist0.shape[-2])
-            dist1_view = dist1.view(-1, dist1.shape[-1])
+            dist0_view = dist0.reshape(-1, dist0.shape[-2])
+            dist1_view = dist1.reshape(-1, dist1.shape[-1])
             one_hot0 = torch.zeros_like(dist0_view)
             one_hot1 = torch.zeros_like(dist1_view)
             one_hot0[torch.arange(one_hot0.shape[0]), dist0_view.argmin(dim=-1)] = 1.0
             one_hot1[torch.arange(one_hot1.shape[0]), dist1_view.argmin(dim=-1)] = 1.0
-            gauss = one_hot0.view(dist0.shape) * one_hot1.view(dist1.shape)
+            gauss = one_hot0.reshape(dist0.shape) * one_hot1.reshape(dist1.shape)
         else:
             g0 = torch.exp(-1.0 / (2 * self.gauss_sigma ** 2) * dist0)
             g1 = torch.exp(-1.0 / (2 * self.gauss_sigma ** 2) * dist1)
@@ -387,11 +387,11 @@ class PrDiMPSteepestDescentNewton(nn.Module):
         if sample_weight is None:
             sample_weight = torch.Tensor([1.0 / num_images]).to(feat.device)
         elif isinstance(sample_weight, torch.Tensor):
-            sample_weight = sample_weight.view(num_images, num_sequences, 1, 1)
+            sample_weight = sample_weight.reshape(num_images, num_sequences, 1, 1)
 
         exp_reg = 0 if self.softmax_reg is None else math.exp(self.softmax_reg)
         def _compute_loss(scores, weights):
-            return torch.sum(sample_weight.view(sample_weight.shape[0], -1) *
+            return torch.sum(sample_weight.reshape(sample_weight.shape[0], -1) *
                              (torch.log(scores.exp().sum(dim=(-2, -1)) + exp_reg) - (label_density * scores).sum(dim=(-2, -1)))) / num_sequences +\
                    reg_weight * (weights ** 2).sum() / num_sequences
 
@@ -404,7 +404,7 @@ class PrDiMPSteepestDescentNewton(nn.Module):
 
             # Compute "residuals"
             scores = filter_layer.apply_filter(feat, weights)
-            scores_softmax = activation.softmax_reg(scores.view(num_images, num_sequences, -1), dim=2, reg=self.softmax_reg).view(scores.shape)
+            scores_softmax = activation.softmax_reg(scores.reshape(num_images, num_sequences, -1), dim=2, reg=self.softmax_reg).reshape(scores.shape)
             res = sample_weight*(scores_softmax - label_density)
 
             if compute_losses:
@@ -418,8 +418,8 @@ class PrDiMPSteepestDescentNewton(nn.Module):
             scores_grad = filter_layer.apply_filter(feat, weights_grad)
             sm_scores_grad = scores_softmax * scores_grad
             hes_scores_grad = sm_scores_grad - scores_softmax * torch.sum(sm_scores_grad, dim=(-2,-1), keepdim=True)
-            grad_hes_grad = (scores_grad * hes_scores_grad).view(num_images, num_sequences, -1).sum(dim=2).clamp(min=0)
-            grad_hes_grad = (sample_weight.view(sample_weight.shape[0], -1) * grad_hes_grad).sum(dim=0)
+            grad_hes_grad = (scores_grad * hes_scores_grad).reshape(num_images, num_sequences, -1).sum(dim=2).clamp(min=0)
+            grad_hes_grad = (sample_weight.reshape(sample_weight.shape[0], -1) * grad_hes_grad).sum(dim=0)
 
             # Compute optimal step length
             alpha_num = (weights_grad * weights_grad).sum(dim=(1,2,3))
@@ -427,7 +427,7 @@ class PrDiMPSteepestDescentNewton(nn.Module):
             alpha = alpha_num / alpha_den
 
             # Update filter
-            weights = weights - (step_length_factor * alpha.view(-1, 1, 1, 1)) * weights_grad
+            weights = weights - (step_length_factor * alpha.reshape(-1, 1, 1, 1)) * weights_grad
 
             # Add the weight iterate
             weight_iterates.append(weights)

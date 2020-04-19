@@ -17,7 +17,7 @@ class LinearFilterLearnGen(nn.Module):
         self.distance_map = DistanceMap(num_dist_bins, bin_displacement)
 
         # Distance coordinates
-        d = torch.arange(num_dist_bins, dtype=torch.float32).view(1,-1,1,1) * bin_displacement
+        d = torch.arange(num_dist_bins, dtype=torch.float32).reshape(1,-1,1,1) * bin_displacement
         if init_gauss_sigma == 0:
             init_gauss = torch.zeros_like(d)
             init_gauss[0,0,0,0] = 1
@@ -60,26 +60,26 @@ class LinearFilterLearnGen(nn.Module):
         scores = filter_layer.apply_filter(feat, filter)
 
         # Compute distance map
-        center = ((bb[..., :2] + bb[..., 2:] / 2) / self.feat_stride).view(-1, 2).flip((1,))
+        center = ((bb[..., :2] + bb[..., 2:] / 2) / self.feat_stride).reshape(-1, 2).flip((1,))
         if is_distractor is not None:
-            center[is_distractor.view(-1), :] = 99999
+            center[is_distractor.reshape(-1), :] = 99999
         dist_map = self.distance_map(center, scores.shape[-2:])
 
         # Compute label map masks and weight
-        label_map = self.label_map_predictor(dist_map).view(num_images, num_sequences, dist_map.shape[-2], dist_map.shape[-1])
-        target_mask = self.target_mask_predictor(dist_map).view(num_images, num_sequences, dist_map.shape[-2], dist_map.shape[-1])
-        spatial_weight = self.spatial_weight_predictor(dist_map).view(num_images, num_sequences, dist_map.shape[-2], dist_map.shape[-1])
+        label_map = self.label_map_predictor(dist_map).reshape(num_images, num_sequences, dist_map.shape[-2], dist_map.shape[-1])
+        target_mask = self.target_mask_predictor(dist_map).reshape(num_images, num_sequences, dist_map.shape[-2], dist_map.shape[-1])
+        spatial_weight = self.spatial_weight_predictor(dist_map).reshape(num_images, num_sequences, dist_map.shape[-2], dist_map.shape[-1])
 
         if sample_weight is None:
             sample_weight = math.sqrt(1.0 / num_images) * spatial_weight
         elif isinstance(sample_weight, torch.Tensor):
-            sample_weight = sample_weight.sqrt().view(-1, 1, 1, 1) * spatial_weight
+            sample_weight = sample_weight.sqrt().reshape(-1, 1, 1, 1) * spatial_weight
 
         # Compute data residual
         scores_act = self.score_activation(scores, target_mask)
         data_residual = sample_weight * (scores_act - label_map)
 
         # Compute regularization residual. Put batch in second dimension
-        reg_residual = self.filter_reg*filter.view(1, num_sequences, -1)
+        reg_residual = self.filter_reg*filter.reshape(1, num_sequences, -1)
 
         return TensorList([data_residual, reg_residual])
