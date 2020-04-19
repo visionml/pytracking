@@ -30,7 +30,7 @@ The framework consists of the following sub-modules.
  - [actors](actors): Contains the actor classes for different trainings. The actor class is responsible for passing the input data through the network can calculating losses.  
  - [admin](admin): Includes functions for loading networks, tensorboard etc. and also contains environment settings.  
  - [dataset](dataset): Contains integration of a number of training datasets, namely [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](https://cis.temple.edu/lasot/), 
- [ImageNet-VID](http://image-net.org/), and [COCO](http://cocodataset.org/#home).  
+ [ImageNet-VID](http://image-net.org/), [DAVIS](https://davischallenge.org), [YouTube-VOS](https://youtube-vos.org), [MS-COCO](http://cocodataset.org/#home), [SBD](http://home.bharathh.info/pubs/codes/SBD), [LVIS](https://www.lvisdataset.org), [ECSSD](http://www.cse.cuhk.edu.hk/leojia/projects/hsaliency/dataset.html), [MSRA10k](https://mmcheng.net/msra10k), and [HKU-IS](https://sites.google.com/site/ligb86/hkuis). Additionally, it includes modules to generate synthetic videos from image datasets. 
  - [data_specs](data_specs): Information about train/val splits of different datasets.   
  - [data](data): Contains functions for processing data, e.g. loading images, data augmentations, sampling frames from videos.  
  - [external](external): External libraries needed for training. Added as submodules.  

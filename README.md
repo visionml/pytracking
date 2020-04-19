@@ -17,14 +17,15 @@ Official implementation of the **DiMP** (ICCV 2019), and
 
 Libraries for implementing and evaluating visual trackers. It includes
 
-* All common **tracking datasets**.  
+* All common **tracking** and **video object segmentation** datasets.  
+* Scripts to **analyse** tracker performance and obtain standard performance scores.
 * General building blocks, including **deep networks**, **optimization**, **feature extraction** and utilities for **correlation filter** tracking.  
 
 ### [Training Framework: LTR](ltr)
  
 **LTR** (Learning Tracking Representations) is a general framework for training your visual tracking networks. It is equipped with
 
-* All common **training datasets** for visual tracking.  
+* All common **training datasets** for visual object tracking and segmentation.  
 * Functions for data **sampling**, **processing** etc.  
 * Network **modules** for visual tracking.
 * And much more...
