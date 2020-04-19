@@ -34,6 +34,11 @@ conda install -y pandas
 
 echo ""
 echo ""
+echo "****************** Installing tqdm ******************"
+conda install -y tqdm
+
+echo ""
+echo ""
 echo "****************** Installing opencv ******************"
 pip install opencv-python
 
@@ -46,6 +51,16 @@ echo ""
 echo ""
 echo "****************** Installing visdom ******************"
 pip install visdom
+
+echo ""
+echo ""
+echo "****************** Installing scikit-image ******************"
+pip install scikit-image
+
+echo ""
+echo ""
+echo "****************** Installing tikzplotlib ******************"
+pip install tikzplotlib
 
 echo ""
 echo ""
