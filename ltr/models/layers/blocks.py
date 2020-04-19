@@ -28,9 +28,9 @@ class LinearBlock(nn.Module):
         self.relu = nn.ReLU(inplace=True) if relu else None
 
     def forward(self, x):
-        x = self.linear(x.view(x.shape[0], -1))
+        x = self.linear(x.reshape(x.shape[0], -1))
         if self.bn is not None:
-            x = self.bn(x.view(x.shape[0], x.shape[1], 1, 1))
+            x = self.bn(x.reshape(x.shape[0], x.shape[1], 1, 1))
         if self.relu is not None:
             x = self.relu(x)
-        return x.view(x.shape[0], -1)
+        return x.reshape(x.shape[0], -1)

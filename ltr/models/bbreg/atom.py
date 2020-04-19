@@ -35,16 +35,16 @@ class ATOMnet(nn.Module):
         num_test_images = test_imgs.shape[0] if test_imgs.dim() == 5 else 1
 
         # Extract backbone features
-        train_feat = self.extract_backbone_features(train_imgs.view(-1, *train_imgs.shape[-3:]))
-        test_feat = self.extract_backbone_features(test_imgs.view(-1, *test_imgs.shape[-3:]))
+        train_feat = self.extract_backbone_features(train_imgs.reshape(-1, *train_imgs.shape[-3:]))
+        test_feat = self.extract_backbone_features(test_imgs.reshape(-1, *test_imgs.shape[-3:]))
 
         train_feat_iou = [feat for feat in train_feat.values()]
         test_feat_iou = [feat for feat in test_feat.values()]
 
         # Obtain iou prediction
         iou_pred = self.bb_regressor(train_feat_iou, test_feat_iou,
-                                     train_bb.view(num_train_images, num_sequences, 4),
-                                     test_proposals.view(num_train_images, num_sequences, -1, 4))
+                                     train_bb.reshape(num_train_images, num_sequences, 4),
+                                     test_proposals.reshape(num_train_images, num_sequences, -1, 4))
         return iou_pred
 
     def extract_backbone_features(self, im, layers=None):

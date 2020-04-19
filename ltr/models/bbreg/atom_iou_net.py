@@ -79,7 +79,7 @@ class AtomIoUNet(nn.Module):
         num_sequences = proposals2.shape[1]
 
         # Extract first train sample
-        feat1 = [f[0,...] if f.dim()==5 else f.view(-1, num_sequences, *f.shape[-3:])[0,...] for f in feat1]
+        feat1 = [f[0,...] if f.dim()==5 else f.reshape(-1, num_sequences, *f.shape[-3:])[0,...] for f in feat1]
         bb1 = bb1[0,...]
 
         # Get modulation vector
@@ -87,11 +87,11 @@ class AtomIoUNet(nn.Module):
 
         iou_feat = self.get_iou_feat(feat2)
 
-        modulation = [f.view(1, num_sequences, -1).repeat(num_images, 1, 1).view(num_sequences*num_images, -1) for f in modulation]
+        modulation = [f.reshape(1, num_sequences, -1).repeat(num_images, 1, 1).reshape(num_sequences*num_images, -1) for f in modulation]
 
-        proposals2 = proposals2.view(num_sequences*num_images, -1, 4)
+        proposals2 = proposals2.reshape(num_sequences*num_images, -1, 4)
         pred_iou = self.predict_iou(modulation, iou_feat, proposals2)
-        return pred_iou.view(num_images, num_sequences, -1)
+        return pred_iou.reshape(num_images, num_sequences, -1)
 
     def predict_iou(self, modulation, feat, proposals):
         """Predicts IoU for the give proposals.
@@ -106,11 +106,11 @@ class AtomIoUNet(nn.Module):
         batch_size = c3_t.size()[0]
 
         # Modulation
-        c3_t_att = c3_t * fc34_3_r.view(batch_size, -1, 1, 1)
-        c4_t_att = c4_t * fc34_4_r.view(batch_size, -1, 1, 1)
+        c3_t_att = c3_t * fc34_3_r.reshape(batch_size, -1, 1, 1)
+        c4_t_att = c4_t * fc34_4_r.reshape(batch_size, -1, 1, 1)
 
         # Add batch_index to rois
-        batch_index = torch.arange(batch_size, dtype=torch.float32).view(-1, 1).to(c3_t.device)
+        batch_index = torch.arange(batch_size, dtype=torch.float32).reshape(-1, 1).to(c3_t.device)
 
         # Push the different rois for the same image along the batch dimension
         num_proposals_per_batch = proposals.shape[1]
@@ -119,9 +119,9 @@ class AtomIoUNet(nn.Module):
         proposals_xyxy = torch.cat((proposals[:, :, 0:2], proposals[:, :, 0:2] + proposals[:, :, 2:4]), dim=2)
 
         # Add batch index
-        roi2 = torch.cat((batch_index.view(batch_size, -1, 1).expand(-1, num_proposals_per_batch, -1),
+        roi2 = torch.cat((batch_index.reshape(batch_size, -1, 1).expand(-1, num_proposals_per_batch, -1),
                           proposals_xyxy), dim=2)
-        roi2 = roi2.view(-1, 5).to(proposals_xyxy.device)
+        roi2 = roi2.reshape(-1, 5).to(proposals_xyxy.device)
 
         roi3t = self.prroi_pool3t(c3_t_att, roi2)
         roi4t = self.prroi_pool4t(c4_t_att, roi2)
@@ -131,7 +131,7 @@ class AtomIoUNet(nn.Module):
 
         fc34_rt_cat = torch.cat((fc3_rt, fc4_rt), dim=1)
 
-        iou_pred = self.iou_predictor(fc34_rt_cat).view(batch_size, num_proposals_per_batch)
+        iou_pred = self.iou_predictor(fc34_rt_cat).reshape(batch_size, num_proposals_per_batch)
 
         return iou_pred
 
@@ -147,7 +147,7 @@ class AtomIoUNet(nn.Module):
 
         # Add batch_index to rois
         batch_size = bb.shape[0]
-        batch_index = torch.arange(batch_size, dtype=torch.float32).view(-1, 1).to(bb.device)
+        batch_index = torch.arange(batch_size, dtype=torch.float32).reshape(-1, 1).to(bb.device)
 
         # input bb is in format xywh, convert it to x0y0x1y1 format
         bb = bb.clone()
@@ -171,7 +171,7 @@ class AtomIoUNet(nn.Module):
 
     def get_iou_feat(self, feat2):
         """Get IoU prediction features from a 4 or 5 dimensional backbone input."""
-        feat2 = [f.view(-1, *f.shape[-3:]) if f.dim()==5 else f for f in feat2]
+        feat2 = [f.reshape(-1, *f.shape[-3:]) if f.dim()==5 else f for f in feat2]
         feat3_t, feat4_t = feat2
         c3_t = self.conv3_2t(self.conv3_1t(feat3_t))
         c4_t = self.conv4_2t(self.conv4_1t(feat4_t))

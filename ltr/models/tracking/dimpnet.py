@@ -48,8 +48,8 @@ class DiMPnet(nn.Module):
         assert train_imgs.dim() == 5 and test_imgs.dim() == 5, 'Expect 5 dimensional inputs'
 
         # Extract backbone features
-        train_feat = self.extract_backbone_features(train_imgs.view(-1, *train_imgs.shape[-3:]))
-        test_feat = self.extract_backbone_features(test_imgs.view(-1, *test_imgs.shape[-3:]))
+        train_feat = self.extract_backbone_features(train_imgs.reshape(-1, *train_imgs.shape[-3:]))
+        test_feat = self.extract_backbone_features(test_imgs.reshape(-1, *test_imgs.shape[-3:]))
 
         # Classification features
         train_feat_clf = self.get_backbone_clf_feat(train_feat)

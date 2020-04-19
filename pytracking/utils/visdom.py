@@ -44,7 +44,7 @@ class VisImage(VisBase):
     def __init__(self, visdom, show_data, title):
         super().__init__(visdom, show_data, title)
 
-    def save_data(self, data, title=None):
+    def save_data(self, data):
         data = data.float()
         self.raw_data = data
 
@@ -208,7 +208,7 @@ class VisCostVolumeUI(VisBase):
         c2 = min((self.zoom_pos[1] + 1) * stride_c, data.shape[2])
 
         factor = 0.8 if self.zoom_mode else 0.5
-        data[:, r1:r2, c1:c2] = data[:, r1:r2, c1:c2] * (1 - factor) + torch.tensor([255.0, 0.0, 0.0]).view(3, 1, 1) * factor
+        data[:, r1:r2, c1:c2] = data[:, r1:r2, c1:c2] * (1 - factor) + torch.tensor([255.0, 0.0, 0.0]).view(3, 1, 1).to(data.device) * factor
         return data
 
     def show_image(self, data=None):
@@ -324,9 +324,9 @@ class VisTracking(VisBase):
 
         for i, disp_rect in enumerate(boxes):
             color = ((255*((i%3)>0)), 255*((i+1)%2), (255*(i%5))//4)
-            cv2.rectangle(disp_image, (int(disp_rect[0]), int(disp_rect[1])), (int(disp_rect[0] + disp_rect[2]),
-                                                                               int(disp_rect[1] + disp_rect[
-                                                                                   3])), color, 2)
+            cv2.rectangle(disp_image,
+                          (int(disp_rect[0]), int(disp_rect[1])),
+                          (int(disp_rect[0] + disp_rect[2]), int(disp_rect[1] + disp_rect[3])), color, 2)
         for i, mask in enumerate(self.raw_data[2], 1):
             disp_image = overlay_mask(disp_image, mask * i)
         disp_image = numpy_to_torch(disp_image).squeeze(0)

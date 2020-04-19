@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import torch
+import copy
 
 
 class TensorDict(OrderedDict):
@@ -11,6 +12,9 @@ class TensorDict(OrderedDict):
 
     def copy(self):
         return TensorDict(super(TensorDict, self).copy())
+
+    def __deepcopy__(self, memodict={}):
+        return TensorDict(copy.deepcopy(list(self), memodict))
 
     def __getattr__(self, name):
         if not hasattr(torch.Tensor, name):

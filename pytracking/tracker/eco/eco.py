@@ -14,7 +14,7 @@ from pytracking.features import augmentation
 
 class ECO(BaseTracker):
 
-    multiobj_mode = 'sequential'
+    multiobj_mode = 'parallel'
 
     def initialize_features(self):
         if not getattr(self, 'features_initialized', False):

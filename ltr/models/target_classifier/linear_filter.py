@@ -49,9 +49,9 @@ class LinearFilter(nn.Module):
         num_sequences = train_bb.shape[1]
 
         if train_feat.dim() == 5:
-            train_feat = train_feat.view(-1, *train_feat.shape[-3:])
+            train_feat = train_feat.reshape(-1, *train_feat.shape[-3:])
         if test_feat.dim() == 5:
-            test_feat = test_feat.view(-1, *test_feat.shape[-3:])
+            test_feat = test_feat.reshape(-1, *test_feat.shape[-3:])
 
         # Extract features
         train_feat = self.extract_classification_feat(train_feat, num_sequences)
@@ -73,7 +73,7 @@ class LinearFilter(nn.Module):
             return self.feature_extractor(feat)
 
         output = self.feature_extractor(feat)
-        return output.view(-1, num_sequences, *output.shape[-3:])
+        return output.reshape(-1, num_sequences, *output.shape[-3:])
 
     def classify(self, weights, feat):
         """Run classifier (filter) on the features (feat)."""
@@ -108,7 +108,7 @@ class LinearFilter(nn.Module):
         num_sequences = bb.shape[1]
 
         if backbone_feat.dim() == 5:
-            backbone_feat = backbone_feat.view(-1, *backbone_feat.shape[-3:])
+            backbone_feat = backbone_feat.reshape(-1, *backbone_feat.shape[-3:])
 
         # Extract features
         train_feat = self.extract_classification_feat(backbone_feat, num_sequences)
@@ -120,7 +120,7 @@ class LinearFilter(nn.Module):
     def track_frame(self, filter_weights, backbone_feat):
         if backbone_feat.dim() == 5:
             num_sequences = backbone_feat.shape[1]
-            backbone_feat = backbone_feat.view(-1, *backbone_feat.shape[-3:])
+            backbone_feat = backbone_feat.reshape(-1, *backbone_feat.shape[-3:])
         else:
             num_sequences = None
 
