@@ -393,7 +393,7 @@ class Visdom:
         if title not in self.registered_blocks.keys():
             show_data = self.debug >= debug_level
 
-            if title is not 'Tracking':
+            if title != 'Tracking':
                 self.blocks_list.append({'type': 'checkbox', 'name': title, 'value': show_data})
 
             self.visdom.properties(self.blocks_list, opts={'title': 'Block List'}, win='block_list')

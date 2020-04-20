@@ -80,7 +80,7 @@ class MultiObjectWrapper:
 
         # Merge other fields
         for key in out_types:
-            if key is 'segmentation':
+            if key == 'segmentation':
                 pass
             else:
                 out_merged[key] = {obj_id: out[key] for obj_id, out in out_all.items()}

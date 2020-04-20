@@ -23,10 +23,10 @@ conda install pytorch torchvision cudatoolkit=10.0 -c pytorch
 - It is possible to use any PyTorch supported version of CUDA (not necessarily v10).   
 - For more details about PyTorch installation, see https://pytorch.org/get-started/previous-versions/.  
 
-#### Install matplotlib, pandas, tqdm, opencv, scikit-image, visdom, tikzplotlib, and tensorboad  
+#### Install matplotlib, pandas, tqdm, opencv, scikit-image, visdom, tikzplotlib, gdown, and tensorboad  
 ```bash
 conda install matplotlib pandas tqdm
-pip install opencv-python visdom tb-nightly scikit-image tikzplotlib
+pip install opencv-python visdom tb-nightly scikit-image tikzplotlib gdown
 ```
 
 
@@ -75,16 +75,16 @@ You can modify these files to set the paths to datasets, results paths etc.
 You can download the pre-trained networks from the [google drive folder](https://drive.google.com/drive/folders/1WVhJqvdu-_JG1U-V0IqfxTUa1SBPnL0O). 
 The networks shoud be saved in the directory set by "network_path" in "pytracking/evaluation/local.py". By default, it is set to 
 pytracking/networks.
-You can also download the networks using the gdrive_download bash script.
+You can also download the networks using the [gdown](https://github.com/wkentaro/gdown) python package.
 
 ```bash
 # Download the default network for DiMP-50 and DiMP-18
-bash pytracking/utils/gdrive_download 1qgachgqks2UGjKx-GdO1qylBDdB1f9KN pytracking/networks/dimp50.pth
-bash pytracking/utils/gdrive_download 1MAjrRJDCbL0DSjUKFyDkUuYS1-cYBNjk pytracking/networks/dimp18.pth
+gdown https://drive.google.com/uc\?id\=1qgachgqks2UGjKx-GdO1qylBDdB1f9KN -O pytracking/networks/dimp50.pth
+gdown https://drive.google.com/uc\?id\=1MAjrRJDCbL0DSjUKFyDkUuYS1-cYBNjk -O pytracking/networks/dimp18.pth
 
 # Download the default network for ATOM
-bash pytracking/utils/gdrive_download 1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU pytracking/networks/atom_default.pth
+gdown https://drive.google.com/uc\?id\=1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU -O pytracking/networks/atom_default.pth
 
 # Download the default network for ECO
-bash pytracking/utils/gdrive_download 1aWC4waLv_te-BULoy0k-n_zS-ONms21S pytracking/networks/resnet18_vggmconv1.pth
+gdown https://drive.google.com/uc\?id\=1aWC4waLv_te-BULoy0k-n_zS-ONms21S -O pytracking/networks/resnet18_vggmconv1.pth
 ```
