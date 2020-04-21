@@ -75,9 +75,9 @@ def calc_seq_err_robust(pred_bb, anno_bb, dataset, target_visible=None):
 
     if target_visible is not None:
         target_visible = target_visible.bool()
-        valid = ((anno_bb > 0.0).sum(1) == 4) & target_visible
+        valid = ((anno_bb[:,2:] > 0.0).sum(1) == 2) & target_visible
     else:
-        valid = ((anno_bb > 0.0).sum(1) == 4)
+        valid = ((anno_bb[:,2:] > 0.0).sum(1) == 2)
 
     err_center = calc_err_center(pred_bb, anno_bb)
     err_center_normalized = calc_err_center(pred_bb, anno_bb, normalized=True)
@@ -148,7 +148,7 @@ def extract_results(trackers, dataset, report_name, skip_missing_seq=False, plot
             avg_overlap_all[seq_id, trk_id] = err_overlap[valid_frame].mean()
 
             if seq.dataset not in ['lasot', 'uav']:
-                seq_length = (err_overlap >= 0.0).sum()
+                seq_length = valid_frame.long().sum()
             else:
                 seq_length = anno_bb.shape[0]
 
