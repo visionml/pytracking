@@ -12,9 +12,18 @@ if env_path not in sys.path:
 
 from pytracking.evaluation.environment import env_settings
 
-
 results_link_dict = {
     "dimp": {
+        "prdimp50_003.zip": "1p13j3iwcOCubBi3ms0hLwqnP6-x0J8Mc",
+        "prdimp50_002.zip": "1PPKgrAepbuyM2kjfzYAozQKTL6AjcQOz",
+        "prdimp50_001.zip": "17NFBObEDeK6mW4Mk2vN5Ekk1SGbFvxRS",
+        "prdimp50_000.zip": "1r3Efq7AumML2yGQ_KV4zmf4ATKVE1bo6",
+        "prdimp18_004.zip": "1DF4ZJQAa4CwvN_OiT4te33AV0kpsO7JM",
+        "prdimp18_003.zip": "1RgwJAN4TxnzgVgsfvrHIg1OUXD1EBZkO",
+        "prdimp18_002.zip": "17lMllYhygCqgE81DoHX4BZar3xc3auzM",
+        "prdimp18_001.zip": "1Yg7DmGYOnn2k0MYtSjjKlGyzO1Uimj4G",
+        "prdimp18_000.zip": "1DuZJSBJ-23WJBQTOWSAaoPYSbGAJJN2Z",
+        "prdimp50_004.zip": "1f9bx9-dtx3B5_IvIJhjjJyp-cnXciqLO",
         "dimp50_004.zip": "1Lj3p8mYCoIqxzdQXZkWFTw-MA8c6eeLa",
         "dimp50_000.zip": "1LCgf5sg453Z4bY37A_W5mbXeG68U1fET",
         "dimp18_000.zip": "17M7dJZ1oKrIY4-O5lL_mlQPEubUn034g",
@@ -41,8 +50,9 @@ results_link_dict = {
         "default_002.zip": "1QIlQFv3p6MBTwsYdIMYmzUDBDQGxGsUC",
         "default_001.zip": "1-K2--GNCURDKEgUuiEF18K4DcCLvDEVt",
         "default_got_002.zip": "1qGtArxdAy0uWSd-HqFT5zmXpR6TCm4Vc",
-    }
+    },
 }
+
 
 def _download_file(file_id, path):
     link = 'https://drive.google.com/uc?id=' + file_id
@@ -54,9 +64,10 @@ def download_results(download_path, trackers='all'):
     Script to automatically download tracker results for PyTracking.
 
     args:
-        output_path - Directory where the zipped results are downloaded
+        download_path - Directory where the zipped results are downloaded
         trackers - Tracker results which are to be downloaded. If set to 'all', all available results are downloaded.
-                   Otherwise, it should be a dict, where the keys are the names of the trackers for which results are
+                   If set to a name of a tracker (e.g. atom), all results for that tracker are downloaded.
+                   Otherwise, it can be set to a dict, where the keys are the names of the trackers for which results are
                    downloaded. The value can be set to either 'all', in which case all available results for the
                     tracker are downloaded. Else the value should be a list of parameter file names.
     """
@@ -99,7 +110,7 @@ def download_results(download_path, trackers='all'):
 
 def unpack_tracking_results(download_path, output_path=None):
     """
-    Unpacks zipped benchmark results. The directory 'packed_results_path' should have the following structure
+    Unpacks zipped benchmark results. The directory 'download_path' should have the following structure
     - root
         - tracker1
             - param1.zip
@@ -113,7 +124,7 @@ def unpack_tracking_results(download_path, output_path=None):
         .
 
     args:
-        packed_results_path - Path to the directory where the zipped results are stored
+        download_path - Path to the directory where the zipped results are stored
         output_path - Path to the directory where the results will be unpacked. Set to env_settings().results_path
                       by default
     """
@@ -139,7 +150,7 @@ def unpack_tracking_results(download_path, output_path=None):
 def main():
     parser = argparse.ArgumentParser(description='Download and unpack zipped results')
     parser.add_argument('--tracker', type=str, default='all',
-                        help='Name of tracker results do download, or ''all''.')
+                        help='Name of tracker results to download, or ''all''.')
     parser.add_argument('--output_path', type=str, default=None,
                         help='Path to the directory where the results will be unpacked.')
     parser.add_argument('--temp_download_path', type=str, default=None,
