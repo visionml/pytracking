@@ -58,9 +58,10 @@ The tookit consists of the following sub-modules.
  - [experiments](experiments): The experiment setting files must be stored here,  
  - [features](features): Contains tools for feature extraction, data augmentation and wrapping networks.  
  - [libs](libs): Includes libraries for optimization, dcf, etc.  
+ - [notebooks](notebooks) Jupyter notebooks to analyze tracker performance.
  - [parameter](parameter): Contains the parameter settings for different trackers.  
  - [tracker](tracker): Contains the implementations of different trackers.  
- - [util_scripts](util_scripts): Some util scripts for e.g. generating packed results for evaluation on GOT-10k and TrackingNet evaluation servers. 
+ - [util_scripts](util_scripts): Some util scripts for e.g. generating packed results for evaluation on GOT-10k and TrackingNet evaluation servers, downloading pre-computed results. 
  - [utils](utils): Some util functions. 
  - [VOT](VOT): VOT Integration.  
  
@@ -93,6 +94,9 @@ The difference between these two settings stems from the fact that the VOT proto
  
 ### ECO
 An unofficial implementation of the ECO tracker can be found at [tracker.eco](tracker/eco). 
+
+## Analysis  
+The [analysis](analysis) module contains several scripts to analyze tracking performance on standard datasets. It can be used to obtain Precision and Success plots, compute AUC, OP, and Precision scores. The module includes utilities to perform per sequence analysis of the trackers. Further, it includes a [script](analysis/playback_results.py) to visualize pre-computed tracking results. Check [notebooks/analyze_results.ipynb](notebooks/analyze_results.ipynb) for examples on how to use the analysis module. 
 
 ## Libs
 The pytracking repository includes some general libraries for implementing and developing different kinds of visual trackers, including deep learning based, optimization based and correlation filter based. The following libs are included:
