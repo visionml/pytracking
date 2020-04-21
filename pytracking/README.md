@@ -96,7 +96,7 @@ The difference between these two settings stems from the fact that the VOT proto
 An unofficial implementation of the ECO tracker can be found at [tracker.eco](tracker/eco). 
 
 ## Analysis  
-The [analysis](analysis) module contains several scripts to analyze tracking performance on standard datasets. It can be used to obtain Precision and Success plots, compute AUC, OP, and Precision scores. The module includes utilities to perform per sequence analysis of the trackers. Further, it includes a script to visualize pre-computed tracking results. Check [notebooks/analyze_results.ipynb](notebooks/analyze_results.ipynb) for examples on how to use the analysis module. 
+The [analysis](analysis) module contains several scripts to analyze tracking performance on standard datasets. It can be used to obtain Precision and Success plots, compute AUC, OP, and Precision scores. The module includes utilities to perform per sequence analysis of the trackers. Further, it includes a [script](analysis/playback_results.py) to visualize pre-computed tracking results. Check [notebooks/analyze_results.ipynb](notebooks/analyze_results.ipynb) for examples on how to use the analysis module. 
 
 ## Libs
 The pytracking repository includes some general libraries for implementing and developing different kinds of visual trackers, including deep learning based, optimization based and correlation filter based. The following libs are included:
