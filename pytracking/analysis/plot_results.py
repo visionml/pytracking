@@ -230,7 +230,7 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
 
     valid_sequence = torch.tensor(eval_data['valid_sequence'], dtype=torch.bool)
 
-    print('\nPlotting results over {} / {} sequences'.format(valid_sequence.sum().item(), valid_sequence.shape[0]))
+    print('\nPlotting results over {} / {} sequences'.format(valid_sequence.long().sum().item(), valid_sequence.shape[0]))
 
     print('\nGenerating plots for: {}'.format(report_name))
 
@@ -324,7 +324,7 @@ def print_results(trackers, dataset, report_name, merge_results=False,
     tracker_names = eval_data['trackers']
     valid_sequence = torch.tensor(eval_data['valid_sequence'], dtype=torch.bool)
 
-    print('\nReporting results over {} / {} sequences'.format(valid_sequence.sum().item(), valid_sequence.shape[0]))
+    print('\nReporting results over {} / {} sequences'.format(valid_sequence.long().sum().item(), valid_sequence.shape[0]))
 
     scores = {}
 
