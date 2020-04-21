@@ -9,6 +9,7 @@ class EnvSettings:
         self.results_path = '{}/tracking_results/'.format(pytracking_path)
         self.segmentation_path = '{}/segmentation_results/'.format(pytracking_path)
         self.network_path = '{}/networks/'.format(pytracking_path)
+        self.result_plot_path = '{}/result_plots/'.format(pytracking_path)
         self.otb_path = ''
         self.nfs_path = ''
         self.uav_path = ''
@@ -24,7 +25,6 @@ class EnvSettings:
         self.got_reports_path = ''
         self.tn_packed_results_path = ''
 
-        self.perf_mat_path = ''
 
 def create_default_local_file():
     comment = {'results_path': 'Where to store tracking results',

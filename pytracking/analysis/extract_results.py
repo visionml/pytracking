@@ -104,10 +104,10 @@ def extract_results(trackers, dataset, report_name, skip_missing_seq=False, plot
     settings = env_settings()
     eps = 1e-16
 
-    perf_mat_path = os.path.join(settings.perf_mat_path, report_name)
+    result_plot_path = os.path.join(settings.result_plot_path, report_name)
 
-    if not os.path.exists(perf_mat_path):
-        os.makedirs(perf_mat_path)
+    if not os.path.exists(result_plot_path):
+        os.makedirs(result_plot_path)
 
     threshold_set_overlap = torch.arange(0.0, 1.0 + plot_bin_gap, plot_bin_gap, dtype=torch.float64)
     threshold_set_center = torch.arange(0, 51, dtype=torch.float64)
@@ -176,7 +176,7 @@ def extract_results(trackers, dataset, report_name, skip_missing_seq=False, plot
                  'threshold_set_center': threshold_set_center.tolist(),
                  'threshold_set_center_norm': threshold_set_center_norm.tolist()}
 
-    with open(perf_mat_path + '/eval_data.pkl', 'wb') as fh:
+    with open(result_plot_path + '/eval_data.pkl', 'wb') as fh:
         pickle.dump(eval_data, fh)
 
     return eval_data

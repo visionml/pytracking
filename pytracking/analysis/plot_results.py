@@ -1,17 +1,10 @@
 import tikzplotlib
 import matplotlib
 import matplotlib.pyplot as plt
-import importlib
 import os
-import sys
 import torch
 import pickle
 import json
-
-env_path = os.path.join(os.path.dirname(__file__), '../..')
-if env_path not in sys.path:
-    sys.path.append(env_path)
-
 from pytracking.evaluation.environment import env_settings
 from pytracking.analysis.extract_results import extract_results
 
@@ -106,7 +99,7 @@ def get_tracker_display_name(tracker):
     return  disp_name
 
 
-def plot_draw_save(y, x, scores, trackers, plot_draw_styles, perf_mat_path, plot_opts):
+def plot_draw_save(y, x, scores, trackers, plot_draw_styles, result_plot_path, plot_opts):
     # Plot settings
     font_size = plot_opts.get('font_size', 12)
     font_size_axis = plot_opts.get('font_size_axis', 13)
@@ -159,8 +152,8 @@ def plot_draw_save(y, x, scores, trackers, plot_draw_styles, perf_mat_path, plot
     ax.grid(True, linestyle='-.')
     fig.tight_layout()
 
-    tikzplotlib.save('{}/{}_plot.tex'.format(perf_mat_path, plot_type))
-    fig.savefig('{}/{}_plot.pdf'.format(perf_mat_path, plot_type), dpi=300, format='pdf', transparent=True)
+    tikzplotlib.save('{}/{}_plot.tex'.format(result_plot_path, plot_type))
+    fig.savefig('{}/{}_plot.pdf'.format(result_plot_path, plot_type), dpi=300, format='pdf', transparent=True)
     plt.draw()
 
 
@@ -169,8 +162,8 @@ def check_and_load_precomputed_results(trackers, dataset, report_name, force_eva
     settings = env_settings()
 
     # Load pre-computed results
-    perf_mat_path = os.path.join(settings.perf_mat_path, report_name)
-    eval_data_path = os.path.join(perf_mat_path, 'eval_data.pkl')
+    result_plot_path = os.path.join(settings.result_plot_path, report_name)
+    eval_data_path = os.path.join(result_plot_path, 'eval_data.pkl')
 
     if os.path.isfile(eval_data_path) and not force_evaluation:
         with open(eval_data_path, 'rb') as fh:
@@ -226,7 +219,7 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
     plot_draw_styles = get_plot_draw_styles()
 
     # Load pre-computed results
-    perf_mat_path = os.path.join(settings.perf_mat_path, report_name)
+    result_plot_path = os.path.join(settings.result_plot_path, report_name)
     eval_data = check_and_load_precomputed_results(trackers, dataset, report_name, force_evaluation, **kwargs)
 
     # Merge results from multiple runs
@@ -239,6 +232,8 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
 
     print('\nPlotting results over {} / {} sequences'.format(valid_sequence.sum().item(), valid_sequence.shape[0]))
 
+    print('\nGenerating plots for: {}'.format(report_name))
+
     # ********************************  Success Plot **************************************
     if 'success' in plot_types:
         ave_success_rate_plot_overlap = torch.tensor(eval_data['ave_success_rate_plot_overlap'])
@@ -249,7 +244,7 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
 
         success_plot_opts = {'plot_type': 'success', 'legend_loc': 'lower left', 'xlabel': 'Overlap threshold',
                              'ylabel': 'Overlap Precision [%]', 'xlim': (0, 1.0), 'ylim': (0, 100), 'title': 'Success plot'}
-        plot_draw_save(auc_curve, threshold_set_overlap, auc, tracker_names, plot_draw_styles, perf_mat_path, success_plot_opts)
+        plot_draw_save(auc_curve, threshold_set_overlap, auc, tracker_names, plot_draw_styles, result_plot_path, success_plot_opts)
 
     # ********************************  Precision Plot **************************************
     if 'prec' in plot_types:
@@ -262,7 +257,7 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
         precision_plot_opts = {'plot_type': 'precision', 'legend_loc': 'lower right',
                                'xlabel': 'Location error threshold [pixels]', 'ylabel': 'Distance Precision [%]',
                                'xlim': (0, 50), 'ylim': (0, 100), 'title': 'Precision plot'}
-        plot_draw_save(prec_curve, threshold_set_center, prec_score, tracker_names, plot_draw_styles, perf_mat_path,
+        plot_draw_save(prec_curve, threshold_set_center, prec_score, tracker_names, plot_draw_styles, result_plot_path,
                        precision_plot_opts)
 
     # ********************************  Norm Precision Plot **************************************
@@ -276,17 +271,17 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
         norm_precision_plot_opts = {'plot_type': 'norm_precision', 'legend_loc': 'lower right',
                                     'xlabel': 'Location error threshold', 'ylabel': 'Distance Precision [%]',
                                     'xlim': (0, 0.5), 'ylim': (0, 100), 'title': 'Normalized Precision plot'}
-        plot_draw_save(prec_curve, threshold_set_center_norm, prec_score, tracker_names, plot_draw_styles, perf_mat_path,
+        plot_draw_save(prec_curve, threshold_set_center_norm, prec_score, tracker_names, plot_draw_styles, result_plot_path,
                        norm_precision_plot_opts)
 
     plt.show()
 
 
-def generate_formatted_report(row_labels, scores):
-    name_width = max([len(d) for d in row_labels]) + 5
+def generate_formatted_report(row_labels, scores, table_name=''):
+    name_width = max([len(d) for d in row_labels] + [len(table_name)]) + 5
     min_score_width = 10
 
-    report_text = '\n{label: <{width}} |'.format(label='', width=name_width)
+    report_text = '\n{label: <{width}} |'.format(label=table_name, width=name_width)
 
     score_widths = [max(min_score_width, len(k) + 3) for k in scores.keys()]
 
@@ -362,7 +357,7 @@ def print_results(trackers, dataset, report_name, merge_results=False,
 
     # Print
     tracker_disp_names = [get_tracker_display_name(trk) for trk in tracker_names]
-    report_text = generate_formatted_report(tracker_disp_names, scores)
+    report_text = generate_formatted_report(tracker_disp_names, scores, table_name=report_name)
     print(report_text)
 
 
@@ -382,7 +377,7 @@ def plot_got_success(trackers, report_name):
     settings = env_settings()
     plot_draw_styles = get_plot_draw_styles()
 
-    perf_mat_path = os.path.join(settings.perf_mat_path, report_name)
+    result_plot_path = os.path.join(settings.result_plot_path, report_name)
 
     auc_curve = torch.zeros((len(trackers), 101))
     scores = torch.zeros(len(trackers))
@@ -422,7 +417,7 @@ def plot_got_success(trackers, report_name):
 
     success_plot_opts = {'plot_type': 'success', 'legend_loc': 'lower left', 'xlabel': 'Overlap threshold',
                          'ylabel': 'Overlap Precision [%]', 'xlim': (0, 1.0), 'ylim': (0, 100), 'title': 'Success plot'}
-    plot_draw_save(auc_curve, threshold_set_overlap, scores, tracker_names, plot_draw_styles, perf_mat_path,
+    plot_draw_save(auc_curve, threshold_set_overlap, scores, tracker_names, plot_draw_styles, result_plot_path,
                    success_plot_opts)
     plt.show()
 
