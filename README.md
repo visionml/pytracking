@@ -14,7 +14,7 @@ We advise to check the updated implementation and train scripts of DiMP in order
 
 ## Highlights
 
-### PrDimp, DiMP and ATOM Trackers
+### PrDiMP, DiMP and ATOM Trackers
 
 Official implementation of the **PrDiMP** (CVPR 2020), **DiMP** (ICCV 2019), and 
 **ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
@@ -42,14 +42,13 @@ The toolkit contains the implementation of the following trackers.
 
 ### PrDiMP
 **[[Paper]](https://arxiv.org/pdf/2003.12565)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
-  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#DiMP)  [[Tracker Code]](./pytracking/README.md#PrDiMP)**
+  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#PrDiMP)  [[Tracker Code]](./pytracking/README.md#DiMP)**
     
 Official implementation of the **PrDiMP** tracker. This work proposes a general 
 formulation for probabilistic regression, which is then applied to visual tracking in the DiMP framework.
 The network predicts the conditional probability density of the target state given an input image.
 The probability density is flexibly parametrized by the neural network itself.
 The regression network is trained by directly minimizing the Kullback-Leibler divergence. 
-
 
 ### DiMP
 **[[Paper]](https://arxiv.org/pdf/1904.07220)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
@@ -67,7 +66,7 @@ includes an initializer network that efficiently provides an initial estimate of
 ### ATOM
 **[[Paper]](https://arxiv.org/pdf/1811.07628)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
   [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#ATOM)  [[Tracker Code]](./pytracking/README.md#ATOM)**  
-  
+ 
 Official implementation of the **ATOM** tracker. ATOM is based on 
 (i) a **target estimation** module that is trained offline, and (ii) **target classification** module that is 
 trained online. The target estimation module is trained to predict the intersection-over-union (IoU) overlap 
