@@ -9,6 +9,7 @@ A general python library for visual tracking algorithms.
    * [DiMP](#DiMP)
    * [ATOM](#ATOM)
    * [ECO](#ECO)
+* [Analysis](#analysis)
 * [Libs](#libs)
 * [Visdom](#visdom)
 * [VOT Integration](#vot-integration)
@@ -69,7 +70,7 @@ The tookit consists of the following sub-modules.
  The toolkit contains the implementation of the following trackers.  
 
 ### DiMP
-The official implementation for the DiMP tracker ([paper](https://arxiv.org/abs/1904.07220)). 
+The official implementation for the DiMP tracker ([paper](https://arxiv.org/abs/1904.07220)) and PrDiMP tracker ([paper](https://arxiv.org/abs/2003.12565)). 
 The tracker implementation file can be found at [tracker.dimp](tracker/dimp). 
 
 ##### Parameter Files
@@ -78,8 +79,11 @@ Four parameter settings are provided. These can be used to reproduce the results
 * **[dimp18_vot](parameter/dimp/dimp18_vot.py)**: The parameters settings used to generate the DiMP-18 VOT2018 results in the paper.  
 * **[dimp50](parameter/dimp/dimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all DiMP-50 results in the paper, except on VOT.  
 * **[dimp50_vot](parameter/dimp/dimp50_vot.py)**: The parameters settings used to generate the DiMP-50 VOT2018 results in the paper.  
+* **[prdimp18](parameter/dimp/prdimp18.py)**: The default parameter setting with ResNet-18 backbone which was used to produce all PrDiMP-18 results in the paper, except on VOT.  
+* **[prdimp50](parameter/dimp/prdimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all PrDiMP-50 results in the paper, except on VOT.  
+* **[super_dimp](parameter/dimp/super_dimp.py)**: Combines the bounding-box regressor of PrDiMP with the standard DiMP classifier and better training and inference settings. 
 
-The difference between the vot and the non-vot settings stems from the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```dimp18_vot``` and ```dimp50_vot``` settings thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
+The difference between the VOT and the non-VOT settings stems from the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks. In most benchmarks, it is highly important to be able to robustly *redetect* the target after e.g. an occlusion or brief target loss. On the other hand, in VOT the tracker is reset if the prediction does not overlap with the target on a *single* frame. This is then counted as a tracking failure. The capability of recovering after target loss is meaningless in this setting. The ```dimp18_vot``` and ```dimp50_vot``` settings thus focuses on avoiding target loss in the first place, while sacrificing re-detection ability. 
  
 ### ATOM
 The official implementation for the ATOM tracker ([paper](https://arxiv.org/abs/1811.07628)). 
@@ -89,9 +93,10 @@ The tracker implementation file can be found at [tracker.atom](tracker/atom).
 Two parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
 * **[default](parameter/atom/default.py)**: The default parameter setting that was used to produce all ATOM results in the paper, except on VOT.  
 * **[default_vot](parameter/atom/default_vot.py)**: The parameters settings used to generate the VOT2018 results in the paper.  
+* **[multiscale_no_iounet](parameter/atom/multiscale_no_iounet.py)**: Baseline setting that uses simple multiscale search instead of IoU-Net. Can be run on **CPU**.  
+* **[atom_prob_ml](parameter/atom/atom_prob_ml.py)**: ATOM with the probabilistic bounding box regression proposed in [this paper](https://arxiv.org/abs/1909.12297).  
+* **[atom_gmm_sampl](parameter/atom/atom_gmm_sampl.py)**: The baseline ATOM* setting evaluated in [this paper](https://arxiv.org/abs/1909.12297).  
 
-The difference between these two settings stems from the fact that the VOT protocol measures robustness in a very different manner compared to other benchmarks.
- 
 ### ECO
 An unofficial implementation of the ECO tracker can be found at [tracker.eco](tracker/eco). 
 
@@ -150,7 +155,7 @@ from .tracker_file import TrackerClass
 def get_tracker_class():
     return TrackerClass
 ```
-Here, ```TrackerClass``` is the name of your tracker class. See the [file for ATOM](tracker/atom/__init__.py) as reference.
+Here, ```TrackerClass``` is the name of your tracker class. See the [file for DiMP](tracker/dimp/__init__.py) as reference.
 
 Next, you need to create a folder "parameter/your_tracker_name", where the parameter settings for the tracker should be stored. The parameter fil shall contain a ```parameters()``` function that returns a ```TrackerParams``` struct. See the [default parameter file for ATOM](parameter/atom/default.py) as an example.
 

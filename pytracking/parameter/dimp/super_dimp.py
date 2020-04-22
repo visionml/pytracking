@@ -62,7 +62,7 @@ def parameters():
     params.box_refinement_step_length = 2.5e-3 # 1   # Gradient step length in the bounding box refinement
     params.box_refinement_step_decay = 1    # Multiplicative step length decay (1 means no decay)
 
-    params.net = NetWithBackbone(net_path='super_dimp',
+    params.net = NetWithBackbone(net_path='super_dimp.pth.tar',
                                  use_gpu=params.use_gpu)
 
     params.vot_anno_conversion_type = 'preserve_area'
