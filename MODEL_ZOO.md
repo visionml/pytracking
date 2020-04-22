@@ -86,6 +86,9 @@ of the models on standard tracking datasets.
 </table>
 
 ## Raw Results
+All the raw results for our trackers are available at https://drive.google.com/open?id=1Sacgh5TZVjfpanmwCFvKkpnOA7UHZCY0. 
+The raw results can be downloaded automatically using [download_results](pytracking/util_scripts/download_results.py) script.
+
 The raw results are in the format [top_left_x, top_left_y, width, height]. 
 Due to the stochastic nature of the trackers, the results reported here are an average over multiple runs. 
 For OTB-100, NFS, UAV123, and LaSOT, the results were averaged over 5 runs. For VOT2018, 15 runs were used 
