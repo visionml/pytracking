@@ -8,6 +8,10 @@ class BaseTracker:
         self.visdom = None
 
 
+    def predicts_segmentation_mask(self):
+        return False
+
+
     def initialize(self, image, info: dict) -> dict:
         """Overload this function in your tracker. This should initialize the model."""
         raise NotImplementedError
