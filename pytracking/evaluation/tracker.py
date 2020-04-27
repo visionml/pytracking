@@ -12,6 +12,7 @@ from pytracking.utils.plotting import draw_figure, overlay_mask
 from pytracking.utils.convert_vot_anno_to_rect import convert_vot_anno_to_rect
 from ltr.data.bounding_box_utils import masks_to_bboxes
 from pytracking.evaluation.multi_object_wrapper import MultiObjectWrapper
+from pathlib import Path
 import torch
 
 
@@ -226,7 +227,7 @@ class Tracker:
 
         return output
 
-    def run_video(self, videofilepath, optional_box=None, debug=None, visdom_info=None):
+    def run_video(self, videofilepath, optional_box=None, debug=None, visdom_info=None, save_results=False):
         """Run the tracker with the vieofile.
         args:
             debug: Debug level.
@@ -258,6 +259,8 @@ class Tracker:
         assert os.path.isfile(videofilepath), "Invalid param {}".format(videofilepath)
         ", videofilepath must be a valid videofile"
 
+        output_boxes = []
+
         cap = cv.VideoCapture(videofilepath)
         display_name = 'Display: ' + tracker.params.tracker_name
         cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
@@ -273,9 +276,10 @@ class Tracker:
             print("Read frame from {} failed.".format(videofilepath))
             exit(-1)
         if optional_box is not None:
-            assert isinstance(optional_box, list, tuple)
+            assert isinstance(optional_box, (list, tuple))
             assert len(optional_box) == 4, "valid box's foramt is [x,y,w,h]"
             tracker.initialize(frame, _build_init_info(optional_box))
+            output_boxes.append(optional_box)
         else:
             while True:
                 # cv.waitKey()
@@ -287,6 +291,7 @@ class Tracker:
                 x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
                 init_state = [x, y, w, h]
                 tracker.initialize(frame, _build_init_info(init_state))
+                output_boxes.append(init_state)
                 break
 
         while True:
@@ -300,6 +305,8 @@ class Tracker:
             # Draw box
             out = tracker.track(frame)
             state = [int(s) for s in out['target_bbox'][1]]
+            output_boxes.append(state)
+
             cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
                          (0, 255, 0), 5)
 
@@ -327,11 +334,21 @@ class Tracker:
                 x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
                 init_state = [x, y, w, h]
                 tracker.initialize(frame, _build_init_info(init_state))
+                output_boxes.append(init_state)
 
         # When everything done, release the capture
         cap.release()
         cv.destroyAllWindows()
 
+        if save_results:
+            if not os.path.exists(self.results_dir):
+                os.makedirs(self.results_dir)
+            video_name = Path(videofilepath).stem
+            base_results_path = os.path.join(self.results_dir, 'video_{}'.format(video_name))
+
+            tracked_bb = np.array(output_boxes).astype(int)
+            bbox_file = '{}.txt'.format(base_results_path)
+            np.savetxt(bbox_file, tracked_bb, delimiter='\t', fmt='%d')
 
     def run_webcam(self, debug=None, visdom_info=None):
         """Run the tracker with the webcam.
