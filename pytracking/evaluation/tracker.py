@@ -298,7 +298,7 @@ class Tracker:
             ret, frame = cap.read()
 
             if frame is None:
-                return
+                break
 
             frame_disp = frame.copy()
 
