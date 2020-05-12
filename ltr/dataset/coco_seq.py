@@ -1,6 +1,6 @@
 import os
-from .base_dataset import BaseDataset
-from ltr.data.image_loader import default_image_loader
+from .base_video_dataset import BaseVideoDataset
+from ltr.data.image_loader import jpeg4py_loader
 import torch
 import random
 from pycocotools.coco import COCO
@@ -8,7 +8,7 @@ from collections import OrderedDict
 from ltr.admin.environment import env_settings
 
 
-class MSCOCOSeq(BaseDataset):
+class MSCOCOSeq(BaseVideoDataset):
     """ The COCO dataset. COCO is an image dataset. Thus, we treat each image as a sequence of length 1.
 
     Publication:
@@ -23,13 +23,15 @@ class MSCOCOSeq(BaseDataset):
         - coco_root
             - annotations
                 - instances_train2014.json
+                - instances_train2017.json
             - images
                 - train2014
+                - train2017
 
     Note: You also have to install the coco pythonAPI from https://github.com/cocodataset/cocoapi.
     """
 
-    def __init__(self, root=None, image_loader=default_image_loader, data_fraction=None):
+    def __init__(self, root=None, image_loader=jpeg4py_loader, data_fraction=None, split="train", version="2014"):
         """
         args:
             root - path to the coco dataset.
@@ -38,21 +40,27 @@ class MSCOCOSeq(BaseDataset):
                                                    opencv's imread is used.
             data_fraction (None) - Fraction of images to be used. The images are selected randomly. If None, all the
                                   images  will be used
+            split - 'train' or 'val'.
+            version - version of coco dataset (2014 or 2017)
         """
         root = env_settings().coco_dir if root is None else root
-        super().__init__(root, image_loader)
+        super().__init__('COCO', root, image_loader)
 
-        self.img_pth = os.path.join(root, 'train2014/')
-        self.anno_path = os.path.join(root, 'annotations/instances_train2014.json')
+        self.img_pth = os.path.join(root, 'images/{}{}/'.format(split, version))
+        self.anno_path = os.path.join(root, 'annotations/instances_{}{}.json'.format(split, version))
 
         # Load the COCO set.
         self.coco_set = COCO(self.anno_path)
 
         self.cats = self.coco_set.cats
+
+        self.class_list = self.get_class_list()
+
         self.sequence_list = self._get_sequence_list()
 
         if data_fraction is not None:
             self.sequence_list = random.sample(self.sequence_list, int(len(self.sequence_list)*data_fraction))
+        self.seq_per_class = self._build_seq_per_class()
 
     def _get_sequence_list(self):
         ann_list = list(self.coco_set.anns.keys())
@@ -63,23 +71,56 @@ class MSCOCOSeq(BaseDataset):
     def is_video_sequence(self):
         return False
 
+    def get_num_classes(self):
+        return len(self.class_list)
+
     def get_name(self):
         return 'coco'
 
+    def has_class_info(self):
+        return True
+
+    def get_class_list(self):
+        class_list = []
+        for cat_id in self.cats.keys():
+            class_list.append(self.cats[cat_id]['name'])
+        return class_list
+
+    def has_segmentation_info(self):
+        return True
+
     def get_num_sequences(self):
         return len(self.sequence_list)
+
+    def _build_seq_per_class(self):
+        seq_per_class = {}
+        for i, seq in enumerate(self.sequence_list):
+            class_name = self.cats[self.coco_set.anns[seq]['category_id']]['name']
+            if class_name not in seq_per_class:
+                seq_per_class[class_name] = [i]
+            else:
+                seq_per_class[class_name].append(i)
+
+        return seq_per_class
+
+    def get_sequences_in_class(self, class_name):
+        return self.seq_per_class[class_name]
 
     def get_sequence_info(self, seq_id):
         anno = self._get_anno(seq_id)
 
         bbox = torch.Tensor(anno['bbox']).view(1, 4)
+
+        mask = torch.Tensor(self.coco_set.annToMask(anno)).unsqueeze(dim=0)
+
         valid = (bbox[:, 2] > 0) & (bbox[:, 3] > 0)
         visible = valid.clone().byte()
 
-        return {'bbox': bbox, 'valid': valid, 'visible': visible}
+        return {'bbox': bbox, 'mask': mask, 'valid': valid, 'visible': visible}
 
     def _get_anno(self, seq_id):
         anno = self.coco_set.anns[self.sequence_list[seq_id]]
+
         return anno
 
     def _get_frames(self, seq_id):
@@ -90,18 +131,23 @@ class MSCOCOSeq(BaseDataset):
     def get_meta_info(self, seq_id):
         try:
             cat_dict_current = self.cats[self.coco_set.anns[self.sequence_list[seq_id]]['category_id']]
-            object_meta = OrderedDict({'object_class': cat_dict_current['name'],
+            object_meta = OrderedDict({'object_class_name': cat_dict_current['name'],
                                        'motion_class': None,
                                        'major_class': cat_dict_current['supercategory'],
                                        'root_class': None,
                                        'motion_adverb': None})
         except:
-            object_meta = OrderedDict({'object_class': None,
+            object_meta = OrderedDict({'object_class_name': None,
                                        'motion_class': None,
                                        'major_class': None,
                                        'root_class': None,
                                        'motion_adverb': None})
         return object_meta
+
+
+    def get_class_name(self, seq_id):
+        cat_dict_current = self.cats[self.coco_set.anns[self.sequence_list[seq_id]]['category_id']]
+        return cat_dict_current['name']
 
     def get_frames(self, seq_id=None, frame_ids=None, anno=None):
         # COCO is an image dataset. Thus we replicate the image denoted by seq_id len(frame_ids) times, and return a
@@ -113,7 +159,6 @@ class MSCOCOSeq(BaseDataset):
         if anno is None:
             anno = self.get_sequence_info(seq_id)
 
-        # Create anno dict
         anno_frames = {}
         for key, value in anno.items():
             anno_frames[key] = [value[0, ...] for _ in frame_ids]

@@ -1,14 +1,11 @@
 import numpy as np
 from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
-import os
+from pytracking.utils.load_text import load_text
 
 
-def LaSOTDataset():
-    return LaSOTDatasetClass().get_sequence_list()
-
-
-class LaSOTDatasetClass(BaseDataset):
-    """ LaSOT test set consisting of 280 videos (see Protocol-II in the LaSOT paper)
+class LaSOTDataset(BaseDataset):
+    """
+    LaSOT test set consisting of 280 videos (see Protocol-II in the LaSOT paper)
 
     Publication:
         LaSOT: A High-quality Benchmark for Large-scale Single Object Tracking
@@ -37,17 +34,26 @@ class LaSOTDatasetClass(BaseDataset):
     def _construct_sequence(self, sequence_name):
         class_name = sequence_name.split('-')[0]
         anno_path = '{}/{}/{}/groundtruth.txt'.format(self.base_path, class_name, sequence_name)
-        try:
-            ground_truth_rect = np.loadtxt(str(anno_path), dtype=np.float64)
-        except:
-            ground_truth_rect = np.loadtxt(str(anno_path), delimiter=',', dtype=np.float64)
+
+        ground_truth_rect = load_text(str(anno_path), delimiter=',', dtype=np.float64)
+
+        occlusion_label_path = '{}/{}/{}/full_occlusion.txt'.format(self.base_path, class_name, sequence_name)
+
+        # NOTE: pandas backed seems super super slow for loading occlusion/oov masks
+        full_occlusion = load_text(str(occlusion_label_path), delimiter=',', dtype=np.float64, backend='numpy')
+
+        out_of_view_label_path = '{}/{}/{}/out_of_view.txt'.format(self.base_path, class_name, sequence_name)
+        out_of_view = load_text(str(out_of_view_label_path), delimiter=',', dtype=np.float64, backend='numpy')
+
+        target_visible = np.logical_and(full_occlusion == 0, out_of_view == 0)
 
         frames_path = '{}/{}/{}/img'.format(self.base_path, class_name, sequence_name)
-        frame_list = [frame for frame in os.listdir(frames_path) if frame.endswith(".jpg")]
-        frame_list.sort(key=lambda f: int(f[:-4]))
-        frames_list = [os.path.join(frames_path, frame) for frame in frame_list]
 
-        return Sequence(sequence_name, frames_list, ground_truth_rect.reshape(-1, 4))
+        frames_list = ['{}/{:08d}.jpg'.format(frames_path, frame_number) for frame_number in range(1, ground_truth_rect.shape[0] + 1)]
+
+        target_class = class_name
+        return Sequence(sequence_name, frames_list, 'lasot', ground_truth_rect.reshape(-1, 4),
+                        object_class=target_class, target_visible=target_visible)
 
     def __len__(self):
         return len(self.sequence_list)

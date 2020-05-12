@@ -1,25 +1,31 @@
 import numpy as np
 from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
+from pytracking.utils.load_text import load_text
 
 
-def TPLDataset():
-    return TPLDatasetClass().get_sequence_list()
+class TPLDataset(BaseDataset):
+    """
+    Temple Color 128 dataset
 
+    Publication:
+        Encoding Color Information for Visual Tracking: Algorithms and Benchmark
+        P. Liang, E. Blasch, and H. Ling
+        TIP, 2015
+        http://www.dabi.temple.edu/~hbling/publication/TColor-128.pdf
 
-def TPLDatasetNoOtb():
-    return TPLDatasetClass(exclude_otb=True).get_sequence_list()
-
-
-class TPLDatasetClass(BaseDataset):
-    '''Temple.'''
+    Download the dataset from http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html
+    """
     def __init__(self, exclude_otb=False):
+        """
+        args:
+            exclude_otb (bool) - If True, sequences overlapping with the OTB dataset are excluded
+        """
         super().__init__()
         self.base_path = self.env_settings.tpl_path
         self.sequence_info_list = self._get_sequence_info_list(exclude_otb)
 
     def get_sequence_list(self):
         return SequenceList([self._construct_sequence(s) for s in self.sequence_info_list])
-
 
     def _construct_sequence(self, sequence_info):
         sequence_path = sequence_info['path']
@@ -32,22 +38,17 @@ class TPLDatasetClass(BaseDataset):
         if 'initOmit' in sequence_info:
             init_omit = sequence_info['initOmit']
 
-        frames = ['{base_path}/{sequence_path}/{frame:0{nz}}.{ext}'.format(base_path=self.base_path,
+        frames = ['{base_path}/{sequence_path}/{frame:0{nz}}.{ext}'.format(base_path=self.base_path, 
         sequence_path=sequence_path, frame=frame_num, nz=nz, ext=ext) for frame_num in range(start_frame+init_omit, end_frame+1)]
 
         anno_path = '{}/{}'.format(self.base_path, sequence_info['anno_path'])
 
-        try:
-            ground_truth_rect = np.loadtxt(str(anno_path), dtype=np.float64)
-        except:
-            ground_truth_rect = np.loadtxt(str(anno_path), delimiter=',', dtype=np.float64)
+        ground_truth_rect = load_text(str(anno_path), delimiter=(',', None), dtype=np.float64, backend='numpy')
 
-        return Sequence(sequence_info['name'], frames, ground_truth_rect[init_omit:,:])
+        return Sequence(sequence_info['name'], frames, 'tpl', ground_truth_rect[init_omit:,:])
 
     def __len__(self):
-        '''Overload this function in your evaluation. This should return number of sequences in the evaluation '''
         return len(self.sequence_info_list)
-
 
     def _get_sequence_info_list(self, exclude_otb=False):
         sequence_info_list = [

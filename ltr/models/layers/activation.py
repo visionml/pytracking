@@ -1,6 +1,20 @@
+import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+
+def softmax_reg(x: torch.Tensor, dim, reg=None):
+    """Softmax with optinal denominator regularization."""
+    if reg is None:
+        return torch.softmax(x, dim=dim)
+    dim %= x.dim()
+    if isinstance(reg, (float, int)):
+        reg = x.new_tensor([reg])
+    reg = reg.expand([1 if d==dim else x.shape[d] for d in range(x.dim())])
+    x = torch.cat((x, reg), dim=dim)
+    return torch.softmax(x, dim=dim)[[slice(-1) if d==dim else slice(None) for d in range(x.dim())]]
+
 
 
 class MLU(nn.Module):

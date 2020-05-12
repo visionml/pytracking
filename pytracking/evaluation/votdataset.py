@@ -2,12 +2,9 @@ import numpy as np
 from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
 
 
-def VOTDataset():
-    return VOTDatasetClass().get_sequence_list()
-
-
-class VOTDatasetClass(BaseDataset):
-    """VOT2018 dataset
+class VOTDataset(BaseDataset):
+    """
+    VOT2018 dataset
 
     Publication:
         The sixth Visual Object Tracking VOT2018 challenge results.
@@ -16,7 +13,8 @@ class VOTDatasetClass(BaseDataset):
         ECCV, 2018
         https://prints.vicos.si/publications/365
 
-    Download the dataset from http://www.votchallenge.net/vot2018/dataset.html"""
+    Download the dataset from http://www.votchallenge.net/vot2018/dataset.html
+    """
     def __init__(self):
         super().__init__()
         self.base_path = self.env_settings.vot_path
@@ -54,7 +52,7 @@ class VOTDatasetClass(BaseDataset):
             y2 = np.amax(gt_y_all, 1).reshape(-1,1)
 
             ground_truth_rect = np.concatenate((x1, y1, x2-x1, y2-y1), 1)
-        return Sequence(sequence_name, frames, ground_truth_rect)
+        return Sequence(sequence_name, frames, 'vot', ground_truth_rect)
 
     def __len__(self):
         return len(self.sequence_list)

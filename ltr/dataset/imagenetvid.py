@@ -1,5 +1,5 @@
 import os
-from .base_dataset import BaseDataset
+from .base_video_dataset import BaseVideoDataset
 from ltr.data.image_loader import default_image_loader
 import xml.etree.ElementTree as ET
 import json
@@ -15,7 +15,7 @@ def get_target_to_image_ratio(seq):
     return (anno[0, 2:4].prod() / (img_sz.prod())).sqrt()
 
 
-class ImagenetVID(BaseDataset):
+class ImagenetVID(BaseVideoDataset):
     """ Imagenet VID dataset.
 
     Publication:

@@ -29,6 +29,8 @@ class LTRTrainer(BaseTrainer):
         tensorboard_writer_dir = os.path.join(self.settings.env.tensorboard_dir, self.settings.project_path)
         self.tensorboard_writer = TensorboardWriter(tensorboard_writer_dir, [l.name for l in loaders])
 
+        self.move_data_to_gpu = getattr(settings, 'move_data_to_gpu', True)
+
     def _set_default_settings(self):
         # Dict of all default values
         default = {'print_interval': 10,
@@ -49,7 +51,9 @@ class LTRTrainer(BaseTrainer):
 
         for i, data in enumerate(loader, 1):
             # get inputs
-            data = data.to(self.device)
+            if self.move_data_to_gpu:
+                data = data.to(self.device)
+
             data['epoch'] = self.epoch
             data['settings'] = self.settings
 

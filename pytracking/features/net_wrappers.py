@@ -6,10 +6,13 @@ class NetWrapper:
     """Used for wrapping networks in pytracking.
     Network modules and functions can be accessed directly as if they were members of this class."""
     _rec_iter=0
-    def __init__(self, net_path, use_gpu=True):
+    def __init__(self, net_path, use_gpu=True, initialize=False, **kwargs):
         self.net_path = net_path
         self.use_gpu = use_gpu
         self.net = None
+        self.net_kwargs = kwargs
+        if initialize:
+            self.initialize()
 
     def __getattr__(self, name):
         if self._rec_iter > 0:
@@ -25,7 +28,7 @@ class NetWrapper:
         return ret_val
 
     def load_network(self):
-        self.net = load_network(self.net_path)
+        self.net = load_network(self.net_path, **self.net_kwargs)
         if self.use_gpu:
             self.cuda()
         self.eval()
@@ -37,15 +40,26 @@ class NetWrapper:
 class NetWithBackbone(NetWrapper):
     """Wraps a network with a common backbone.
     Assumes the network have a 'extract_backbone_features(image)' function."""
-    def initialize(self):
+
+    def __init__(self, net_path, use_gpu=True, initialize=False, image_format='rgb',
+                 mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), **kwargs):
+        super().__init__(net_path, use_gpu, initialize, **kwargs)
+
+        self.image_format = image_format
+        self._mean = torch.Tensor(mean).view(1, -1, 1, 1)
+        self._std = torch.Tensor(std).view(1, -1, 1, 1)
+
+    def initialize(self, image_format='rgb', mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)):
         super().initialize()
-        self._mean = torch.Tensor([0.485, 0.456, 0.406]).view(1, -1, 1, 1)
-        self._std = torch.Tensor([0.229, 0.224, 0.225]).view(1, -1, 1, 1)
 
     def preprocess_image(self, im: torch.Tensor):
         """Normalize the image with the mean and standard deviation used by the network."""
 
-        im = im/255
+        if self.image_format in ['rgb', 'bgr']:
+            im = im/255
+
+        if self.image_format in ['bgr', 'bgr255']:
+            im = im[:, [2, 1, 0], :, :]
         im -= self._mean
         im /= self._std
 

@@ -1,14 +1,12 @@
 import torch.nn as nn
 import torch.optim as optim
-import torchvision.transforms
-
 from ltr.dataset import Lasot, Got10k, TrackingNet, MSCOCOSeq
 from ltr.data import processing, sampler, LTRLoader
 from ltr.models.tracking import dimpnet
 import ltr.models.loss as ltr_losses
 from ltr import actors
 from ltr.trainers import LTRTrainer
-import ltr.data.transforms as dltransforms
+import ltr.data.transforms as tfm
 from ltr import MultiGPU
 
 
@@ -28,7 +26,7 @@ def run(settings):
     settings.center_jitter_factor = {'train': 3, 'test': 4.5}
     settings.scale_jitter_factor = {'train': 0.25, 'test': 0.5}
     settings.hinge_threshold = 0.05
-    # settings.print_stats = ['Loss/total', 'Loss/iou', 'ClfTrain/init_loss', 'ClfTrain/test_loss']
+    # settings.print_stats = ['Loss/total', 'Loss/iou', 'ClfTrain/clf_ce', 'ClfTrain/test_loss']
 
     # Train datasets
     lasot_train = Lasot(settings.env.lasot_dir, split='train')
@@ -41,13 +39,13 @@ def run(settings):
 
 
     # Data transform
-    transform_joint = dltransforms.ToGrayscale(probability=0.05)
+    transform_joint = tfm.Transform(tfm.ToGrayscale(probability=0.05))
 
-    transform_train = torchvision.transforms.Compose([dltransforms.ToTensorAndJitter(0.2),
-                                                      torchvision.transforms.Normalize(mean=settings.normalize_mean, std=settings.normalize_std)])
+    transform_train = tfm.Transform(tfm.ToTensorAndJitter(0.2),
+                                    tfm.Normalize(mean=settings.normalize_mean, std=settings.normalize_std))
 
-    transform_val = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
-                                                    torchvision.transforms.Normalize(mean=settings.normalize_mean, std=settings.normalize_std)])
+    transform_val = tfm.Transform(tfm.ToTensor(),
+                                  tfm.Normalize(mean=settings.normalize_mean, std=settings.normalize_std))
 
     # The tracking pairs processing module
     output_sigma = settings.output_sigma_factor / settings.search_area_factor

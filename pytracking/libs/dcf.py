@@ -8,7 +8,7 @@ import torch.nn.functional as F
 def hann1d(sz: int, centered = True) -> torch.Tensor:
     """1D cosine window."""
     if centered:
-        return 0.5 * (1 - torch.cos((2 * math.pi / (sz + 2)) * torch.arange(1, sz + 1).float()))
+        return 0.5 * (1 - torch.cos((2 * math.pi / (sz + 1)) * torch.arange(1, sz + 1).float()))
     w = 0.5 * (1 + torch.cos((2 * math.pi / (sz + 2)) * torch.arange(0, sz//2 + 1).float()))
     return torch.cat([w, w[1:sz-sz//2].flip((0,))])
 

@@ -1,35 +1,37 @@
 # PyTracking
-A general python framework for training and running visual object trackers, based on **PyTorch**.
+A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
-### **News:** Code released for **DiMP**!!!
-Code now released for our new tracker **DiMP**, accepted as an Oral at ICCV 2019.  
-This release also includes many **new features**, including:  
-* Visualization with Visdom  
-* VOT integration  
-* Many new network modules  
-* Multi GPU training  
-* PyTorch v1.2 support  
+### New version released!
+* Code for our CVPR 2020 paper [Probabilistic Regression for Visual Tracking](https://arxiv.org/abs/2003.12565).  
+* Tools for analyzing results: performance metrics, plots, tables, etc.  
+* Support for multi-object tracking. Any tracker can be run in multi-object mode.    
+* Support for Video Object Segmentation (**VOS**): training, datasets, evaluation, etc.  
+* Code for [Learning What to Learn for Video Object Segmentation](https://arxiv.org/abs/2003.11540) will be released soon.  
+* Much more...   
 
- 
+**Note:** Many of our changes are breaking. Integrate your extensions into the new version of PyTracking should not be difficult.
+We advise to check the updated implementation and train scripts of DiMP in order to update your code.
+
 ## Highlights
 
-### DiMP and ATOM Trackers
+### PrDiMP, DiMP and ATOM Trackers
 
-Official implementation of the **DiMP** (ICCV 2019), and 
+Official implementation of the **PrDiMP** (CVPR 2020), **DiMP** (ICCV 2019), and 
 **ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
 
 ### [Tracking Libraries](pytracking)
 
 Libraries for implementing and evaluating visual trackers. It includes
 
-* All common **tracking datasets**.  
+* All common **tracking** and **video object segmentation** datasets.  
+* Scripts to **analyse** tracker performance and obtain standard performance scores.
 * General building blocks, including **deep networks**, **optimization**, **feature extraction** and utilities for **correlation filter** tracking.  
 
 ### [Training Framework: LTR](ltr)
  
 **LTR** (Learning Tracking Representations) is a general framework for training your visual tracking networks. It is equipped with
 
-* All common **training datasets** for visual tracking.  
+* All common **training datasets** for visual object tracking and segmentation.  
 * Functions for data **sampling**, **processing** etc.  
 * Network **modules** for visual tracking.
 * And much more...
@@ -38,9 +40,19 @@ Libraries for implementing and evaluating visual trackers. It includes
 ## Trackers
 The toolkit contains the implementation of the following trackers.  
 
+### PrDiMP
+**[[Paper]](https://arxiv.org/pdf/2003.12565)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
+  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#PrDiMP)  [[Tracker Code]](./pytracking/README.md#DiMP)**
+    
+Official implementation of the **PrDiMP** tracker. This work proposes a general 
+formulation for probabilistic regression, which is then applied to visual tracking in the DiMP framework.
+The network predicts the conditional probability density of the target state given an input image.
+The probability density is flexibly parametrized by the neural network itself.
+The regression network is trained by directly minimizing the Kullback-Leibler divergence. 
+
 ### DiMP
-**[[Paper]](https://arxiv.org/pdf/1904.07220v1.pdf)  [[Raw results]](https://drive.google.com/drive/folders/15mpUAJmzxemnOC6gmvMTCDJ-0v6hxJ7y)
-  [[Models]](https://drive.google.com/open?id=1YEJySjhFokyQ6zgQg6vFAnzEFi1Onq7G)  [[Training Code]](./ltr/README.md#DiMP)  [[Tracker Code]](./pytracking/README.md#DiMP)**
+**[[Paper]](https://arxiv.org/pdf/1904.07220)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
+  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#DiMP)  [[Tracker Code]](./pytracking/README.md#DiMP)**
     
 Official implementation of the **DiMP** tracker. DiMP is an end-to-end tracking architecture, capable
 of fully exploiting both target and background appearance
@@ -52,9 +64,9 @@ includes an initializer network that efficiently provides an initial estimate of
 ![DiMP overview figure](pytracking/.figs/dimp_overview.png)
  
 ### ATOM
-**[[Paper]](https://arxiv.org/pdf/1811.07628.pdf)  [[Raw results]](https://drive.google.com/drive/folders/1MdJtsgr34iJesAgL7Y_VelP8RvQm_IG_)
-  [[Models]](https://drive.google.com/open?id=1EsNSQr25qfXHYLqjZaVZElbGdUg-nyzd)  [[Training Code]](./ltr/README.md#ATOM)  [[Tracker Code]](./pytracking/README.md#ATOM)**  
-  
+**[[Paper]](https://arxiv.org/pdf/1811.07628)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
+  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#ATOM)  [[Tracker Code]](./pytracking/README.md#ATOM)**  
+ 
 Official implementation of the **ATOM** tracker. ATOM is based on 
 (i) a **target estimation** module that is trained offline, and (ii) **target classification** module that is 
 trained online. The target estimation module is trained to predict the intersection-over-union (IoU) overlap 
@@ -100,6 +112,7 @@ This script will also download the default networks and set-up the environment.
 
 **Note:** The install script has been tested on an Ubuntu 18.04 system. In case of issues, check the [detailed installation instructions](INSTALL.md). 
 
+**Windows:** (NOT Recommended!) Check [these installation instructions](INSTALL_win.md). 
 
 #### Let's test it!
 Activate the conda environment and run the script pytracking/run_webcam.py to run ATOM using the webcam input.  
@@ -116,7 +129,7 @@ python run_webcam.py dimp dimp50
 
 #### [ltr](ltr) - for training your tracker
 
-## Contributors
+## Main Contributors
 
 * [Martin Danelljan](https://martin-danelljan.github.io/)  
 * [Goutam Bhat](https://www.vision.ee.ethz.ch/en/members/detail/407/)

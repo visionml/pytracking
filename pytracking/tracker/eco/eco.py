@@ -14,6 +14,8 @@ from pytracking.features import augmentation
 
 class ECO(BaseTracker):
 
+    multiobj_mode = 'parallel'
+
     def initialize_features(self):
         if not getattr(self, 'features_initialized', False):
             self.params.features.initialize()
@@ -25,7 +27,7 @@ class ECO(BaseTracker):
 
         # Initialize some stuff
         self.frame_num = 1
-        if not hasattr(self.params, 'device'):
+        if not self.params.has('device'):
             self.params.device = 'cuda' if self.params.use_gpu else 'cpu'
 
         # Initialize features
@@ -176,7 +178,7 @@ class ECO(BaseTracker):
 
 
 
-    def track(self, image) -> dict:
+    def track(self, image, info: dict = None) -> dict:
         self.debug_info = {}
 
         self.frame_num += 1
