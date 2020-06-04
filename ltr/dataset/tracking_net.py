@@ -83,7 +83,7 @@ class TrackingNet(BaseVideoDataset):
 
         seq_per_class = {}
         for i, seq in enumerate(self.sequence_list):
-            class_name = seq_to_class_map[seq[1]]
+            class_name = seq_to_class_map.get(seq[1], 'Unknown')
             if class_name not in seq_per_class:
                 seq_per_class[class_name] = [i]
             else:
