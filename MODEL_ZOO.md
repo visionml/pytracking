@@ -87,7 +87,7 @@ of the models on standard tracking datasets.
 
 ## Raw Results
 The raw results can be downloaded automatically using the [download_results](pytracking/util_scripts/download_results.py) script.
-You can also download anx extract them manually from https://drive.google.com/open?id=1Sacgh5TZVjfpanmwCFvKkpnOA7UHZCY0. 
+You can also download and extract them manually from https://drive.google.com/open?id=1Sacgh5TZVjfpanmwCFvKkpnOA7UHZCY0. The folder ```benchmark_results``` contains raw results for all datasets except VOT. These results can be analyzed using the [analysis](pytracking/analysis) module in pytracking. Check [pytracking/notebooks/analyze_results.ipynb](pytracking/notebooks/analyze_results.ipynb) for examples on how to use the analysis module. The folder ```packed_results``` contains packed results for TrackingNet and GOT-10k, which can be directly evaluated on the official evaluation servers, as well as the VOT results. 
 
 The raw results are in the format [top_left_x, top_left_y, width, height]. 
 Due to the stochastic nature of the trackers, the results reported here are an average over multiple runs. 
