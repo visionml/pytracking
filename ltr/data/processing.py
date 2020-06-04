@@ -133,8 +133,8 @@ class ATOMProcessing(BaseProcessing):
             jittered_anno = [self._get_jittered_box(a, s) for a in data[s + '_anno']]
 
             # Crop image region centered at jittered_anno box
-            crops, boxes = prutils.jittered_center_crop(data[s + '_images'], jittered_anno, data[s + '_anno'],
-                                                        self.search_area_factor, self.output_sz)
+            crops, boxes, _ = prutils.jittered_center_crop(data[s + '_images'], jittered_anno, data[s + '_anno'],
+                                                           self.search_area_factor, self.output_sz)
 
             # Apply transforms
             data[s + '_images'], data[s + '_anno'] = self.transform[s](image=crops, bbox=boxes, joint=False)
@@ -307,8 +307,8 @@ class ATOMwKLProcessing(BaseProcessing):
             jittered_anno = [self._get_jittered_box(a, s) for a in data[s + '_anno']]
 
             # Crop image region centered at jittered_anno box
-            crops, boxes = prutils.jittered_center_crop(data[s + '_images'], jittered_anno, data[s + '_anno'],
-                                                        self.search_area_factor, self.output_sz)
+            crops, boxes, _ = prutils.jittered_center_crop(data[s + '_images'], jittered_anno, data[s + '_anno'],
+                                                           self.search_area_factor, self.output_sz)
 
             # Apply transforms
             data[s + '_images'], data[s + '_anno'] = self.transform[s](image=crops, bbox=boxes, joint=False)
