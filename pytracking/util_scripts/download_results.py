@@ -12,7 +12,7 @@ if env_path not in sys.path:
 
 from pytracking.evaluation.environment import env_settings
 
-results_link_dict = {
+pytracking_results_link_dict = {
     "dimp": {
         "prdimp50_003.zip": "1p13j3iwcOCubBi3ms0hLwqnP6-x0J8Mc",
         "prdimp50_002.zip": "1PPKgrAepbuyM2kjfzYAozQKTL6AjcQOz",
@@ -53,19 +53,53 @@ results_link_dict = {
     },
 }
 
+external_results_link_dict = {
+    "UPDT": {
+        "default_009.zip": "11zrgjiRL-gyRFsx5ZzycBpHb3a9rknA4",
+        "default_008.zip": "1397XtEgFY68Ska6qo-cnGnwU4Dj6F-yE",
+        "default_007.zip": "1fi4w32daXwfhbmLKao7esRw9JPXpKnwE",
+        "default_006.zip": "14XxeykT-o1Ovj9KJocertk5zt6UaYB57",
+        "default_005.zip": "1k5Mm4WNKUlWPTdsHyjxpJwFsUD8zmNo4",
+        "default_004.zip": "1E3HcRScBf7_wyzS_4jH6fBbRUw9HJ3Tb",
+        "default_003.zip": "1FdYCYp1KxGb2cwwvGG8tGk1-odY6a7T-",
+        "default_002.zip": "19V3JaO7bNnhxIYD_OFdvUDGua9Oq3b7H",
+        "default_001.zip": "18ie7rpLMxVRm-P4JmiS_VLBaibW6YQMz",
+        "default_000.zip": "1i4mBqcNWxx9b0t-0hH_k65c-XkkGnZfi",
+    },
+    "SiamRPN++": {
+        "default.zip": "1a_hBzAeTojEy_zueDxjwh2egv-EIfHnv",
+    },
+    "MDNet": {
+        "default.zip": "18J0-5QrYbyGlnXXLNeF8g3mzgayxmEM1",
+    },
+    "ECO": {
+        "default_hc.zip": "1M5fpL_b9KHjaHe-eMnfFYhNuTzdvzngb",
+        "default_deep.zip": "1548ZhXdplOBFFxRG-kSNctSQsoOWHMrp",
+    },
+    "DaSiamRPN": {
+        "default.zip": "1ckxL3nt4es6SfpAEUzVLhRrPYVsGK3Oi",
+    },
+    "CCOT": {
+        "default.zip": "1yt_KpURIHQthwls5w3mcPsi9ia7fNih9",
+    },
+}
+
 
 def _download_file(file_id, path):
     link = 'https://drive.google.com/uc?id=' + file_id
     gdown.download(link, path, quiet=True)
 
 
-def download_results(download_path, trackers='all'):
+def download_results(download_path, trackers='pytracking'):
     """
     Script to automatically download tracker results for PyTracking.
 
     args:
         download_path - Directory where the zipped results are downloaded
-        trackers - Tracker results which are to be downloaded. If set to 'all', all available results are downloaded.
+        trackers - Tracker results which are to be downloaded.
+                   If set to 'pytracking', results for all pytracking based trackers will be downloaded.
+                   If set to 'external', results for available external trackers will be downloaded.
+                   If set to 'all', all available results are downloaded.
                    If set to a name of a tracker (e.g. atom), all results for that tracker are downloaded.
                    Otherwise, it can be set to a dict, where the keys are the names of the trackers for which results are
                    downloaded. The value can be set to either 'all', in which case all available results for the
@@ -77,8 +111,13 @@ def download_results(download_path, trackers='all'):
 
     if isinstance(trackers, str):
         if trackers == 'all':
-            trackers = {k: 'all' for k in results_link_dict.keys()}
-        elif trackers in results_link_dict:
+            all_trackers = list(pytracking_results_link_dict.keys()) + list(external_results_link_dict.keys())
+            trackers = {k: 'all' for k in all_trackers}
+        elif trackers == 'pytracking':
+            trackers = {k: 'all' for k in pytracking_results_link_dict.keys()}
+        elif trackers == 'external':
+            trackers = {k: 'all' for k in external_results_link_dict.keys()}
+        elif trackers in pytracking_results_link_dict or trackers in external_results_link_dict:
             trackers = {trackers: 'all'}
         else:
             raise Exception('tracker_list must be set to ''all'', a tracker name, or be a dict')
@@ -87,18 +126,22 @@ def download_results(download_path, trackers='all'):
     else:
         raise Exception('tracker_list must be set to ''all'', or be a dict')
 
+    common_link_dict = pytracking_results_link_dict
+    for k, v in external_results_link_dict.items():
+        common_link_dict[k] = v
+
     for trk, runfiles in trackers.items():
         trk_path = os.path.join(download_path, trk)
         if not os.path.exists(trk_path):
             os.makedirs(trk_path)
 
         if runfiles == 'all':
-            for params, fileid in results_link_dict[trk].items():
+            for params, fileid in common_link_dict[trk].items():
                 print('Downloading: {}/{}'.format(trk, params))
                 _download_file(fileid, os.path.join(trk_path, params))
         elif isinstance(runfiles, (list, tuple)):
             for p in runfiles:
-                for params, fileid in results_link_dict[trk].items():
+                for params, fileid in common_link_dict[trk].items():
                     if re.match(r'{}(|_(\d\d\d)).zip'.format(p), params) is not None:
                         print('Downloading: {}/{}'.format(trk, params))
                         _download_file(fileid, os.path.join(trk_path, params))
@@ -149,8 +192,9 @@ def unpack_tracking_results(download_path, output_path=None):
 
 def main():
     parser = argparse.ArgumentParser(description='Download and unpack zipped results')
-    parser.add_argument('--tracker', type=str, default='all',
-                        help='Name of tracker results to download, or ''all''.')
+    parser.add_argument('--tracker', type=str, default='pytracking',
+                        help='Name of tracker results to download, or "pytracking" (downloads results for PyTracking'
+                             ' based trackers, or "external" (downloads results for external trackers) or "all"')
     parser.add_argument('--output_path', type=str, default=None,
                         help='Path to the directory where the results will be unpacked.')
     parser.add_argument('--temp_download_path', type=str, default=None,
