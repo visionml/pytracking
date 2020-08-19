@@ -76,9 +76,9 @@ The tracker implementation file can be found at [tracker.dimp](tracker/dimp).
 ##### Parameter Files
 Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
 * **[dimp18](parameter/dimp/dimp18.py)**: The default parameter setting with ResNet-18 backbone which was used to produce all DiMP-18 results in the paper, except on VOT.  
-* **[dimp18_vot](parameter/dimp/dimp18_vot.py)**: The parameters settings used to generate the DiMP-18 VOT2018 results in the paper.  
+* **[dimp18_vot](parameter/dimp/dimp18_vot18.py)**: The parameters settings used to generate the DiMP-18 VOT2018 results in the paper.  
 * **[dimp50](parameter/dimp/dimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all DiMP-50 results in the paper, except on VOT.  
-* **[dimp50_vot](parameter/dimp/dimp50_vot.py)**: The parameters settings used to generate the DiMP-50 VOT2018 results in the paper.  
+* **[dimp50_vot](parameter/dimp/dimp50_vot18.py)**: The parameters settings used to generate the DiMP-50 VOT2018 results in the paper.  
 * **[prdimp18](parameter/dimp/prdimp18.py)**: The default parameter setting with ResNet-18 backbone which was used to produce all PrDiMP-18 results in the paper, except on VOT.  
 * **[prdimp50](parameter/dimp/prdimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all PrDiMP-50 results in the paper, except on VOT.  
 * **[super_dimp](parameter/dimp/super_dimp.py)**: Combines the bounding-box regressor of PrDiMP with the standard DiMP classifier and better training and inference settings. 
