@@ -12,7 +12,10 @@ from ltr.models.loss.segmentation import LovaszSegLoss
 
 
 def run(settings):
-    settings.description = 'Default train settings with backbone weights fixed'
+    settings.description = 'Default train settings with backbone weights fixed. We initialize the backbone ResNet with ' \
+                           'pre-trained Mask-RCNN weights. These weights can be obtained from ' \
+                           'https://drive.google.com/file/d/12pVHmhqtxaJ151dZrXN1dcgUa7TuAjdA/view?usp=sharing. ' \
+                           'Download and save these weights in env_settings.pretrained_networks directory'
     settings.batch_size = 20
     settings.num_workers = 8
     settings.multi_gpu = True
