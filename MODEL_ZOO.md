@@ -102,8 +102,8 @@ single run was used for TrackingNet. For GOT-10k, 3 runs are used as per protoco
 ### Models
 |    Model    | YouTube-VOS 2018 (Overall Score) | YouTube-VOS 2019 (Overall Score) | DAVIS 2017 val (J&F score) | Links |
 |:-----------:|:--------------------------------:|:--------------------------------:|:--------------------------:|:-----:|
-|  [LWL_ytvos](ltr/train_settings/lwl/lwl_stage2.py)  |               81.5               |               81.0               |              --             | [model](todo) |
-| [LWL_boxinit](ltr/train_settings/lwl/lwl_boxinit.py) |               70.4               |                 --                |            70.8            | [model](todo) |
+|  [LWL_ytvos](ltr/train_settings/lwl/lwl_stage2.py)  |               81.5               |               81.0               |              --             | [model](https://drive.google.com/file/d/1Xnm4A2BRBliDBKO4EEFHAQfGyfOMsVyY/view?usp=sharing) |
+| [LWL_boxinit](ltr/train_settings/lwl/lwl_boxinit.py) |               70.4               |                 --                |            70.8            | [model](https://drive.google.com/file/d/1aAsj_N1LAMpmmcb1iOxo2z66tJM6MEuM/view?usp=sharing) |
 
 
 ### Raw Results

@@ -30,6 +30,8 @@ def parameters():
     params.net_opt_iter = 20
     params.net_opt_update_iter = 5
 
+    params.init_with_box = True
+
     params.net = NetWithBackbone(net_path='lwl_boxinit.pth',
                                  use_gpu=params.use_gpu,
                                  image_format='bgr255',

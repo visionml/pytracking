@@ -47,7 +47,7 @@ class LWL(BaseTracker):
         state = info['init_bbox']
         init_mask = info.get('init_mask', None)
 
-        if init_mask is not None:
+        if init_mask is not None and not self.params.get('init_with_box', False):
             # shape 1 , 1, h, w (frames, seq, h, w)
             init_mask = torch.tensor(init_mask).unsqueeze(0).unsqueeze(0).float()
         elif hasattr(self.net, 'box_label_encoder'):

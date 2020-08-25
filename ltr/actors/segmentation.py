@@ -87,7 +87,7 @@ class LWLActor(BaseActor):
         return loss, stats
 
 
-class LWTLBoxActor(BaseActor):
+class LWLBoxActor(BaseActor):
     """Actor for training bounding box encoder """
     def __init__(self, net, objective, loss_weight=None):
         super().__init__(net, objective)
