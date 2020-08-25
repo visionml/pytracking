@@ -6,7 +6,7 @@ A general PyTorch based framework for learning tracking representations.
 * [Quick Start](#quick-start)
 * [Overview](#overview)
 * [Trackers](#trackers)
-   * [LWTL](#LWTL)
+   * [LWL](#LWL)
    * [PrDiMP](#PrDiMP)
    * [DiMP](#DiMP)
    * [ATOM](#ATOM)
@@ -43,11 +43,11 @@ The framework consists of the following sub-modules.
 ## Trackers
  The framework currently contains the training code for the following trackers.
 
-### LWTL
+### LWL
  The following setting files can be used train the LWTL networks, or to know the exact training details. 
- - [lwtl.lwtl_stage1](train_settings/lwtl/lwtl_stage1.py): The default settings used for initial network training with fixed backbone weights. We initialize the backbone ResNet with pre-trained Mask-RCNN weights. These weights can be obtained from [here](https://drive.google.com/file/d/12pVHmhqtxaJ151dZrXN1dcgUa7TuAjdA/view?usp=sharing). Download and save these weights in env_settings().pretrained_networks directory.
- - [lwtl.lwtl_stage2](train_settings/lwtl/lwtl_stage2.py): The default settings used for training the final LWTL model. This setting fine-tunes all layers in the model trained using [lwtl_stage1](train_settings/lwtl/lwtl_stage1.py). 
- - [lwtl.lwtl_boxinit](train_settings/lwtl/lwtl_boxinit.py):  The default settings used for training the bounding box encoder network in order to enable VOS with box initialization.
+ - [lwl.lwl_stage1](train_settings/lwl/lwl_stage1.py): The default settings used for initial network training with fixed backbone weights. We initialize the backbone ResNet with pre-trained Mask-RCNN weights. These weights can be obtained from [here](https://drive.google.com/file/d/12pVHmhqtxaJ151dZrXN1dcgUa7TuAjdA/view?usp=sharing). Download and save these weights in env_settings().pretrained_networks directory.
+ - [lwl.lwl_stage2](train_settings/lwl/lwl_stage2.py): The default settings used for training the final LWL model. This setting fine-tunes all layers in the model trained using [lwl_stage1](train_settings/lwl/lwl_stage1.py). 
+ - [lwl.lwl_boxinit](train_settings/lwl/lwl_boxinit.py):  The default settings used for training the bounding box encoder network in order to enable VOS with box initialization.
  
  
 ### PrDiMP

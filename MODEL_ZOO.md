@@ -3,7 +3,8 @@
 Here, we provide a number of tracker models trained using PyTracking. We also report the results
 of the models on standard tracking datasets.  
 
-## Models
+## Tracking
+### Models
 
 <table>
   <tr>
@@ -85,7 +86,7 @@ of the models on standard tracking datasets.
   </tr>
 </table>
 
-## Raw Results
+### Raw Results
 The raw results can be downloaded automatically using the [download_results](pytracking/util_scripts/download_results.py) script.
 You can also download and extract them manually from https://drive.google.com/open?id=1Sacgh5TZVjfpanmwCFvKkpnOA7UHZCY0. The folder ```benchmark_results``` contains raw results for all datasets except VOT. These results can be analyzed using the [analysis](pytracking/analysis) module in pytracking. Check [pytracking/notebooks/analyze_results.ipynb](pytracking/notebooks/analyze_results.ipynb) for examples on how to use the analysis module. The folder ```packed_results``` contains packed results for TrackingNet and GOT-10k, which can be directly evaluated on the official evaluation servers, as well as the VOT results. 
 
@@ -95,17 +96,5 @@ For OTB-100, NFS, UAV123, and LaSOT, the results were averaged over 5 runs. For 
 as per the VOT protocol. As TrackingNet results are obtained using the online evaluation server, only a 
 single run was used for TrackingNet. For GOT-10k, 3 runs are used as per protocol.
 
-## Plots
-The success plots for our trained models on the standard tracking datasets are shown below.  
 
-#### LaSOT
-![LaSOT](pytracking/.figs/LaSOT.png)  
-
-#### OTB-100
-![OTB-100](pytracking/.figs/OTB-100.png)  
-
-#### NFS
-![NFS](pytracking/.figs/NFS.png)  
-
-#### UAV123
-![UAV123](pytracking/.figs/UAV123.png)  
+## VOS

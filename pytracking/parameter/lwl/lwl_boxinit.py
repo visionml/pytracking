@@ -30,7 +30,7 @@ def parameters():
     params.net_opt_iter = 20
     params.net_opt_update_iter = 5
 
-    params.net = NetWithBackbone(net_path='lwtl_boxinit/LWTLBoxNet_ep0050.pth.tar',
+    params.net = NetWithBackbone(net_path='lwl_boxinit/LWTLBoxNet_ep0050.pth.tar',
                                  use_gpu=params.use_gpu,
                                  image_format='bgr255',
                                  mean=[102.9801, 115.9465, 122.7717],

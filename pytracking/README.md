@@ -6,6 +6,7 @@ A general python library for visual tracking algorithms.
 * [Running a tracker](#running-a-tracker)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [LWL](#LWL)
    * [DiMP](#DiMP)
    * [ATOM](#ATOM)
    * [ECO](#ECO)
@@ -69,14 +70,14 @@ The tookit consists of the following sub-modules.
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
 
-### LWTL
-The official implementation for the LWTL tracker ([paper](https://arxiv.org/pdf/2003.11540.pdf)). 
-The tracker implementation file can be found at [tracker.lwtl](tracker/lwtl). 
+### LWL
+The official implementation for the LWL tracker ([paper](https://arxiv.org/pdf/2003.11540.pdf)). 
+The tracker implementation file can be found at [tracker.lwl](tracker/lwl). 
 
 ##### Parameter Files
 Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
-* **[lwtl_ytvos](parameter/lwtl/lwtl_ytvos.py)**: The default parameter setting with ResNet-50 backbone which was used to generate YouTubeVOS results.  
-* **[lwtl_boxinit](parameter/lwtl/lwtl_boxinit.py)**: The parameters settings used to generate results with bounding box initialization on YouTubeVOS and DAVIS datasets.
+* **[lwl_ytvos](parameter/lwl/lwl_ytvos.py)**: The default parameter setting with ResNet-50 backbone which was used to generate YouTubeVOS results.  
+* **[lwl_boxinit](parameter/lwl/lwl_boxinit.py)**: The parameters settings used to generate results with bounding box initialization on YouTubeVOS and DAVIS datasets.
 
 
 ### DiMP

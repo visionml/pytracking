@@ -1,15 +1,15 @@
 # PyTracking
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
-### LWTL released!
+### LWL released!
 * Code for our ECCV 2020 paper [Learning What to Learn for Video Object Segmentation](https://arxiv.org/abs/2003.11540) is available now.  
 
 
 ## Highlights
 
-### LWTL, PrDiMP, DiMP and ATOM Trackers
+### LWL, PrDiMP, DiMP and ATOM Trackers
 
-Official implementation of the **LWTL** (ECCV 2020), **PrDiMP** (CVPR 2020), **DiMP** (ICCV 2019), and 
+Official implementation of the **LWL** (ECCV 2020), **PrDiMP** (CVPR 2020), **DiMP** (ICCV 2019), and 
 **ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
 
 ### [Tracking Libraries](pytracking)
@@ -33,19 +33,19 @@ Libraries for implementing and evaluating visual trackers. It includes
 ## Trackers
 The toolkit contains the implementation of the following trackers.  
 
-### LWTL
+### LWL
 **[[Paper]](https://arxiv.org/pdf/2003.11540.pdf)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
-  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#LWTL)  [[Tracker Code]](./pytracking/README.md#LWTL)**
+  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#LWL)  [[Tracker Code]](./pytracking/README.md#LWL)**
     
-Official implementation of the **LWTL** tracker. LWTL is an end-to-end trainable video object segmentation architecture
+Official implementation of the **LWL** tracker. LWL is an end-to-end trainable video object segmentation architecture
 which captures the current target object information in a compact parametric
 model. It integrates a differentiable few-shot learner module, which predicts the
 target model parameters using the first frame annotation. The learner is designed
 to explicitly optimize an error between target model prediction and a ground
-truth label. LWTL further learns the ground-truth labels used by the
+truth label. LWL further learns the ground-truth labels used by the
 few-shot learner to train the target model. All modules in the architecture are trained end-to-end by maximizing segmentation accuracy on annotated VOS videos. 
 
-![DiMP overview figure](pytracking/.figs/lwtl_overview.png)
+![LWL overview figure](pytracking/.figs/lwtl_overview.png)
 
 ### PrDiMP
 **[[Paper]](https://arxiv.org/pdf/2003.12565)  [[Raw results]](MODEL_ZOO.md#Raw-Results)

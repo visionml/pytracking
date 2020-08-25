@@ -11,7 +11,7 @@ from pytracking.features import augmentation
 from collections import OrderedDict
 
 
-class LWTL(BaseTracker):
+class LWL(BaseTracker):
     multiobj_mode = 'parallel'
 
     def predicts_segmentation_mask(self):
