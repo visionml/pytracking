@@ -69,6 +69,16 @@ The tookit consists of the following sub-modules.
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
 
+### LWTL
+The official implementation for the LWTL tracker ([paper](https://arxiv.org/pdf/2003.11540.pdf)). 
+The tracker implementation file can be found at [tracker.lwtl](tracker/lwtl). 
+
+##### Parameter Files
+Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
+* **[lwtl_ytvos](parameter/lwtl/lwtl_ytvos.py)**: The default parameter setting with ResNet-50 backbone which was used to generate YouTubeVOS results.  
+* **[lwtl_boxinit](parameter/lwtl/lwtl_boxinit.py)**: The parameters settings used to generate results with bounding box initialization on YouTubeVOS and DAVIS datasets.
+
+
 ### DiMP
 The official implementation for the DiMP tracker ([paper](https://arxiv.org/abs/1904.07220)) and PrDiMP tracker ([paper](https://arxiv.org/abs/2003.12565)). 
 The tracker implementation file can be found at [tracker.dimp](tracker/dimp). 
@@ -157,7 +167,7 @@ def get_tracker_class():
 ```
 Here, ```TrackerClass``` is the name of your tracker class. See the [file for DiMP](tracker/dimp/__init__.py) as reference.
 
-Next, you need to create a folder "parameter/your_tracker_name", where the parameter settings for the tracker should be stored. The parameter fil shall contain a ```parameters()``` function that returns a ```TrackerParams``` struct. See the [default parameter file for DiMP](parameter/dimp/dimp50.py) as an example.
+Next, you need to create a folder "parameter/your_tracker_name", where the parameter settings for the tracker should be stored. The parameter file shall contain a ```parameters()``` function that returns a ```TrackerParams``` struct. See the [default parameter file for DiMP](parameter/dimp/dimp50.py) as an example.
 
  
  

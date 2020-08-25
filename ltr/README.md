@@ -6,6 +6,7 @@ A general PyTorch based framework for learning tracking representations.
 * [Quick Start](#quick-start)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [LWTL](#LWTL)
    * [PrDiMP](#PrDiMP)
    * [DiMP](#DiMP)
    * [ATOM](#ATOM)
@@ -42,6 +43,13 @@ The framework consists of the following sub-modules.
 ## Trackers
  The framework currently contains the training code for the following trackers.
 
+### LWTL
+ The following setting files can be used train the LWTL networks, or to know the exact training details. 
+ - [lwtl.lwtl_stage1](train_settings/lwtl/lwtl_stage1.py): The default settings used for initial network training with fixed backbone weights.
+ - [lwtl.lwtl_stage2](train_settings/lwtl/lwtl_stage2.py): The default settings used for training the final LWTL model. This setting fine-tunes all layers in the model trained using [lwtl_stage1](train_settings/lwtl/lwtl_stage1.py). 
+ - [lwtl.lwtl_boxinit](train_settings/lwtl/lwtl_boxinit.py):  The default settings used for training the bounding box encoder network in order to enable VOS with box initialization.
+ 
+ 
 ### PrDiMP
  The following setting files can be used train the DiMP networks, or to know the exact training details. 
  - [dimp.prdimp18](train_settings/dimp/prdimp18.py): The default settings used for training the PrDiMP model with ResNet-18 backbone.
