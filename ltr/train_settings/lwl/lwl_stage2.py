@@ -1,7 +1,7 @@
 import torch.optim as optim
 from ltr.dataset import YouTubeVOS, Davis
 from ltr.data import processing, sampler, LTRLoader
-import ltr.models.lwtl.lwtl_net as seg_tracker
+import ltr.models.lwl.lwl_net as lwl_networks
 import ltr.actors.segmentation as segm_actors
 from ltr.trainers import LTRTrainer
 import ltr.data.transforms as tfm
@@ -51,38 +51,38 @@ def run(settings):
     transform_val = tfm.Transform(tfm.ToTensorAndJitter(0.0, normalize=False),
                                   tfm.Normalize(mean=settings.normalize_mean, std=settings.normalize_std))
 
-    data_processing_train = processing.LWTLProcessing(search_area_factor=settings.search_area_factor,
-                                                      output_sz=settings.output_sz,
-                                                      center_jitter_factor=settings.center_jitter_factor,
-                                                      scale_jitter_factor=settings.scale_jitter_factor,
-                                                      mode='sequence',
-                                                      crop_type=settings.crop_type,
-                                                      max_scale_change=settings.max_scale_change,
-                                                      transform=transform_train,
-                                                      joint_transform=transform_joint,
-                                                      new_roll=True)
+    data_processing_train = processing.LWLProcessing(search_area_factor=settings.search_area_factor,
+                                                     output_sz=settings.output_sz,
+                                                     center_jitter_factor=settings.center_jitter_factor,
+                                                     scale_jitter_factor=settings.scale_jitter_factor,
+                                                     mode='sequence',
+                                                     crop_type=settings.crop_type,
+                                                     max_scale_change=settings.max_scale_change,
+                                                     transform=transform_train,
+                                                     joint_transform=transform_joint,
+                                                     new_roll=True)
 
-    data_processing_val = processing.LWTLProcessing(search_area_factor=settings.search_area_factor,
-                                                    output_sz=settings.output_sz,
-                                                    center_jitter_factor=settings.center_jitter_factor,
-                                                    scale_jitter_factor=settings.scale_jitter_factor,
-                                                    mode='sequence',
-                                                    crop_type=settings.crop_type,
-                                                    max_scale_change=settings.max_scale_change,
-                                                    transform=transform_val,
-                                                    joint_transform=transform_joint,
-                                                    new_roll=True)
+    data_processing_val = processing.LWLProcessing(search_area_factor=settings.search_area_factor,
+                                                   output_sz=settings.output_sz,
+                                                   center_jitter_factor=settings.center_jitter_factor,
+                                                   scale_jitter_factor=settings.scale_jitter_factor,
+                                                   mode='sequence',
+                                                   crop_type=settings.crop_type,
+                                                   max_scale_change=settings.max_scale_change,
+                                                   transform=transform_val,
+                                                   joint_transform=transform_joint,
+                                                   new_roll=True)
 
     # Train sampler and loader
-    dataset_train = sampler.LWTLSampler([ytvos_train, davis_train], [6, 1],
-                                        samples_per_epoch=settings.batch_size * 1000, max_gap=100, num_test_frames=3,
-                                        num_train_frames=1,
-                                        processing=data_processing_train)
-    dataset_val = sampler.LWTLSampler([ytvos_val], [1],
-                                      samples_per_epoch=settings.batch_size * 100, max_gap=100,
-                                      num_test_frames=3,
-                                      num_train_frames=1,
-                                      processing=data_processing_val)
+    dataset_train = sampler.LWLSampler([ytvos_train, davis_train], [6, 1],
+                                       samples_per_epoch=settings.batch_size * 1000, max_gap=100, num_test_frames=3,
+                                       num_train_frames=1,
+                                       processing=data_processing_train)
+    dataset_val = sampler.LWLSampler([ytvos_val], [1],
+                                     samples_per_epoch=settings.batch_size * 100, max_gap=100,
+                                     num_test_frames=3,
+                                     num_train_frames=1,
+                                     processing=data_processing_val)
 
     loader_train = LTRLoader('train', dataset_train, training=True, num_workers=settings.num_workers,
                              stack_dim=1, batch_size=settings.batch_size)
@@ -91,15 +91,15 @@ def run(settings):
                            epoch_interval=5, stack_dim=1, batch_size=settings.batch_size)
 
     # Network
-    net = seg_tracker.steepest_descent_resnet50(filter_size=3, num_filters=16, optim_iter=5,
-                                                backbone_pretrained=True,
-                                                out_feature_dim=512,
-                                                frozen_backbone_layers=['conv1', 'bn1', 'layer1'],
-                                                label_encoder_dims=(16, 32, 64),
-                                                use_bn_in_label_enc=False,
-                                                clf_feat_blocks=0,
-                                                final_conv=True,
-                                                backbone_type='mrcnn')
+    net = lwl_networks.steepest_descent_resnet50(filter_size=3, num_filters=16, optim_iter=5,
+                                                 backbone_pretrained=True,
+                                                 out_feature_dim=512,
+                                                 frozen_backbone_layers=['conv1', 'bn1', 'layer1'],
+                                                 label_encoder_dims=(16, 32, 64),
+                                                 use_bn_in_label_enc=False,
+                                                 clf_feat_blocks=0,
+                                                 final_conv=True,
+                                                 backbone_type='mrcnn')
 
     base_net = network_loading.load_trained_network(settings.env.workspace_dir,
                                                     'ltr/lwl/lwl_stage1/LWTLNet_ep0070.pth.tar')
@@ -119,8 +119,8 @@ def run(settings):
         'segm': 100.0
     }
 
-    actor = segm_actors.LWTLActor(net=net, objective=objective, loss_weight=loss_weight,
-                                  num_refinement_iter=2, disable_all_bn=True)
+    actor = segm_actors.LWLActor(net=net, objective=objective, loss_weight=loss_weight,
+                                 num_refinement_iter=2, disable_all_bn=True)
 
     # Optimizer
     optimizer = optim.Adam([{'params': actor.net.target_model.filter_initializer.parameters(), 'lr': 5e-5},

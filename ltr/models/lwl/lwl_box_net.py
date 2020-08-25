@@ -2,13 +2,13 @@ import math
 import torch
 import torch.nn as nn
 from collections import OrderedDict
-import ltr.models.lwtl.label_encoder as seg_label_encoder
+import ltr.models.lwl.label_encoder as seg_label_encoder
 from ltr import model_constructor
-import ltr.models.lwtl.linear_filter as target_clf
+import ltr.models.lwl.linear_filter as target_clf
 import ltr.models.target_classifier.features as clf_features
-import ltr.models.lwtl.initializer as seg_initializer
-import ltr.models.lwtl.loss_residual_modules as loss_residual_modules
-import ltr.models.lwtl.decoder as lwtl_decoder
+import ltr.models.lwl.initializer as seg_initializer
+import ltr.models.lwl.loss_residual_modules as loss_residual_modules
+import ltr.models.lwl.decoder as lwtl_decoder
 import ltr.models.backbone as backbones
 import ltr.models.backbone.resnet_mrcnn as mrcnn_backbones
 import ltr.models.meta.steepestdescent as steepestdescent

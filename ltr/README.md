@@ -44,7 +44,7 @@ The framework consists of the following sub-modules.
  The framework currently contains the training code for the following trackers.
 
 ### LWL
- The following setting files can be used train the LWTL networks, or to know the exact training details. 
+ The following setting files can be used train the LWL networks, or to know the exact training details. 
  - [lwl.lwl_stage1](train_settings/lwl/lwl_stage1.py): The default settings used for initial network training with fixed backbone weights. We initialize the backbone ResNet with pre-trained Mask-RCNN weights. These weights can be obtained from [here](https://drive.google.com/file/d/12pVHmhqtxaJ151dZrXN1dcgUa7TuAjdA/view?usp=sharing). Download and save these weights in env_settings().pretrained_networks directory.
  - [lwl.lwl_stage2](train_settings/lwl/lwl_stage2.py): The default settings used for training the final LWL model. This setting fine-tunes all layers in the model trained using [lwl_stage1](train_settings/lwl/lwl_stage1.py). 
  - [lwl.lwl_boxinit](train_settings/lwl/lwl_boxinit.py):  The default settings used for training the bounding box encoder network in order to enable VOS with box initialization.

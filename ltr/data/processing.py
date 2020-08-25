@@ -662,8 +662,8 @@ class KLDiMPProcessing(BaseProcessing):
         return data
 
 
-class LWTLProcessing(BaseProcessing):
-    """ The processing class used for training LWTL. The images are processed in the following way.
+class LWLProcessing(BaseProcessing):
+    """ The processing class used for training LWL. The images are processed in the following way.
     First, the target bounding box (computed using the segmentation mask)is jittered by adding some noise.
     Next, a rectangular region (called search region ) centered at the jittered target center, and of area
     search_area_factor^2 times the area of the jittered box is cropped from the image.

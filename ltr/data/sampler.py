@@ -189,7 +189,7 @@ class ATOMSampler(TrackingSampler):
                          frame_sample_mode=frame_sample_mode)
 
 
-class LWTLSampler(torch.utils.data.Dataset):
+class LWLSampler(torch.utils.data.Dataset):
     """ Class responsible for sampling frames from training sequences to form batches. Each training sample is a
     tuple consisting of i) a set of train frames and ii) a set of test frames. The train frames, along with the
     ground-truth masks, are passed to the few-shot learner to obtain the target model parameters \tau. The test frames

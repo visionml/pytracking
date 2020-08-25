@@ -5,8 +5,8 @@ import torch.nn as nn
 from pytracking.analysis.vos_utils import davis_jaccard_measure
 
 
-class LWTLActor(BaseActor):
-    """Actor for training the LWTL network."""
+class LWLActor(BaseActor):
+    """Actor for training the LWL network."""
     def __init__(self, net, objective, loss_weight=None,
                  num_refinement_iter=3,
                  disable_backbone_bn=False,
