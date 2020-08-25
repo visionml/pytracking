@@ -2,7 +2,7 @@
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
 ### LWL released!
-* Code for our ECCV 2020 paper [Learning What to Learn for Video Object Segmentation](https://arxiv.org/abs/2003.11540) is available now.  
+* Code for our ECCV 2020 paper [Learning What to Learn for Video Object Segmentation](https://arxiv.org/abs/2003.11540) is now available.  
 
 
 ## Highlights
@@ -34,8 +34,8 @@ Libraries for implementing and evaluating visual trackers. It includes
 The toolkit contains the implementation of the following trackers.  
 
 ### LWL
-**[[Paper]](https://arxiv.org/pdf/2003.11540.pdf)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
-  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#LWL)  [[Tracker Code]](./pytracking/README.md#LWL)**
+**[[Paper]](https://arxiv.org/pdf/2003.11540.pdf)  [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
+  [[Models]](MODEL_ZOO.md#Models-1)  [[Training Code]](./ltr/README.md#LWL)  [[Tracker Code]](./pytracking/README.md#LWL)**
     
 Official implementation of the **LWL** tracker. LWL is an end-to-end trainable video object segmentation architecture
 which captures the current target object information in a compact parametric

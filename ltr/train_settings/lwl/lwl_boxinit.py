@@ -96,7 +96,7 @@ def run(settings):
                                              final_bn=False)
 
     base_net_weights = network_loading.load_trained_network(settings.env.workspace_dir,
-                                                            'ltr/segm/lwl_stage2/LWTLNet_ep0080.pth.tar')
+                                                            'ltr/lwl/lwl_stage2/LWTLNet_ep0080.pth.tar')
 
     # Copy weights
     net.feature_extractor.load_state_dict(base_net_weights.feature_extractor.state_dict())

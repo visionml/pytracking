@@ -30,11 +30,11 @@ pip install opencv-python visdom tb-nightly scikit-image tikzplotlib gdown
 ```
 
 
-#### Install the coco toolkit  
-If you want to use COCO dataset for training, install the coco python toolkit. You additionally need to install cython to compile the coco toolkit.
+#### Install the coco and lvis toolkits  
 ```bash
 conda install cython
 pip install pycocotools
+pip install lvis
 ```
 
 

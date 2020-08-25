@@ -102,7 +102,7 @@ def run(settings):
                                                 backbone_type='mrcnn')
 
     base_net = network_loading.load_trained_network(settings.env.workspace_dir,
-                                                    'ltr/segm/lwl_stage1/LWTLNet_ep0070.pth.tar')
+                                                    'ltr/lwl/lwl_stage1/LWTLNet_ep0070.pth.tar')
 
     net.load_state_dict(base_net.state_dict())
 

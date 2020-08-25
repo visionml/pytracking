@@ -79,6 +79,11 @@ pip install pycocotools
 
 echo ""
 echo ""
+echo "****************** Installing LVIS toolkit ******************"
+pip install lvis
+
+echo ""
+echo ""
 echo "****************** Installing jpeg4py python wrapper ******************"
 pip install jpeg4py 
 

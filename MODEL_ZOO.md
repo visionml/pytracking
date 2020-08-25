@@ -98,3 +98,13 @@ single run was used for TrackingNet. For GOT-10k, 3 runs are used as per protoco
 
 
 ## VOS
+
+### Models
+|    Model    | YouTube-VOS 2018 (Overall Score) | YouTube-VOS 2019 (Overall Score) | DAVIS 2017 val (J&F score) | Links |
+|:-----------:|:--------------------------------:|:--------------------------------:|:--------------------------:|:-----:|
+|  [LWL_ytvos](ltr/train_settings/lwl/lwl_stage2.py)  |               81.5               |               81.0               |              --             | [model](todo) |
+| [LWL_boxinit](ltr/train_settings/lwl/lwl_boxinit.py) |               70.4               |                 --                |            70.8            | [model](todo) |
+
+
+### Raw Results
+The raw segmentation results can be downloaded from [here](https://drive.google.com/drive/folders/1cJ-5Ctl4PV9niQEe54zcWRQzsTutfY_n?usp=sharing). 
