@@ -5,10 +5,11 @@ import copy
 
 
 class MultiObjectWrapper:
-    def __init__(self, base_tracker_class, params, visdom=None, fast_load=False):
+    def __init__(self, base_tracker_class, params, visdom=None, fast_load=False, frame_reader=None):
         self.base_tracker_class = base_tracker_class
         self.params = params
         self.visdom = visdom
+        self.frame_reader = frame_reader
 
         self.initialized_ids = []
         self.trackers = OrderedDict()
@@ -29,6 +30,8 @@ class MultiObjectWrapper:
         if tracker is None:
             tracker = self.base_tracker_class(self.params)
         tracker.visdom = self.visdom
+
+        tracker.frame_reader = self.frame_reader
         return tracker
 
     def _split_info(self, info):
@@ -89,7 +92,7 @@ class MultiObjectWrapper:
 
     def merge_outputs(self, out_all):
         if hasattr(self.base_tracker_class, 'merge_results'):
-            out_merged = self.base_tracker_class.merge_results(out_all)
+            out_merged = self.trackers[self.initialized_ids[0]].merge_results(out_all)
         else:
             out_merged = self.default_merge(out_all)
 
@@ -122,10 +125,11 @@ class MultiObjectWrapper:
             out = self._set_defaults(out, init_default)
             out_all[obj_id] = out
 
+        self.initialized_ids = info['init_object_ids'].copy()
+
         # Merge results
         out_merged = self.merge_outputs(out_all)
 
-        self.initialized_ids = info['init_object_ids'].copy()
         return out_merged
 
     def track(self, image, info: dict = None) -> dict:
