@@ -498,8 +498,11 @@ class LWL(BaseTracker):
 
                 # Update weights
                 if prev_ind is None:
-                    sw /= 1 - lr
-                    sw[r_ind] = lr
+                    if self.params.get('lower_init_weight', False):
+                        sw[r_ind] = 1
+                    else:
+                        sw /= 1 - lr
+                        sw[r_ind] = lr
                 else:
                     sw[r_ind] = sw[prev_ind] / (1 - lr)
 
