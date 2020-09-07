@@ -152,6 +152,7 @@ python run_webcam.py dimp dimp50
 
 * [Martin Danelljan](https://martin-danelljan.github.io/)  
 * [Goutam Bhat](https://www.vision.ee.ethz.ch/en/members/detail/407/)
+* [Felix Järemo-Lawin](https://liu.se/en/employee/felja34)
 
 ## Acknowledgments
 We use the implementation of the Lovász-Softmax loss from https://github.com/bermanmaxim/LovaszSoftmax.

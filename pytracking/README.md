@@ -86,7 +86,7 @@ The tracker implementation file can be found at [tracker.kys](tracker/kys).
 
 ##### Parameter Files
 * **[default](parameter/kys/default.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all results in the paper, except on VOT and LaSOT.  
-* **[default_vot](parameter/kys/default.py)**: The parameters settings used to generate the VOT2018 results in the paper.  
+* **[default_vot](parameter/kys/default_vot.py)**: The parameters settings used to generate the VOT2018 results in the paper.  
 
 ### DiMP
 The official implementation for the DiMP tracker ([paper](https://arxiv.org/abs/1904.07220)) and PrDiMP tracker ([paper](https://arxiv.org/abs/2003.12565)). 
