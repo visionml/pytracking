@@ -46,6 +46,12 @@ sudo apt-get install ninja-build
 In case of issues, we refer to https://github.com/vacancy/PreciseRoIPooling.  
 
 
+#### Install spatial-correlation-sampler (only required for KYS tracker) 
+```bash
+pip install spatial-correlation-sampler
+```
+In case of issues, we refer to https://github.com/ClementPinard/Pytorch-Correlation-extension.  
+
 #### Install jpeg4py  
 In order to use [jpeg4py](https://github.com/ajkxyz/jpeg4py) for loading the images instead of OpenCV's imread(), install jpeg4py in the following way,  
 ```bash

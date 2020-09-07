@@ -1,4 +1,6 @@
 import torch
+import math
+import numpy as np
 import torchvision.transforms as transforms
 from pytracking import TensorDict
 import ltr.data.processing_utils as prutils
@@ -770,5 +772,165 @@ class LWLProcessing(BaseProcessing):
             data = data.apply(stack_tensors)
         else:
             data = data.apply(lambda x: x[0] if isinstance(x, list) else x)
+
+        return data
+
+
+class KYSProcessing(BaseProcessing):
+    """ The processing class used for training KYS. The images are processed in the following way.
+        First, the target bounding box is jittered by adding some noise. Next, a square region (called search region )
+        centered at the jittered target center, and of area search_area_factor^2 times the area of the jittered box is
+        cropped from the image. The reason for jittering the target box is to avoid learning the bias that the target is
+        always at the center of the search region. The search region is then resized to a fixed size given by the
+        argument output_sz. A Gaussian label centered at the target is generated for each image. These label functions are
+        used for computing the loss of the predicted classification model on the test images. A set of proposals are
+        also generated for the test images by jittering the ground truth box. These proposals can be used to train the
+        bounding box estimating branch.
+        """
+    def __init__(self, search_area_factor, output_sz, center_jitter_param, scale_jitter_param,
+                 proposal_params=None, label_function_params=None, min_crop_inside_ratio=0,
+                 *args, **kwargs):
+        """
+        args:
+            search_area_factor - The size of the search region  relative to the target size.
+            output_sz - An integer, denoting the size to which the search region is resized. The search region is always
+                        square.
+            center_jitter_factor - A dict containing the amount of jittering to be applied to the target center before
+                                    extracting the search region. See _generate_synthetic_motion for how the jittering is done.
+            scale_jitter_factor - A dict containing the amount of jittering to be applied to the target size before
+                                    extracting the search region. See _generate_synthetic_motion for how the jittering is done.
+            proposal_params - Arguments for the proposal generation process. See _generate_proposals for details.
+            label_function_params - Arguments for the label generation process. See _generate_label_function for details.
+            min_crop_inside_ratio - Minimum amount of cropped search area which should be inside the image.
+                                    See _check_if_crop_inside_image for details.
+        """
+        super().__init__(*args, **kwargs)
+        self.search_area_factor = search_area_factor
+        self.output_sz = output_sz
+        self.center_jitter_param = center_jitter_param
+        self.scale_jitter_param = scale_jitter_param
+
+        self.proposal_params = proposal_params
+        self.label_function_params = label_function_params
+        self.min_crop_inside_ratio = min_crop_inside_ratio
+
+    def _check_if_crop_inside_image(self, box, im_shape):
+        x, y, w, h = box.tolist()
+
+        if w <= 0.0 or h <= 0.0:
+            return False
+
+        crop_sz = math.ceil(math.sqrt(w * h) * self.search_area_factor)
+
+        x1 = x + 0.5 * w - crop_sz * 0.5
+        x2 = x1 + crop_sz
+
+        y1 = y + 0.5 * h - crop_sz * 0.5
+        y2 = y1 + crop_sz
+
+        w_inside = max(min(x2, im_shape[1]) - max(x1, 0), 0)
+        h_inside = max(min(y2, im_shape[0]) - max(y1, 0), 0)
+
+        crop_area = ((x2 - x1) * (y2 - y1))
+
+        if crop_area > 0:
+            inside_ratio = w_inside * h_inside / crop_area
+            return inside_ratio > self.min_crop_inside_ratio
+        else:
+            return False
+
+    def _generate_synthetic_motion(self, boxes, images, mode):
+        num_frames = len(boxes)
+
+        out_boxes = []
+
+        for i in range(num_frames):
+            jittered_box = None
+            for _ in range(10):
+                orig_box = boxes[i]
+                jittered_size = orig_box[2:4] * torch.exp(torch.randn(2) * self.scale_jitter_param[mode + '_factor'])
+
+                if self.center_jitter_param.get(mode + '_mode', 'uniform') == 'uniform':
+                    max_offset = (jittered_size.prod().sqrt() * self.center_jitter_param[mode + '_factor']).item()
+                    offset_factor = (torch.rand(2) - 0.5)
+                    jittered_center = orig_box[0:2] + 0.5 * orig_box[2:4] + max_offset * offset_factor
+
+                    if self.center_jitter_param.get(mode + '_limit_motion', False) and i > 0:
+                        prev_out_box_center = out_boxes[-1][:2] + 0.5 * out_boxes[-1][2:]
+                        if abs(jittered_center[0] - prev_out_box_center[0]) > out_boxes[-1][2:].prod().sqrt() * 2.5:
+                            jittered_center[0] = orig_box[0] + 0.5 * orig_box[2] + max_offset * offset_factor[0] * -1
+
+                        if abs(jittered_center[1] - prev_out_box_center[1]) > out_boxes[-1][2:].prod().sqrt() * 2.5:
+                            jittered_center[1] = orig_box[1] + 0.5 * orig_box[3] + max_offset * offset_factor[1] * -1
+
+                jittered_box = torch.cat((jittered_center - 0.5 * jittered_size, jittered_size), dim=0)
+
+                if self._check_if_crop_inside_image(jittered_box, images[i].shape):
+                    break
+                else:
+                    jittered_box = torch.tensor([1, 1, 10, 10]).float()
+
+            out_boxes.append(jittered_box)
+
+        return out_boxes
+
+    def _generate_proposals(self, frame2_gt_crop):
+        # Generate proposals
+        num_proposals = self.proposal_params['boxes_per_frame']
+        frame2_proposals = np.zeros((num_proposals, 4))
+        gt_iou = np.zeros(num_proposals)
+        sample_p = np.zeros(num_proposals)
+
+        for i in range(num_proposals):
+            frame2_proposals[i, :], gt_iou[i], sample_p[i] = prutils.perturb_box(
+                frame2_gt_crop,
+                min_iou=self.proposal_params['min_iou'],
+                sigma_factor=self.proposal_params['sigma_factor']
+            )
+
+        gt_iou = gt_iou * 2 - 1
+
+        return frame2_proposals, gt_iou
+
+    def _generate_label_function(self, target_bb, target_absent=None):
+        gauss_label = prutils.gaussian_label_function(target_bb.view(-1, 4), self.label_function_params['sigma_factor'],
+                                                      self.label_function_params['kernel_sz'],
+                                                      self.label_function_params['feature_sz'], self.output_sz,
+                                                      end_pad_if_even=self.label_function_params.get(
+                                                          'end_pad_if_even', True))
+        if target_absent is not None:
+            gauss_label *= (1 - target_absent).view(-1, 1, 1).float()
+        return gauss_label
+
+    def __call__(self, data: TensorDict):
+        if self.transform['joint'] is not None:
+            data['train_images'], data['train_anno'] = self.transform['joint'](image=data['train_images'],
+                                                                               bbox=data['train_anno'])
+            data['test_images'], data['test_anno'] = self.transform['joint'](image=data['test_images'], bbox=data['test_anno'], new_roll=False)
+
+        for s in ['train', 'test']:
+            # Generate synthetic sequence
+            jittered_anno = self._generate_synthetic_motion(data[s + '_anno'], data[s + '_images'], s)
+
+            # Crop images
+            crops, boxes, _ = prutils.jittered_center_crop(data[s + '_images'], jittered_anno, data[s + '_anno'],
+                                                           self.search_area_factor, self.output_sz)
+
+            # Add transforms
+            data[s + '_images'], data[s + '_anno'] = self.transform[s](image=crops, bbox=boxes, joint=False)
+
+        if self.proposal_params:
+            frame2_proposals, gt_iou = zip(*[self._generate_proposals(a.numpy()) for a in data['test_anno']])
+
+            data['test_proposals'] = [torch.tensor(p, dtype=torch.float32) for p in frame2_proposals]
+            data['proposal_iou'] = [torch.tensor(gi, dtype=torch.float32) for gi in gt_iou]
+
+        data = data.apply(stack_tensors)
+
+        if self.label_function_params is not None:
+            data['train_label'] = self._generate_label_function(data['train_anno'])
+            test_target_absent = 1 - (data['test_visible'] * data['test_valid_anno'])
+
+            data['test_label'] = self._generate_label_function(data['test_anno'], test_target_absent)
 
         return data

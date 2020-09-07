@@ -84,6 +84,17 @@ of the models on standard tracking datasets.
     <td>-</td>
     <td><a href="https://drive.google.com/open?id=1qDptswis2FxihLRYLVRGDvx6aUoAVVLv">model</a></td>
   </tr>
+  <tr>
+    <td>KYS</td>
+    <td>0.462</td>
+    <td>69.5</td>
+    <td>63.4</td>
+    <td>-</td>
+    <td>55.4</td>
+    <td>74.0</td>
+    <td>63.6</td>
+    <td><a href="https://drive.google.com/open?id=1nJTBxpuBhN0WGSvG7Zm3yBc9JAC6LnEn">model</a></td>
+  </tr>
 </table>
 
 ### Raw Results

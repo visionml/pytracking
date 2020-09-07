@@ -191,3 +191,195 @@ class KLDiMPActor(BaseActor):
                     stats['ClfTrain/clf_ce_iter'] = sum(clf_ce_losses[1:-1]).item() / (len(clf_ce_losses) - 2)
 
         return loss, stats
+
+
+class KYSActor(BaseActor):
+    """ Actor for training KYS model """
+    def __init__(self, net, objective, loss_weight=None, dimp_jitter_fn=None):
+        super().__init__(net, objective)
+        self.loss_weight = loss_weight
+
+        self.dimp_jitter_fn = dimp_jitter_fn
+
+        # TODO set it somewhere
+        self.device = torch.device("cuda:0")
+
+    def __call__(self, data):
+        sequence_length = data['test_images'].shape[0]
+        num_sequences = data['test_images'].shape[1]
+
+        valid_samples = data['test_valid_image'].to(self.device)
+        test_visibility = data['test_visible_ratio'].to(self.device)
+
+        # Initialize loss variables
+        clf_loss_test_all = torch.zeros(num_sequences, sequence_length - 1).to(self.device)
+        clf_loss_test_orig_all = torch.zeros(num_sequences, sequence_length - 1).to(self.device)
+        dimp_loss_test_all = torch.zeros(num_sequences, sequence_length - 1).to(self.device)
+        test_clf_acc = 0
+        dimp_clf_acc = 0
+
+        test_tracked_correct = torch.zeros(num_sequences, sequence_length - 1).long().to(self.device)
+        test_seq_all_correct = torch.ones(num_sequences).to(self.device)
+        dimp_seq_all_correct = torch.ones(num_sequences).to(self.device)
+
+        is_target_loss_all = torch.zeros(num_sequences, sequence_length - 1).to(self.device)
+        is_target_after_prop_loss_all = torch.zeros(num_sequences, sequence_length - 1).to(self.device)
+
+        # Initialize target model using the training frames
+        train_images = data['train_images'].to(self.device)
+        train_anno = data['train_anno'].to(self.device)
+        dimp_filters = self.net.train_classifier(train_images, train_anno)
+
+        # Track in the first test frame
+        test_image_cur = data['test_images'][0, ...].to(self.device)
+        backbone_feat_prev_all = self.net.extract_backbone_features(test_image_cur)
+        backbone_feat_prev = backbone_feat_prev_all[self.net.classification_layer]
+        backbone_feat_prev = backbone_feat_prev.view(1, num_sequences, -1,
+                                                     backbone_feat_prev.shape[-2], backbone_feat_prev.shape[-1])
+
+        if self.net.motion_feat_extractor is not None:
+            motion_feat_prev = self.net.motion_feat_extractor(backbone_feat_prev_all).view(1, num_sequences, -1,
+                                                                                           backbone_feat_prev.shape[-2],
+                                                                                           backbone_feat_prev.shape[-1])
+        else:
+            motion_feat_prev = backbone_feat_prev
+
+        dimp_scores_prev = self.net.dimp_classifier.track_frame(dimp_filters, backbone_feat_prev)
+
+        # Remove last row and col (added due to even kernel size in the target model)
+        dimp_scores_prev = dimp_scores_prev[:, :, :-1, :-1].contiguous()
+
+        # Set previous frame information
+        label_prev = data['test_label'][0:1, ...].to(self.device)
+        label_prev = label_prev[:, :, :-1, :-1].contiguous()
+
+        anno_prev = data['test_anno'][0:1, ...].to(self.device)
+        state_prev = None
+
+        is_valid_prev = valid_samples[0, :].view(1, -1, 1, 1).byte()
+
+        # Loop over the sequence
+        for i in range(1, sequence_length):
+            test_image_cur = data['test_images'][i, ...].to(self.device)
+            test_label_cur = data['test_label'][i:i+1, ...].to(self.device)
+            test_label_cur = test_label_cur[:, :, :-1, :-1].contiguous()
+
+            test_anno_cur = data['test_anno'][i:i + 1, ...].to(self.device)
+
+            # Extract features
+            backbone_feat_cur_all = self.net.extract_backbone_features(test_image_cur)
+            backbone_feat_cur = backbone_feat_cur_all[self.net.classification_layer]
+            backbone_feat_cur = backbone_feat_cur.view(1, num_sequences, -1,
+                                                       backbone_feat_cur.shape[-2], backbone_feat_cur.shape[-1])
+
+            if self.net.motion_feat_extractor is not None:
+                motion_feat_cur = self.net.motion_feat_extractor(backbone_feat_cur_all).view(1, num_sequences, -1,
+                                                                                             backbone_feat_cur.shape[-2],
+                                                                                             backbone_feat_cur.shape[-1])
+            else:
+                motion_feat_cur = backbone_feat_cur
+
+            # Run target model
+            dimp_scores_cur = self.net.dimp_classifier.track_frame(dimp_filters, backbone_feat_cur)
+            dimp_scores_cur = dimp_scores_cur[:, :, :-1, :-1].contiguous()
+
+            # Jitter target model output for augmentation
+            jitter_info = None
+            if self.dimp_jitter_fn is not None:
+                dimp_scores_cur = self.dimp_jitter_fn(dimp_scores_cur, test_label_cur.clone())
+
+            # Input target model output along with previous frame information to the predictor
+            predictor_input_data = {'input1': motion_feat_prev, 'input2': motion_feat_cur,
+                                    'label_prev': label_prev, 'anno_prev': anno_prev,
+                                    'dimp_score_prev': dimp_scores_prev, 'dimp_score_cur': dimp_scores_cur,
+                                    'state_prev': state_prev,
+                                    'jitter_info': jitter_info}
+
+            predictor_output = self.net.predictor(predictor_input_data)
+
+            predicted_resp = predictor_output['response']
+            state_prev = predictor_output['state_cur']
+            aux_data = predictor_output['auxiliary_outputs']
+
+            is_valid = valid_samples[i, :].view(1, -1, 1, 1).byte()
+            uncertain_frame = (test_visibility[i, :].view(1, -1, 1, 1) < 0.75) * (test_visibility[i, :].view(1, -1, 1, 1) > 0.25)
+
+            is_valid = is_valid * ~uncertain_frame
+
+            # Calculate losses
+            clf_loss_test_new = self.objective['test_clf'](predicted_resp, test_label_cur,
+                                                           test_anno_cur, valid_samples=is_valid)
+            clf_loss_test_all[:, i - 1] = clf_loss_test_new.squeeze()
+
+            dimp_loss_test_new = self.objective['dimp_clf'](dimp_scores_cur, test_label_cur,
+                                                            test_anno_cur, valid_samples=is_valid)
+            dimp_loss_test_all[:, i - 1] = dimp_loss_test_new.squeeze()
+
+            if 'fused_score_orig' in aux_data and 'test_clf_orig' in self.loss_weight.keys():
+                aux_data['fused_score_orig'] = aux_data['fused_score_orig'].view(test_label_cur.shape)
+                clf_loss_test_orig_new = self.objective['test_clf'](aux_data['fused_score_orig'], test_label_cur, test_anno_cur,  valid_samples=is_valid)
+                clf_loss_test_orig_all[:, i - 1] = clf_loss_test_orig_new.squeeze()
+
+            if 'is_target' in aux_data and 'is_target' in self.loss_weight.keys() and 'is_target' in self.objective.keys():
+                is_target_loss_new = self.objective['is_target'](aux_data['is_target'], label_prev, is_valid_prev)
+                is_target_loss_all[:, i - 1] = is_target_loss_new
+
+            if 'is_target_after_prop' in aux_data and 'is_target_after_prop' in self.loss_weight.keys() and 'is_target' in self.objective.keys():
+                is_target_after_prop_loss_new = self.objective['is_target'](aux_data['is_target_after_prop'],
+                                                                            test_label_cur, is_valid)
+                is_target_after_prop_loss_all[:, i - 1] = is_target_after_prop_loss_new
+
+            test_clf_acc_new, test_pred_correct = self.objective['clf_acc'](predicted_resp, test_label_cur, valid_samples=is_valid)
+            test_clf_acc += test_clf_acc_new
+
+            test_seq_all_correct = test_seq_all_correct * (test_pred_correct.long() | (1 - is_valid).long()).float()
+            test_tracked_correct[:, i - 1] = test_pred_correct
+
+            dimp_clf_acc_new, dimp_pred_correct = self.objective['clf_acc'](dimp_scores_cur, test_label_cur, valid_samples=is_valid)
+            dimp_clf_acc += dimp_clf_acc_new
+
+            dimp_seq_all_correct = dimp_seq_all_correct * (dimp_pred_correct.long() | (1 - is_valid).long()).float()
+
+            motion_feat_prev = motion_feat_cur.clone()
+            dimp_scores_prev = dimp_scores_cur.clone()
+            label_prev = test_label_cur.clone()
+            is_valid_prev = is_valid.clone()
+
+        # Compute average loss over the sequence
+        clf_loss_test = clf_loss_test_all.mean()
+        clf_loss_test_orig = clf_loss_test_orig_all.mean()
+        dimp_loss_test = dimp_loss_test_all.mean()
+        is_target_loss = is_target_loss_all.mean()
+        is_target_after_prop_loss = is_target_after_prop_loss_all.mean()
+
+        test_clf_acc /= (sequence_length - 1)
+        dimp_clf_acc /= (sequence_length - 1)
+        clf_loss_test_orig /= (sequence_length - 1)
+
+        test_seq_clf_acc = test_seq_all_correct.mean()
+        dimp_seq_clf_acc = dimp_seq_all_correct.mean()
+
+        clf_loss_test_w = self.loss_weight['test_clf'] * clf_loss_test
+        clf_loss_test_orig_w = self.loss_weight['test_clf_orig'] * clf_loss_test_orig
+        dimp_loss_test_w = self.loss_weight.get('dimp_clf', 0.0) * dimp_loss_test
+
+        is_target_loss_w = self.loss_weight.get('is_target', 0.0) * is_target_loss
+        is_target_after_prop_loss_w = self.loss_weight.get('is_target_after_prop', 0.0) * is_target_after_prop_loss
+
+        loss = clf_loss_test_w + dimp_loss_test_w + is_target_loss_w + is_target_after_prop_loss_w + clf_loss_test_orig_w
+
+        stats = {'Loss/total': loss.item(),
+                 'Loss/test_clf': clf_loss_test_w.item(),
+                 'Loss/dimp_clf': dimp_loss_test_w.item(),
+                 'Loss/raw/test_clf': clf_loss_test.item(),
+                 'Loss/raw/test_clf_orig': clf_loss_test_orig.item(),
+                 'Loss/raw/dimp_clf': dimp_loss_test.item(),
+                 'Loss/raw/test_clf_acc': test_clf_acc.item(),
+                 'Loss/raw/dimp_clf_acc': dimp_clf_acc.item(),
+                 'Loss/raw/is_target': is_target_loss.item(),
+                 'Loss/raw/is_target_after_prop': is_target_after_prop_loss.item(),
+                 'Loss/raw/test_seq_acc': test_seq_clf_acc.item(),
+                 'Loss/raw/dimp_seq_acc': dimp_seq_clf_acc.item(),
+                 }
+
+        return loss, stats

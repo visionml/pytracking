@@ -7,6 +7,7 @@ A general PyTorch based framework for learning tracking representations.
 * [Overview](#overview)
 * [Trackers](#trackers)
    * [LWL](#LWL)
+   * [KYS](#KYS)
    * [PrDiMP](#PrDiMP)
    * [DiMP](#DiMP)
    * [ATOM](#ATOM)
@@ -49,7 +50,10 @@ The framework consists of the following sub-modules.
  - [lwl.lwl_stage2](train_settings/lwl/lwl_stage2.py): The default settings used for training the final LWL model. This setting fine-tunes all layers in the model trained using [lwl_stage1](train_settings/lwl/lwl_stage1.py). 
  - [lwl.lwl_boxinit](train_settings/lwl/lwl_boxinit.py):  The default settings used for training the bounding box encoder network in order to enable VOS with box initialization.
  
- 
+### KYS
+ The following setting files can be used train the KYS networks, or to know the exact training details. 
+ - [kys.kys](train_settings/kys/kys.py): The default settings used for training the KYS model with ResNet-50 backbone.
+
 ### PrDiMP
  The following setting files can be used train the DiMP networks, or to know the exact training details. 
  - [dimp.prdimp18](train_settings/dimp/prdimp18.py): The default settings used for training the PrDiMP model with ResNet-18 backbone.

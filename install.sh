@@ -82,6 +82,12 @@ echo ""
 echo "****************** Installing LVIS toolkit ******************"
 pip install lvis
 
+
+echo ""
+echo ""
+echo "******** Installing spatial-correlation-sampler. Note: This is required only for KYS tracker **********"
+pip install spatial-correlation-sampler
+
 echo ""
 echo ""
 echo "****************** Installing jpeg4py python wrapper ******************"

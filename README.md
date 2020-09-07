@@ -1,15 +1,16 @@
 # PyTracking
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
-### LWL released!
+### LWL and KYS released!
+* Code for our ECCV 2020 paper [Know Your Surroundings: Exploiting Scene Information for Object Tracking](https://arxiv.org/pdf/2003.11014.pdf) is now available.  
 * Code for our ECCV 2020 paper [Learning What to Learn for Video Object Segmentation](https://arxiv.org/abs/2003.11540) is now available.  
 
 
 ## Highlights
 
-### LWL, PrDiMP, DiMP and ATOM Trackers
+### LWL, KYS, PrDiMP, DiMP and ATOM Trackers
 
-Official implementation of the **LWL** (ECCV 2020), **PrDiMP** (CVPR 2020), **DiMP** (ICCV 2019), and 
+Official implementation of the **LWL** (ECCV 2020), **KYS** (ECCV 2020), **PrDiMP** (CVPR 2020), **DiMP** (ICCV 2019), and 
 **ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
 
 ### [Tracking Libraries](pytracking)
@@ -46,6 +47,17 @@ truth label. LWL further learns the ground-truth labels used by the
 few-shot learner to train the target model. All modules in the architecture are trained end-to-end by maximizing segmentation accuracy on annotated VOS videos. 
 
 ![LWL overview figure](pytracking/.figs/lwtl_overview.png)
+
+### KYS
+**[[Paper]](https://arxiv.org/pdf/2003.11014.pdf)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
+  [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#KYS)  [[Tracker Code]](./pytracking/README.md#KYS)**
+    
+Official implementation of the **KYS** tracker. Unlike conventional frame-by-frame detection based tracking, KYS 
+propagates valuable scene information through the sequence. This information is used to
+achieve an improved scene-aware target prediction in each frame. The scene information is represented using a dense 
+set of localized state vectors. These state vectors are propagated through the sequence and combined with the appearance
+model output to localize the target. The network is learned to effectively utilize the scene information by directly maximizing tracking performance on video segments
+![KYS overview figure](pytracking/.figs/kys_overview.png)
 
 ### PrDiMP
 **[[Paper]](https://arxiv.org/pdf/2003.12565)  [[Raw results]](MODEL_ZOO.md#Raw-Results)

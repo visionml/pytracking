@@ -7,6 +7,7 @@ A general python library for visual tracking algorithms.
 * [Overview](#overview)
 * [Trackers](#trackers)
    * [LWL](#LWL)
+   * [KYS](#KYS)
    * [DiMP](#DiMP)
    * [ATOM](#ATOM)
    * [ECO](#ECO)
@@ -75,17 +76,23 @@ The official implementation for the LWL tracker ([paper](https://arxiv.org/pdf/2
 The tracker implementation file can be found at [tracker.lwl](tracker/lwl). 
 
 ##### Parameter Files
-Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
+Two parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
 * **[lwl_ytvos](parameter/lwl/lwl_ytvos.py)**: The default parameter setting with ResNet-50 backbone which was used to generate YouTubeVOS results.  
 * **[lwl_boxinit](parameter/lwl/lwl_boxinit.py)**: The parameters settings used to generate results with bounding box initialization on YouTubeVOS and DAVIS datasets.
 
+### KYS
+The official implementation for the KYS tracker ([paper](https://arxiv.org/pdf/2003.11014.pdf)). 
+The tracker implementation file can be found at [tracker.kys](tracker/kys). 
+
+##### Parameter Files
+* **[default](parameter/kys/default.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all results in the paper, except on VOT and LaSOT.  
+* **[default_vot](parameter/kys/default.py)**: The parameters settings used to generate the VOT2018 results in the paper.  
 
 ### DiMP
 The official implementation for the DiMP tracker ([paper](https://arxiv.org/abs/1904.07220)) and PrDiMP tracker ([paper](https://arxiv.org/abs/2003.12565)). 
 The tracker implementation file can be found at [tracker.dimp](tracker/dimp). 
 
 ##### Parameter Files
-Four parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
 * **[dimp18](parameter/dimp/dimp18.py)**: The default parameter setting with ResNet-18 backbone which was used to produce all DiMP-18 results in the paper, except on VOT.  
 * **[dimp18_vot](parameter/dimp/dimp18_vot18.py)**: The parameters settings used to generate the DiMP-18 VOT2018 results in the paper.  
 * **[dimp50](parameter/dimp/dimp50.py)**: The default parameter setting with ResNet-50 backbone which was used to produce all DiMP-50 results in the paper, except on VOT.  
@@ -101,7 +108,6 @@ The official implementation for the ATOM tracker ([paper](https://arxiv.org/abs/
 The tracker implementation file can be found at [tracker.atom](tracker/atom).  
  
 ##### Parameter Files
-Two parameter settings are provided. These can be used to reproduce the results or as a starting point for your exploration.  
 * **[default](parameter/atom/default.py)**: The default parameter setting that was used to produce all ATOM results in the paper, except on VOT.  
 * **[default_vot](parameter/atom/default_vot.py)**: The parameters settings used to generate the VOT2018 results in the paper.  
 * **[multiscale_no_iounet](parameter/atom/multiscale_no_iounet.py)**: Baseline setting that uses simple multiscale search instead of IoU-Net. Can be run on **CPU**.  

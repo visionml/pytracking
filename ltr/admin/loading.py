@@ -50,7 +50,7 @@ def load_network(network_dir=None, checkpoint=None, constructor_fun_name=None, c
     else:
         net_path = None
 
-    if net_path.is_file():
+    if net_path is not None and net_path.is_file():
         checkpoint = str(net_path)
 
     if checkpoint is None:
