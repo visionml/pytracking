@@ -64,7 +64,7 @@ def parameters():
     # params.use_projection_matrix = True    # Use projection matrix, i.e. use the factorized convolution formulation
     params.update_projection_matrix = True   # Whether the projection matrix should be optimized or not
     # params.proj_init_method = 'pca'        # Method for initializing the projection matrix
-    params.projection_reg = 5e-8	 	 	 # Regularization paremeter of the projection matrix
+    params.projection_reg = 5e-8	 	 	 # Regularization parameter of the projection matrix
     shallow_params.compressed_dim = 16       # Dimension output of projection matrix for shallow features
     deep_params.compressed_dim = 64          # Dimension output of projection matrix for deep features
 

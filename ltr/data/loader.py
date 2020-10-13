@@ -155,7 +155,7 @@ class LTRLoader(torch.utils.data.dataloader.DataLoader):
 
     .. note:: By default, each worker will have its PyTorch seed set to
               ``base_seed + worker_id``, where ``base_seed`` is a long generated
-              by main process using its RNG. However, seeds for other libraies
+              by main process using its RNG. However, seeds for other libraries
               may be duplicated upon initializing workers (w.g., NumPy), causing
               each worker to return identical random numbers. (See
               :ref:`dataloader-workers-random-seed` section in FAQ.) You may

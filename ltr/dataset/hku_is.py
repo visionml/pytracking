@@ -17,7 +17,7 @@ class HKUIS(BaseImageDataset):
         CVPR, 2015
         https://arxiv.org/pdf/1503.08663.pdf
 
-    Dowload dataset from https://sites.google.com/site/ligb86/hkuis
+    Download dataset from https://sites.google.com/site/ligb86/hkuis
     """
 
     def __init__(self, root=None, image_loader=jpeg4py_loader, data_fraction=None, min_area=None):

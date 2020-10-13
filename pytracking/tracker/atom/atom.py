@@ -489,7 +489,7 @@ class ATOM(BaseTracker):
         if random_shift_factor > 0:
             get_rand_shift = lambda: ((torch.rand(2) - 0.5) * self.img_sample_sz * random_shift_factor).long().tolist()
 
-        # Create transofmations
+        # Create transformations
         self.transforms = [augmentation.Identity(aug_output_sz)]
         if 'shift' in self.params.augmentation:
             self.transforms.extend([augmentation.Translation(shift, aug_output_sz) for shift in self.params.augmentation['shift']])

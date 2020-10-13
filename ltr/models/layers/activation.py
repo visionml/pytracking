@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 
 def softmax_reg(x: torch.Tensor, dim, reg=None):
-    """Softmax with optinal denominator regularization."""
+    """Softmax with optional denominator regularization."""
     if reg is None:
         return torch.softmax(x, dim=dim)
     dim %= x.dim()

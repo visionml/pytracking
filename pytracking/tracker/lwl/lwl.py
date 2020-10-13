@@ -331,7 +331,7 @@ class LWL(BaseTracker):
         """ Obtain segmentation scores for the full image using the scores for the search region crop. This is done by
             assigning a low score (-100) for image regions outside the search region """
 
-        # Resize the segmention scores to match the image scale
+        # Resize the segmentation scores to match the image scale
         segmentation_scores_re = F.interpolate(segmentation_scores, scale_factor=sample_scale.item(), mode='bilinear')
         segmentation_scores_re = segmentation_scores_re.view(*segmentation_scores_re.shape[-2:])
 

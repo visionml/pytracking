@@ -119,7 +119,7 @@ def overlay_mask(im, ann, alpha=0.5, colors=None, contour_thickness=None):
         im: Numpy Array. Array with the image. The shape must be (H, W, 3) and
             the pixels must be represented as `np.uint8` data type.
         ann: Numpy Array. Array with the mask. The shape must be (H, W) and the
-            values must be intergers
+            values must be integers
         alpha: Float. Proportion of alpha to apply at the overlaid mask.
         colors: Numpy Array. Optional custom colormap. It must have shape (N, 3)
             being N the maximum number of colors to represent.
