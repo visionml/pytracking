@@ -49,7 +49,7 @@ Here, ```experiment_module```  is the name of the experiment setting file, e.g. 
 **Run the tracker on a video file**  
 This is done using the run_video script.  
 ```bash
-python run_video.py experiment_module experiment_name videofile --optional_box optional_box --debug debug
+python run_video.py tracker_name parameter_name videofile --optional_box optional_box --debug debug
 ```  
 Here, ```videofile```  is the path to the video file. You can either draw the box by hand or provide it directly in the ```optional_box``` argument.
 
