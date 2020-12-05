@@ -6,7 +6,7 @@ from ltr.admin import loading, multigpu
 
 
 class BaseTrainer:
-    """Base trainer class. Contains functions for training and saving/loading chackpoints.
+    """Base trainer class. Contains functions for training and saving/loading checkpoints.
     Trainer classes should inherit from this one and overload the train_epoch function."""
 
     def __init__(self, actor, loaders, optimizer, settings, lr_scheduler=None):

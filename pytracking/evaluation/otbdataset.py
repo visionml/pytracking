@@ -179,7 +179,7 @@ class OTBDataset(BaseDataset):
              "object_class": "person"},
             {"name": "Jumping", "path": "Jumping/img", "startFrame": 1, "endFrame": 313, "nz": 4, "ext": "jpg", "anno_path": "Jumping/groundtruth_rect.txt",
              "object_class": "face"},
-            {"name": "KiteSurf", "path": "KiteSurf/img", "startFrame": 1, "endFrame": 84, "nz": 4, "ext": "png", "anno_path": "KiteSurf/groundtruth_rect.txt",
+            {"name": "KiteSurf", "path": "KiteSurf/jpg", "startFrame": 1, "endFrame": 84, "nz": 4, "ext": "png", "anno_path": "KiteSurf/groundtruth_rect.txt",
              "object_class": "face"},
             {"name": "Lemming", "path": "Lemming/img", "startFrame": 1, "endFrame": 1336, "nz": 4, "ext": "jpg", "anno_path": "Lemming/groundtruth_rect.txt",
              "object_class": "other"},

@@ -48,7 +48,7 @@ def iou_binary(preds, labels, EMPTY=1., ignore=None, per_image=True):
         else:
             iou = float(intersection) / float(union)
         ious.append(iou)
-    iou = mean(ious)  # mean accross images if per_image
+    iou = mean(ious)  # mean across images if per_image
     return 100 * iou
 
 
@@ -70,7 +70,7 @@ def iou(preds, labels, C, EMPTY=1., ignore=None, per_image=False):
                 else:
                     iou.append(float(intersection) / float(union))
         ious.append(iou)
-    ious = [mean(iou) for iou in zip(*ious)]  # mean accross images if per_image
+    ious = [mean(iou) for iou in zip(*ious)]  # mean across images if per_image
     return 100 * np.array(ious)
 
 
