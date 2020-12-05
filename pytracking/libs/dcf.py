@@ -25,7 +25,7 @@ def hann2d_clipped(sz: torch.Tensor, effective_sz: torch.Tensor, centered = True
     effective_sz += (effective_sz - sz) % 2
     effective_window = hann1d(effective_sz[0].item(), True).reshape(1, 1, -1, 1) * hann1d(effective_sz[1].item(), True).reshape(1, 1, 1, -1)
 
-    pad = (sz - effective_sz) / 2
+    pad = (sz - effective_sz) // 2
 
     window = F.pad(effective_window, (pad[1].item(), pad[1].item(), pad[0].item(), pad[0].item()), 'replicate')
 
