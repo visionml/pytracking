@@ -27,6 +27,7 @@ class Backbone(nn.Module):
         if not self._is_frozen_nograd:
             self._set_frozen_to_nograd()
             self._is_frozen_nograd = True
+        return self
 
 
     def _set_frozen_to_eval(self):
