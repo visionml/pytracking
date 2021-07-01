@@ -21,6 +21,12 @@ _tracker_disp_colors = {1: (0, 255, 0), 2: (0, 0, 255), 3: (255, 0, 0),
                         7: (123, 123, 123), 8: (255, 128, 0), 9: (128, 0, 255)}
 
 
+
+def do_action():
+    pass
+
+
+
 def trackerlist(name: str, parameter_name: str, run_ids = None, display_name: str = None):
     """Generate list of trackers.
     args:
@@ -264,7 +270,7 @@ class Tracker:
         cap = cv.VideoCapture(videofilepath)
         display_name = 'Display: ' + tracker.params.tracker_name
         cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
-        cv.resizeWindow(display_name, 960, 720)
+        cv.resizeWindow(display_name, 1280, 720)
         success, frame = cap.read()
         cv.imshow(display_name, frame)
 
@@ -290,6 +296,7 @@ class Tracker:
 
                 x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
                 init_state = [x, y, w, h]
+                # print('bbox details is : ', init_state)
                 tracker.initialize(frame, _build_init_info(init_state))
                 output_boxes.append(init_state)
                 break
@@ -413,7 +420,7 @@ class Tracker:
         cap = cv.VideoCapture(0)
         display_name = 'Display: ' + self.name
         cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
-        cv.resizeWindow(display_name, 960, 720)
+        cv.resizeWindow(display_name, 1280, 720)
         cv.setMouseCallback(display_name, ui_control.mouse_callback)
 
         next_object_id = 1
@@ -426,6 +433,10 @@ class Tracker:
 
             info = OrderedDict()
             info['previous_output'] = prev_output
+            tuple_list = list(info.items())
+
+            # key_value = tuple_list
+            # print(key_value)
 
             if ui_control.new_init:
                 ui_control.new_init = False
@@ -450,14 +461,17 @@ class Tracker:
                     frame_disp = overlay_mask(frame_disp, out['segmentation'])
 
                 if 'target_bbox' in out:
+                    tuple_list = list(out.items())
+                    key_value = tuple_list[0]
+                    print(key_value[1][1])
+
                     for obj_id, state in out['target_bbox'].items():
                         state = [int(s) for s in state]
                         cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
-                                     _tracker_disp_colors[obj_id], 5)
-
+                                     _tracker_disp_colors[obj_id], 1)
             # Put text
             font_color = (0, 0, 0)
-            cv.putText(frame_disp, 'Select target', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, font_color, 1)
+            cv.putText(frame_disp, 'Tracking', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, font_color, 1)
             cv.putText(frame_disp, 'Press r to reset', (20, 55), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
                        font_color, 1)
             cv.putText(frame_disp, 'Press q to quit', (20, 85), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
@@ -562,11 +576,11 @@ class Tracker:
 
             out = tracker.track(image, info)
             prev_output = OrderedDict(out)
-
             if output_segmentation:
                 pred = out['segmentation'].astype(np.uint8)
             else:
                 state = out['target_bbox']
+
                 pred = vot.Rectangle(*state)
             handle.report(pred, 1.0)
 
