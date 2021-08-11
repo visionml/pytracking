@@ -1,9 +1,11 @@
 # PyTracking
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
-### LWL and KYS released!
-* Code for our **ECCV 2020 oral** paper [Learning What to Learn for Video Object Segmentation](https://arxiv.org/abs/2003.11540) is now available.  
-* Code for our **ECCV 2020** paper [Know Your Surroundings: Exploiting Scene Information for Object Tracking](https://arxiv.org/abs/2003.11014) is now available.  
+### :mega: Two tracking/VOS papers accepted at ICCV 2021! :point_down:
+* [Learning Target Candidate Association to Keep Track of What Not to Track](https://arxiv.org/abs/2103.16556)
+* [Generating Masks from Boxes by Mining Spatio-Temporal Consistencies in Videos](https://arxiv.org/abs/2101.02196)  
+
+**Code coming here soon...**
 
 
 ## Highlights
