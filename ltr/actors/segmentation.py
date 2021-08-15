@@ -138,3 +138,86 @@ class LWLBoxActor(BaseActor):
         stats['Stats/acc_box_train'] = acc_box/cnt_box
 
         return loss, stats
+
+
+class STAActor(BaseActor):
+    """Actor for training the DiMP network."""
+    def __init__(self, net, objective, loss_weight=None,
+                 use_focal_loss=False, use_lovasz_loss=False,
+                 detach_pred=True,
+                 num_refinement_iter=3,
+                 disable_backbone_bn=False,
+                 disable_all_bn=False):
+        super().__init__(net, objective)
+        if loss_weight is None:
+            loss_weight = {'segm': 1.0}
+        self.loss_weight = loss_weight
+
+        self.use_focal_loss = use_focal_loss
+        self.use_lovasz_loss = use_lovasz_loss
+        self.detach_pred = detach_pred
+        self.num_refinement_iter = num_refinement_iter
+        self.disable_backbone_bn = disable_backbone_bn
+        self.disable_all_bn = disable_all_bn
+
+    def train(self, mode=True):
+        """ Set whether the network is in train mode.
+        args:
+            mode (True) - Bool specifying whether in training mode.
+        """
+        self.net.train(mode)
+
+        if self.disable_all_bn:
+            self.net.eval()
+        elif self.disable_backbone_bn:
+            for m in self.net.feature_extractor.modules():
+                if isinstance(m, nn.BatchNorm2d):
+                    m.eval()
+    
+    def __call__(self, data):
+        """
+        args:
+            data - The input data, should contain the fields 'train_images', 'test_images', 'train_anno',
+                    'test_proposals', 'proposal_iou', 'test_label', 'train_masks' and 'test_masks'
+        returns:
+            loss    - the training loss
+            stats  -  dict containing detailed losses
+        """
+        segm_pred_bbox, segm_pred = self.net(train_imgs=data['train_images'],
+                             train_bbox=data['train_anno'])
+        acc = 0
+        cnt = 0
+        acc_mid = 0
+        cnt_mid = 0
+
+        segm_pred_bbox = segm_pred_bbox.view(-1, 1, *segm_pred_bbox.shape[-2:])
+        segm_pred = segm_pred.view(-1, 1, *segm_pred.shape[-2:])
+        gt_segm = data['train_masks']
+        gt_segm = gt_segm.view(-1, 1, *gt_segm.shape[-2:])
+
+        loss_segm_bbox = self.loss_weight['segm'] * self.objective['segm'](segm_pred_bbox, gt_segm)
+        loss_segm = self.loss_weight['segm'] * self.objective['segm'](segm_pred, gt_segm)
+
+        acc_l = [davis_jaccard_measure(torch.sigmoid(rm.detach()).cpu().numpy() > 0.5, lb.cpu().numpy()) for
+                 rm, lb in zip(segm_pred.view(-1, *segm_pred.shape[-2:]), gt_segm.view(-1, *segm_pred.shape[-2:]))]
+        acc += sum(acc_l)
+        cnt += len(acc_l)
+
+        acc_l_mid = [davis_jaccard_measure(torch.sigmoid(rm.detach()).cpu().numpy() > 0.5, lb.cpu().numpy()) for
+                 rm, lb in zip(segm_pred_bbox.view(-1, *segm_pred_bbox.shape[-2:]), gt_segm.view(-1, *segm_pred_bbox.shape[-2:]))]
+        acc_mid += sum(acc_l_mid)
+        cnt_mid += len(acc_l_mid)
+
+        loss = loss_segm_bbox + loss_segm
+
+        if torch.isinf(loss) or torch.isnan(loss):
+            raise Exception('ERROR: Loss was nan or inf!!!')
+
+        # Log stats
+        stats = {'Loss/total': loss.item()}
+        stats['Loss/segm mid'] = loss_segm_bbox.item()
+        stats['Loss/segm'] = loss_segm.item()
+
+        stats['Stats/acc_mid'] = acc_mid / cnt_mid
+        stats['Stats/acc'] = acc / cnt
+        return loss, stats
