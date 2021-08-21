@@ -11,7 +11,7 @@ import matplotlib.patches as patches
 from pytracking.utils.plotting import draw_figure, overlay_mask
 from pytracking.utils.convert_vot_anno_to_rect import convert_vot_anno_to_rect
 from ltr.data.bounding_box_utils import masks_to_bboxes
-from pytracking.evaluation.multi_object_wrapper import MultiObjectWrapper
+from pytracking.evaluation.multi_object_wrapper import MultiObjectWrapper, MultiObjectWrapperSTA
 from pathlib import Path
 import torch
 
@@ -19,6 +19,34 @@ import torch
 _tracker_disp_colors = {1: (0, 255, 0), 2: (0, 0, 255), 3: (255, 0, 0),
                         4: (255, 255, 255), 5: (0, 0, 0), 6: (0, 255, 128),
                         7: (123, 123, 123), 8: (255, 128, 0), 9: (128, 0, 255)}
+
+
+class FrameReader:
+    def __init__(self, seq_info):
+        self.seq_info = seq_info
+        self.frame_names = seq_info.frames
+        self.frames = [None for _ in self.frame_names]
+        self.num_frames_in_memory = 0
+
+    def get_frame(self, frame_number):
+        if self.frames[frame_number] is None:
+            self.frames[frame_number] = self._read_image(self.frame_names[frame_number])
+            self.num_frames_in_memory += 1
+
+        return self.frames[frame_number]
+
+    def get_init_info(self, frame_number):
+        return self.seq_info.frame_info(frame_number)
+
+    def get_bbox(self, frame_number, object_id=None):
+        return self.seq_info.get_bbox(frame_number, object_id)
+
+    def _read_image(self, image_file: str):
+        im = cv.imread(image_file)
+        return cv.cvtColor(im, cv.COLOR_BGR2RGB)
+
+    def num_frames(self):
+        return len(self.frame_names)
 
 
 def trackerlist(name: str, parameter_name: str, run_ids = None, display_name: str = None):
@@ -138,14 +166,24 @@ class Tracker:
         if multiobj_mode is None:
             multiobj_mode = getattr(params, 'multiobj_mode', getattr(self.tracker_class, 'multiobj_mode', 'default'))
 
+        # TODO only enable ground-truth passing if explicitly allowed in param settings
+        frame_reader = FrameReader(seq)
+
         if multiobj_mode == 'default' or is_single_object:
             tracker = self.create_tracker(params)
+            tracker.frame_reader = frame_reader
         elif multiobj_mode == 'parallel':
-            tracker = MultiObjectWrapper(self.tracker_class, params, self.visdom)
+            if self.name == "sta":
+                tracker = MultiObjectWrapperSTA(self.tracker_class, params, self.visdom, frame_reader=frame_reader)
+            else:
+                tracker = MultiObjectWrapper(self.tracker_class, params, self.visdom)
         else:
             raise ValueError('Unknown multi object mode {}'.format(multiobj_mode))
 
-        output = self._track_sequence(tracker, seq, init_info)
+        if self.name == "sta":
+            output = self._track_sequence_sta(tracker, frame_reader, init_info)
+        else:
+            output = self._track_sequence(tracker, seq, init_info)
         return output
 
     def _track_sequence(self, tracker, seq, init_info):
@@ -224,6 +262,102 @@ class Tracker:
         for key in ['target_bbox', 'segmentation']:
             if key in output and len(output[key]) <= 1:
                 output.pop(key)
+
+        return output
+    
+    def _track_sequence_sta(self, tracker, frame_reader, init_info):
+        # Define outputs
+        # Each field in output is a list containing tracker prediction for each frame.
+
+        # In case of single object tracking mode:
+        # target_bbox[i] is the predicted bounding box for frame i
+        # time[i] is the processing time for frame i
+        # segmentation[i] is the segmentation mask for frame i (numpy array)
+
+        # In case of multi object tracking mode:
+        # target_bbox[i] is an OrderedDict, where target_bbox[i][obj_id] is the predicted box for target obj_id in
+        # frame i
+        # time[i] is either the processing time for frame i, or an OrderedDict containing processing times for each
+        # object in frame i
+        # segmentation[i] is the multi-label segmentation mask for frame i (numpy array)
+
+        output = {'target_bbox': [],
+                  'time': [],
+                  'segmentation': []}
+
+        def _store_outputs(tracker_out: dict, defaults=None):
+            defaults = {} if defaults is None else defaults
+            for key in output.keys():
+                val = tracker_out.get(key, defaults.get(key, None))
+                if key in tracker_out or val is not None:
+                    output[key].append(val)
+
+        # Initialize
+        image = frame_reader.get_frame(0)
+
+        if tracker.params.visualization and self.visdom is None:
+            self.visualize(image, init_info.get('init_bbox'))
+
+        start_time = time.time()
+        out = tracker.initialize(image, init_info)
+        if out is None:
+            out = {}
+
+        prev_output = OrderedDict(out)
+
+        # init_default = {'target_bbox': init_info.get('init_bbox'),
+        #                 'time': time.time() - start_time,
+        #                 'segmentation': init_info.get('init_mask')}
+
+        # _store_outputs(out, init_default)
+        for frame_num in range(1, frame_reader.num_frames()):
+            image = frame_reader.get_frame(frame_num)
+            if "object_ids" in init_info.keys():
+                bbox = OrderedDict()
+                for object_id in init_info["object_ids"]:
+                    bbox[object_id] = frame_reader.get_bbox(frame_num, object_id)
+            else:
+                bbox = frame_reader.get_bbox(frame_num)
+            info = frame_reader.get_init_info(frame_num)
+            tracker.store_seq(image, bbox, info)
+        
+        for frame_num in range(0, frame_reader.num_frames()):
+            while True:
+                if not self.pause_mode:
+                    break
+                elif self.step:
+                    self.step = False
+                    break
+                else:
+                    time.sleep(0.1)
+
+            image = frame_reader.get_frame(frame_num)
+
+            if "object_ids" in init_info.keys():
+                bbox = OrderedDict()
+                for object_id in init_info["object_ids"]:
+                    bbox[object_id] = frame_reader.get_bbox(frame_num, object_id)
+            else:
+                bbox = frame_reader.get_bbox(frame_num)
+
+            start_time = time.time()
+
+            info = frame_reader.get_init_info(frame_num)
+            info['previous_output'] = prev_output
+            
+            out = tracker.track(image, bbox, info)
+            prev_output = OrderedDict(out)
+            _store_outputs(out, {'time': time.time() - start_time})
+
+            segmentation = out['segmentation'] if 'segmentation' in out else None
+            if self.visdom is not None:
+                tracker.visdom_draw_tracking(image, out['target_bbox'], segmentation)
+            elif tracker.params.visualization:
+                self.visualize(image, out['target_bbox'], segmentation)
+
+        # for key in ['target_bbox', 'segmentation']:
+        #     if key in output and len(output[key]) <= 1:
+        #         output.pop(key)
 
         return output
 

@@ -103,6 +103,13 @@ class Sequence:
     def init_mask(self, frame_num=0):
         return self.object_init_data(frame_num=frame_num).get('init_mask')
 
+    def get_bbox(self, frame_num, object_id=None):
+        # print(self.ground_truth_rect, flush=True)
+        if object_id is not None:
+            return self.ground_truth_rect[object_id][frame_num]
+        else:
+            return self.ground_truth_rect[frame_num]
+
     def get_info(self, keys, frame_num=None):
         info = dict()
         for k in keys:
