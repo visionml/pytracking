@@ -2,10 +2,57 @@ import numpy as np
 import multiprocessing
 import os
 import sys
+import csv
 from itertools import product
 from collections import OrderedDict
 from pytracking.evaluation import Sequence, Tracker
 from ltr.data.image_loader import imwrite_indexed
+
+
+PREDICTION_FIELD_NAMES = ['video', 'object', 'frame_num', 'present', 'score', 'xmin', 'xmax', 'ymin', 'ymax']
+
+
+def _save_tracker_output_oxuva(seq: Sequence, tracker: Tracker, output: dict):
+    if not os.path.exists(tracker.results_dir):
+        os.makedirs(tracker.results_dir)
+
+    frame_names = [os.path.splitext(os.path.basename(f))[0] for f in seq.frames]
+
+    img_h, img_w = output['image_shape']
+    tracked_bb = np.array(output['target_bbox'])
+    object_presence_scores = np.array(output['object_presence_score'])
+
+    tracked_bb = np.vstack([
+        tracked_bb[:, 0]/img_w,
+        (tracked_bb[:, 0] + tracked_bb[:, 2])/img_w,
+        tracked_bb[:, 1]/img_h,
+        (tracked_bb[:, 1] + tracked_bb[:, 3])/img_h,
+    ]).T
+    tracked_bb = tracked_bb.clip(0., 1.)
+
+    tracked_bb = tracked_bb[1:]
+    object_presence_scores = object_presence_scores[1:]
+    frame_numbers = np.array(list(map(int, frame_names[1:])))
+    vid_id, obj_id = seq.name.split('_')[:2]
+
+    pred_file = os.path.join(tracker.results_dir, '{}_{}.csv'.format(vid_id, obj_id))
+
+    with open(pred_file, 'w') as fp:
+        writer = csv.DictWriter(fp, fieldnames=PREDICTION_FIELD_NAMES)
+
+        for i in range(0, len(frame_numbers)):
+            row = {
+                'video': vid_id,
+                'object': obj_id,
+                'frame_num': frame_numbers[i],
+                'present': str(object_presence_scores[i] > output['object_presence_score_threshold']).lower(),  # True or False
+                'score': object_presence_scores[i],
+                'xmin': tracked_bb[i, 0],
+                'xmax': tracked_bb[i, 1],
+                'ymin': tracked_bb[i, 2],
+                'ymax': tracked_bb[i, 3],
+            }
+            writer.writerow(row)
 
 
 def _save_tracker_output(seq: Sequence, tracker: Tracker, output: dict):
@@ -77,7 +124,11 @@ def run_sequence(seq: Sequence, tracker: Tracker, debug=False, visdom_info=None)
     """Runs a tracker on a sequence."""
 
     def _results_exist():
-        if seq.object_ids is None:
+        if seq.dataset == 'oxuva':
+            vid_id, obj_id = seq.name.split('_')[:2]
+            pred_file = os.path.join(tracker.results_dir, '{}_{}.csv'.format(vid_id, obj_id))
+            return os.path.isfile(pred_file)
+        elif seq.object_ids is None:
             bbox_file = '{}/{}.txt'.format(tracker.results_dir, seq.name)
             return os.path.isfile(bbox_file)
         else:
@@ -114,7 +165,10 @@ def run_sequence(seq: Sequence, tracker: Tracker, debug=False, visdom_info=None)
     print('FPS: {}'.format(num_frames / exec_time))
 
     if not debug:
-        _save_tracker_output(seq, tracker, output)
+        if seq.dataset == 'oxuva':
+            _save_tracker_output_oxuva(seq, tracker, output)
+        else:
+            _save_tracker_output(seq, tracker, output)
 
 
 def run_dataset(dataset, trackers, debug=False, threads=0, visdom_info=None):

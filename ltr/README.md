@@ -6,6 +6,7 @@ A general PyTorch based framework for learning tracking representations.
 * [Quick Start](#quick-start)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [KeepTrack](#KeepTrack)
    * [LWL](#LWL)
    * [KYS](#KYS)
    * [PrDiMP](#PrDiMP)
@@ -32,7 +33,7 @@ python run_training bbreg atom_default
 The framework consists of the following sub-modules.  
  - [actors](actors): Contains the actor classes for different trainings. The actor class is responsible for passing the input data through the network can calculating losses.  
  - [admin](admin): Includes functions for loading networks, tensorboard etc. and also contains environment settings.  
- - [dataset](dataset): Contains integration of a number of training datasets, namely [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](https://cis.temple.edu/lasot/), 
+ - [dataset](dataset): Contains integration of a number of training datasets, namely [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](http://vision.cs.stonybrook.edu/~lasot/), 
  [ImageNet-VID](http://image-net.org/), [DAVIS](https://davischallenge.org), [YouTube-VOS](https://youtube-vos.org), [MS-COCO](http://cocodataset.org/#home), [SBD](http://home.bharathh.info/pubs/codes/SBD), [LVIS](https://www.lvisdataset.org), [ECSSD](http://www.cse.cuhk.edu.hk/leojia/projects/hsaliency/dataset.html), [MSRA10k](https://mmcheng.net/msra10k), and [HKU-IS](https://sites.google.com/site/ligb86/hkuis). Additionally, it includes modules to generate synthetic videos from image datasets. 
  - [data_specs](data_specs): Information about train/val splits of different datasets.   
  - [data](data): Contains functions for processing data, e.g. loading images, data augmentations, sampling frames from videos.  
@@ -43,30 +44,37 @@ The framework consists of the following sub-modules.
  
 ## Trackers
  The framework currently contains the training code for the following trackers.
+ 
+### KeepTrack
+ In order to train KeepTrack the following three steps are required.
+ - Prepare the base tracker: Download the weights <a href="https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg">super_dimp_simple.pth.tar</a> or retrain the tracker using the settings [dimp.super_dimp_simple](train_settings/dimp/super_dimp_simple.py).
+ - Prepare the training dataset: Download <a href="https://drive.google.com/file/d/1gIlrYYpkYKAtZyNzkwUCaqAxYyMNC27S">target_candidates_dataset_dimp_simple_super_dimp_simple.json</a> or re-create the dataset by switching to `../pytracking/util_scripts` and
+ running [create_distractor_dataset](../pytracking/util_scripts/create_distractor_dataset.py) using `python create_distractor_dataset.py dimp_simple super_dimp_simple lasot_train $DATASET_DIR`. Add the path to the dataset file to the `local.py` file.
+ - Train KeepTrack using the settings [keep_track.keep_track](train_settings/keep_track/keep_track.py) using super_dimp_simple as base tracker.
 
 ### LWL
- The following setting files can be used train the LWL networks, or to know the exact training details. 
+ The following setting files can be used to train the LWL networks, or to know the exact training details. 
  - [lwl.lwl_stage1](train_settings/lwl/lwl_stage1.py): The default settings used for initial network training with fixed backbone weights. We initialize the backbone ResNet with pre-trained Mask-RCNN weights. These weights can be obtained from [here](https://drive.google.com/file/d/12pVHmhqtxaJ151dZrXN1dcgUa7TuAjdA/view?usp=sharing). Download and save these weights in env_settings().pretrained_networks directory.
  - [lwl.lwl_stage2](train_settings/lwl/lwl_stage2.py): The default settings used for training the final LWL model. This setting fine-tunes all layers in the model trained using [lwl_stage1](train_settings/lwl/lwl_stage1.py). 
  - [lwl.lwl_boxinit](train_settings/lwl/lwl_boxinit.py):  The default settings used for training the bounding box encoder network in order to enable VOS with box initialization.
  
 ### KYS
- The following setting files can be used train the KYS networks, or to know the exact training details. 
+ The following setting file can be used to train the KYS networks, or to know the exact training details. 
  - [kys.kys](train_settings/kys/kys.py): The default settings used for training the KYS model with ResNet-50 backbone.
 
 ### PrDiMP
- The following setting files can be used train the DiMP networks, or to know the exact training details. 
+ The following setting files can be used to train the DiMP networks, or to know the exact training details. 
  - [dimp.prdimp18](train_settings/dimp/prdimp18.py): The default settings used for training the PrDiMP model with ResNet-18 backbone.
  - [dimp.prdimp50](train_settings/dimp/prdimp50.py): The default settings used for training the PrDiMP model with ResNet-50 backbone. 
  - [dimp.super_dimp](train_settings/dimp/super_dimp.py): Combines the bounding-box regressor of PrDiMP with the standard DiMP classifier and better training and inference settings. 
  
 ### DiMP
- The following setting files can be used train the DiMP networks, or to know the exact training details. 
+ The following setting files can be used to train the DiMP networks, or to know the exact training details. 
  - [dimp.dimp18](train_settings/dimp/dimp18.py): The default settings used for training the DiMP model with ResNet-18 backbone.
  - [dimp.dimp50](train_settings/dimp/dimp50.py): The default settings used for training the DiMP model with ResNet-50 backbone.
  
 ### ATOM
- The following setting file can be used train the ATOM network, or to know the exact training details. 
+ The following setting file can be used to train the ATOM network, or to know the exact training details. 
  - [bbreg.atom](train_settings/bbreg/atom_paper.py): The settings used in the paper for training the network in ATOM.
  - [bbreg.atom](train_settings/bbreg/atom.py): Newer settings used for training the network in ATOM, also utilizing the GOT10k dataset.
  - [bbreg.atom](train_settings/bbreg/atom_prob_ml.py): Settings for ATOM with the probabilistic bounding box regression proposed in [this paper](https://arxiv.org/abs/1909.12297). 

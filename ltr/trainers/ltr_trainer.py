@@ -67,11 +67,10 @@ class LTRTrainer(BaseTrainer):
                 self.optimizer.step()
 
             # update statistics
-            batch_size = data['train_images'].shape[loader.stack_dim]
-            self._update_stats(stats, batch_size, loader)
+            self._update_stats(stats, loader.batch_size, loader)
 
             # print statistics
-            self._print_stats(i, loader, batch_size)
+            self._print_stats(i, loader, loader.batch_size)
 
     def train_epoch(self):
         """Do one epoch for each loader."""

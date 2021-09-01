@@ -166,7 +166,8 @@ class Tracker:
 
         output = {'target_bbox': [],
                   'time': [],
-                  'segmentation': []}
+                  'segmentation': [],
+                  'object_presence_score': []}
 
         def _store_outputs(tracker_out: dict, defaults=None):
             defaults = {} if defaults is None else defaults
@@ -190,7 +191,8 @@ class Tracker:
 
         init_default = {'target_bbox': init_info.get('init_bbox'),
                         'time': time.time() - start_time,
-                        'segmentation': init_info.get('init_mask')}
+                        'segmentation': init_info.get('init_mask'),
+                        'object_presence_score': 1.}
 
         _store_outputs(out, init_default)
 
@@ -225,10 +227,13 @@ class Tracker:
             if key in output and len(output[key]) <= 1:
                 output.pop(key)
 
+        output['image_shape'] = image.shape[:2]
+        output['object_presence_score_threshold'] = tracker.params.get('object_presence_score_threshold', 0.55)
+
         return output
 
     def run_video(self, videofilepath, optional_box=None, debug=None, visdom_info=None, save_results=False):
-        """Run the tracker with the vieofile.
+        """Run the tracker with the video file.
         args:
             debug: Debug level.
         """

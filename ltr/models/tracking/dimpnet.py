@@ -7,6 +7,7 @@ import ltr.models.target_classifier.linear_filter as target_clf
 import ltr.models.target_classifier.features as clf_features
 import ltr.models.target_classifier.initializer as clf_initializer
 import ltr.models.target_classifier.optimizer as clf_optimizer
+from ltr.models.target_classifier import residual_modules
 import ltr.models.bbreg as bbmodels
 import ltr.models.backbone as backbones
 from ltr import model_constructor
@@ -196,6 +197,59 @@ def dimpnet50(filter_size=1, optim_iter=5, optim_init_step=1.0, optim_init_reg=0
                   classification_layer=classification_layer, bb_regressor_layer=['layer2', 'layer3'])
     return net
 
+
+@model_constructor
+def dimpnet50_simple(filter_size=1, optim_iter=5, optim_init_reg=0.01,
+                     classification_layer='layer3', feat_stride=16, backbone_pretrained=True, clf_feat_blocks=0,
+                     clf_feat_norm=True, init_filter_norm=False, final_conv=True,
+                     out_feature_dim=512, hinge_threshold=0.05, iou_input_dim=(256, 256), iou_inter_dim=(256, 256),
+                     activation_leak=0.0, score_act='relu', act_param=None,
+                     detach_length=float('Inf'), frozen_backbone_layers=()):
+
+    # Backbone
+    backbone_net = backbones.resnet50(pretrained=backbone_pretrained, frozen_layers=frozen_backbone_layers)
+
+    # Feature normalization
+    norm_scale = math.sqrt(1.0 / (out_feature_dim * filter_size * filter_size))
+
+    # Classifier features
+    if classification_layer == 'layer3':
+        feature_dim = 256
+    elif classification_layer == 'layer4':
+        feature_dim = 512
+    else:
+        raise Exception
+
+    clf_feature_extractor = clf_features.residual_bottleneck(feature_dim=feature_dim,
+                                                             num_blocks=clf_feat_blocks, l2norm=clf_feat_norm,
+                                                             final_conv=final_conv, norm_scale=norm_scale,
+                                                             out_dim=out_feature_dim)
+
+    # Initializer for the DiMP classifier
+    initializer = clf_initializer.FilterInitializerLinear(filter_size=filter_size, filter_norm=init_filter_norm,
+                                                          feature_dim=out_feature_dim)
+
+    # Residual module that defined the online loss
+    residual_module = residual_modules.LinearFilterHinge(feat_stride=feat_stride, init_filter_reg=optim_init_reg,
+                                                         hinge_threshold=hinge_threshold, activation_leak=activation_leak,
+                                                   score_act=score_act, act_param=act_param)
+
+    # Construct generic optimizer module
+    optimizer = steepestdescent.GNSteepestDescent(residual_module=residual_module, num_iter=optim_iter, detach_length=detach_length,
+                                                  residual_batch_dim=1, compute_losses=True)
+
+    # The classifier module
+    classifier = target_clf.LinearFilter(filter_size=filter_size, filter_initializer=initializer,
+                                         filter_optimizer=optimizer, feature_extractor=clf_feature_extractor)
+
+    # Bounding box regressor
+    bb_regressor = bbmodels.AtomIoUNet(input_dim=(4 * 128, 4 * 256), pred_input_dim=iou_input_dim,
+                                       pred_inter_dim=iou_inter_dim)
+
+    # DiMP network
+    net = DiMPnet(feature_extractor=backbone_net, classifier=classifier, bb_regressor=bb_regressor,
+                  classification_layer=classification_layer, bb_regressor_layer=['layer2', 'layer3'])
+    return net
 
 
 @model_constructor

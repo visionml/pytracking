@@ -58,6 +58,18 @@ pytracking_results_link_dict = {
         "default_002.zip": "1_9u1ybCFxHu0yJmW5ZzDR4-isJMEUsDf",
         "default_001.zip": "1utJhdosNj6vlI75dfzUxGM3Vy8OjWslT",
     },
+    "keep_track": {
+        "default_000.zip": "1spUXwzQkoAj1D94OxcLTx8JPBc--0X4y",
+        "default_001.zip": "1kI0y-xQxH2IL2CZwftqGCcR_PjPdQb66",
+        "default_002.zip": "1eAzTNV6Ott4dEuunh_e1OvCAaH0lwUYv",
+        "default_003.zip": "1G4n40ynquPWm7MeHj7WxIWPd7p1YJ75d",
+        "default_004.zip": "17K_R_OEe-UZc_9GqaH5yMU17jKqSK2dF",
+        "default_fast_000.zip": "1hoveozlXdXpirXfHTmaatogsaidaiGuM",
+        "default_fast_001.zip": "1mphAhtl32PzYiQVNCMVFYnZbJXYt2sO4",
+        "default_fast_002.zip": "1mqQ1bar2vhJ8Bwok4xiDYxhzYx-RY92j",
+        "default_fast_003.zip": "1WGbicdfC5jYyIuhZrTzW44_zrZTB5dTV",
+        "default_fast_004.zip": "1McQ7YPeo33SJU5EEqCCbLziVsL3VW36D",
+    }
 }
 
 external_results_link_dict = {

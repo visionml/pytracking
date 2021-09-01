@@ -17,7 +17,9 @@ class EnvSettings:
         self.vot_path = ''
         self.got10k_path = ''
         self.lasot_path = ''
+        self.lasot_extension_subset_path = ''
         self.trackingnet_path = ''
+        self.oxuva_path = ''
         self.davis_dir = ''
         self.youtubevos_dir = ''
 

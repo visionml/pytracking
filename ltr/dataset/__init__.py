@@ -13,3 +13,4 @@ from .hku_is import HKUIS
 from .sbd import SBD
 from .synthetic_video import SyntheticVideo
 from .synthetic_video_blend import SyntheticVideoBlend
+from .lasot_candidate_matching import LasotCandidateMatching

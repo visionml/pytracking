@@ -83,3 +83,49 @@ class LinearFilterLearnGen(nn.Module):
         reg_residual = self.filter_reg*filter.reshape(1, num_sequences, -1)
 
         return TensorList([data_residual, reg_residual])
+
+
+class LinearFilterHinge(nn.Module):
+    def __init__(self, feat_stride=16, init_filter_reg=1e-2, hinge_threshold=-999, activation_leak=0.0, score_act='bentpar', act_param=None):
+        super().__init__()
+
+        self.filter_reg = nn.Parameter(init_filter_reg * torch.ones(1))
+        self.feat_stride = feat_stride
+        self.hinge_threshold = hinge_threshold
+        self.activation_leak = activation_leak
+
+        if score_act == 'bentpar':
+            self.score_activation = activation.BentIdentPar(act_param)
+        elif score_act == 'relu':
+            self.score_activation = activation.LeakyReluPar()
+        else:
+            raise ValueError('Unknown activation')
+
+
+    def forward(self, meta_parameter: TensorList, feat, bb=None, train_label=None, sample_weight=None, is_distractor=None):
+        assert isinstance(meta_parameter, TensorList)
+
+        filter = meta_parameter[0]
+
+        num_images = feat.shape[0]
+        num_sequences = feat.shape[1] if feat.dim() == 5 else 1
+
+        # Compute scores
+        scores = filter_layer.apply_filter(feat, filter)
+
+        if sample_weight is None:
+            sample_weight = math.sqrt(1.0 / num_images)
+        elif isinstance(sample_weight, torch.Tensor):
+            sample_weight = sample_weight.sqrt()
+        else:
+            raise NotImplementedError()
+
+        # Compute data residual
+        target_mask = ((train_label > self.hinge_threshold).float() + self.activation_leak).clamp(max=1.0)
+        scores_act = self.score_activation(scores, target_mask)
+        data_residual = sample_weight * (scores_act - target_mask * train_label)
+
+        # Compute regularization residual. Put batch in second dimension
+        reg_residual = self.filter_reg*filter.view(1, num_sequences, -1)
+
+        return TensorList([data_residual, reg_residual])

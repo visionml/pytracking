@@ -6,6 +6,7 @@ A general python library for visual tracking algorithms.
 * [Running a tracker](#running-a-tracker)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [KeepTrack](#KeepTrack)
    * [LWL](#LWL)
    * [KYS](#KYS)
    * [DiMP](#DiMP)
@@ -57,7 +58,7 @@ Here, ```videofile```  is the path to the video file. You can either draw the bo
 The tookit consists of the following sub-modules.  
  - [analysis](analysis): Contains scripts to analyse tracking performance, e.g. obtain success plots, compute AUC score. It also contains a [script](analysis/playback_results.py) to playback saved results for debugging.
  - [evaluation](evaluation): Contains the necessary scripts for running a tracker on a dataset. It also contains integration of a number of standard tracking and video object segmentation datasets, namely  [OTB-100](http://cvlab.hanyang.ac.kr/tracker_benchmark/index.html), [NFS](http://ci2cv.net/nfs/index.html),
- [UAV123](https://ivul.kaust.edu.sa/Pages/pub-benchmark-simulator-uav.aspx), [Temple128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html), [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](https://cis.temple.edu/lasot/), [VOT](http://www.votchallenge.net), [Temple Color 128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html), [DAVIS](https://davischallenge.org), and [YouTube-VOS](https://youtube-vos.org).  
+ [UAV123](https://ivul.kaust.edu.sa/Pages/pub-benchmark-simulator-uav.aspx), [Temple128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html), [TrackingNet](https://tracking-net.org/), [GOT-10k](http://got-10k.aitestunion.com/), [LaSOT](http://vision.cs.stonybrook.edu/~lasot/), [LaSOTExtSub](http://vision.cs.stonybrook.edu/~lasot/), [VOT](http://www.votchallenge.net), [Temple Color 128](http://www.dabi.temple.edu/~hbling/data/TColor-128/TColor-128.html), [OxUvA](https://oxuva.github.io/long-term-tracking-benchmark/), [DAVIS](https://davischallenge.org), and [YouTube-VOS](https://youtube-vos.org).  
  - [experiments](experiments): The experiment setting files must be stored here,  
  - [features](features): Contains tools for feature extraction, data augmentation and wrapping networks.  
  - [libs](libs): Includes libraries for optimization, dcf, etc.  
@@ -70,6 +71,15 @@ The tookit consists of the following sub-modules.
  
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
+
+### KeepTrack
+The official implementation for KeepTrack ([paper](https://arxiv.org/abs/2103.16556)).
+The tracker implementation file can be found at [tracker.keep_track](tracker/keep_track).
+
+##### Parameter Files
+Two parameter settings are provided.
+* **[default](parameter/keep_track/default.py)**: The default parameter setting was used to generate all results with SuperDiMP as base tracker.
+* **[default_fast](parameter/keep_track/default_fast.py)**: The parameter setting for the speed optimized version that employs 3 instead of 10 box refinement iterations, a smaller search area, and a higher threshold for candidate detection of 0.1.
 
 ### LWL
 The official implementation for the LWL tracker ([paper](https://arxiv.org/pdf/2003.11540.pdf)). 

@@ -594,3 +594,142 @@ class KYSSampler(torch.utils.data.Dataset):
 
         # Send for processing
         return self.processing(data)
+
+
+class SequentialTargetCandidateMatchingSampler(torch.utils.data.Dataset):
+    def __init__(self, dataset, samples_per_epoch, sup_modes, p_sup_modes=None, processing=no_processing,
+                 subseq_modes=None, p_subseq_modes=None, frame_modes=None, p_frame_modes=None):
+        """
+        args:
+            datasets - List of datasets to be used for training
+            samples_per_epoch - Number of training samples per epoch
+            sup_modes - List of different supervision modes to use (partial_sup or self_sup).
+            p_sup_modes - List of sup_mode sample probabilities.
+            processing - An instance of Processing class which performs the necessary processing of the data.
+            subseq_modes - List of different subsequence modes to sample from (HH, HK, HG), see KeepTrack paper for details.
+            p_subseq_modes - List of subseq_mode sample probabilities.
+            frame_modes - List of different frame mode to sample from (H, K, J), see KeepTrack paper for details.
+            p_frame_modes - List of frame_mode sample probabilities.
+
+        """
+        self.dataset = dataset
+        self.samples_per_epoch = samples_per_epoch
+        self.processing = processing
+        self.subseq_modes = subseq_modes
+        self.frame_modes = frame_modes
+        self.sup_modes = sup_modes if sup_modes is not None else ['self_sup']
+        self.p_sup_modes = p_sup_modes
+
+        if p_sup_modes is None:
+            self.p_sup_modes = [1. / len(self.sup_modes)] * (len(self.sup_modes))
+
+        if subseq_modes is not None:
+            self.dataset_subseq_states = self._load_dataset_subsequence_states()
+
+            if p_subseq_modes is None:
+                p_subseq_modes = [self.dataset_subseq_states[mode].shape[0] for mode in self.subseq_modes]
+
+            # Normalize
+            p_subseq_total = sum(p_subseq_modes)
+            self.p_subseq_modes = [x / p_subseq_total for x in p_subseq_modes]
+
+        if frame_modes is not None:
+            self.dataset_frame_states = self._load_dataset_frame_states()
+
+            if p_frame_modes is None:
+                p_frame_modes = [self.dataset_frame_states[mode].shape[0] for mode in self.frame_modes]
+
+            # Normalize
+            p_frames_total = sum(p_frame_modes)
+            self.p_frame_modes = [x / p_frames_total for x in p_frame_modes]
+
+    def __len__(self):
+        return self.samples_per_epoch
+
+    def _load_dataset_subsequence_states(self):
+        return self.dataset.get_subseq_states()
+
+    def _load_dataset_frame_states(self):
+        return self.dataset.get_frame_states()
+
+    def _sample_valid_ids(self, visible, num_ids=1, min_id=None, max_id=None):
+        """ Samples num_ids frames between min_id and max_id for which dumped data is useful
+
+        args:
+            visible - 1d Tensor indicating whether target is visible for each frame
+            num_ids - number of frames to be sampled
+            min_id - Minimum allowed frame number
+            max_id - Maximum allowed frame number
+
+        returns:
+            list - List of sampled frame numbers. None if not sufficient visible frames could be found.
+        """
+        if num_ids == 0:
+            return []
+        if min_id is None or min_id < 2:
+            min_id = 2
+        if max_id is None or max_id > len(visible):
+            max_id = len(visible)
+
+        valid_ids = [i for i in range(min_id, max_id) if visible[i]]
+
+        # No visible ids
+        if len(valid_ids) == 0:
+            return None
+
+        num_begin = num_ids//2
+        num_end = num_ids - num_ids//2
+        ids_begin = random.sample(valid_ids[:len(valid_ids)//2], k=num_begin)
+        ids_end = random.sample(valid_ids[len(valid_ids)//2:], k=num_end)
+        return ids_begin + ids_end
+
+
+    def __getitem__(self, index):
+        """
+        args:
+            index (int): Index (Ignored since we sample randomly).
+
+        returns:
+            TensorDict - dict containing all the data blocks
+        """
+
+        # select a subseq mode
+        sup_mode = random.choices(self.sup_modes, self.p_sup_modes, k=1)[0]
+
+        if sup_mode == 'self_sup':
+            mode = random.choices(self.frame_modes, self.p_frame_modes, k=1)[0]
+
+            states = self.dataset_frame_states[mode]
+            state = random.choices(states, k=1)[0]
+            seq_id = state[0].item()
+            baseframe_id = state[1].item()
+            test_frame_ids = [baseframe_id]
+
+        elif sup_mode == 'partial_sup':
+            mode = random.choices(self.subseq_modes, self.p_subseq_modes, k=1)[0]
+
+            states = self.dataset_subseq_states[mode]
+            state = random.choices(states, k=1)[0]
+            seq_id = state[0].item()
+            baseframe_id = state[1].item()
+            test_frame_ids = [baseframe_id, baseframe_id + 1]
+        else:
+            raise ValueError('Supervision mode: \'{}\' is invalid.'.format(sup_mode))
+
+
+        seq_info_dict = self.dataset.get_sequence_info(seq_id)
+
+        frames_dict, _ = self.dataset.get_frames(seq_id, test_frame_ids, seq_info_dict)
+
+        data = TensorDict({
+            'dataset': self.dataset.get_name(),
+            'mode': mode,
+            'seq_name': self.dataset.get_sequence_name(seq_id),
+            'base_frame_id': baseframe_id,
+            'sup_mode': sup_mode
+        })
+
+        for key, val in frames_dict.items():
+            data[key] = val
+
+        return self.processing(data)

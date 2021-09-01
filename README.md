@@ -10,10 +10,10 @@ A general python framework for visual object tracking and video object segmentat
 
 ## Highlights
 
-### LWL, KYS, PrDiMP, DiMP and ATOM Trackers
+### KeepTrack, LWL, KYS, PrDiMP, DiMP and ATOM Trackers
 
-Official implementation of the **LWL** (ECCV 2020), **KYS** (ECCV 2020), **PrDiMP** (CVPR 2020), **DiMP** (ICCV 2019), and 
-**ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
+Official implementation of the **KeepTrack** (ICCV 2021), **LWL** (ECCV 2020), **KYS** (ECCV 2020), **PrDiMP** (CVPR 2020), 
+**DiMP** (ICCV 2019), and **ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
 
 ### [Tracking Libraries](pytracking)
 
@@ -34,7 +34,21 @@ Libraries for implementing and evaluating visual trackers. It includes
 
 
 ## Trackers
-The toolkit contains the implementation of the following trackers.  
+The toolkit contains the implementation of the following trackers.
+
+### KeepTrack
+
+**[[Paper]](https://arxiv.org/abs/2103.16556)  [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
+  [[MODELS]](MODEL_ZOO.md#Models-1)  [[Training Code]](./ltr/README.md#KeepTrack)  [[Tracker Code]](./pytracking/README.md#KeepTrack)**
+
+Official implementation of **KeepTrack**. KeepTrack actively handles distractor objects to
+continue tracking the target. It employs a learned target candidate association network, that
+allows to propagate the identities of all target candidates from frame-to-frame.
+To tackle the problem of lacking groundtruth correspondences between distractor objects in visual tracking,
+it uses a training strategy that combines partial annotations with self-supervision. 
+
+![KeepTrack_teaser_figure](pytracking/.figs/KeepTrack_teaser.png)
+
 
 ### LWL
 **[[Paper]](https://arxiv.org/pdf/2003.11540.pdf)  [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
@@ -155,6 +169,7 @@ python run_webcam.py dimp dimp50
 ### Main Contributors
 * [Martin Danelljan](https://martin-danelljan.github.io/)  
 * [Goutam Bhat](https://goutamgmb.github.io/)
+* [Christoph Mayer](https://2006pmach.github.io/)
 
 ### Guest Contributors
 * [Felix Järemo-Lawin](https://liu.se/en/employee/felja34) [LWL]

@@ -4,6 +4,7 @@ import cv2 as cv
 import random
 import torch.nn.functional as F
 from .bounding_box_utils import rect_to_rel, rel_to_rect
+from pytracking import TensorList
 
 
 def sample_target(im, target_bb, search_area_factor, output_sz=None, mask=None):
@@ -235,6 +236,44 @@ def sample_target_adaptive(im, target_bb, search_area_factor, output_sz, mode: s
         return im_out, crop_box
     else:
         return im_out, crop_box, mask_out
+
+
+def sample_target_from_crop_region(im, crop_box, output_sz):
+    """ Extracts a crop of the image according to the crop box with the specified output size.
+
+        args:
+            im - Input numpy image to crop.
+            crop_box - crop box [x, y, w, h]
+            output_sz - Size to which the extracted crop is resized (always square) or tuple.
+
+        returns:
+            numpy image - Extracted crop.
+    """
+    if isinstance(output_sz, (float, int)):
+        output_sz = (output_sz, output_sz)
+    output_sz = torch.Tensor(output_sz)
+
+    crop_box = crop_box.int()
+    x1, y1, w1, h1 = crop_box.tolist()
+    x2 = x1 + w1
+    y2 = y1 + h1
+
+    x1_pad = max(0, -x1)
+    x2_pad = max(x2 - im.shape[1] + 1, 0)
+
+    y1_pad = max(0, -y1)
+    y2_pad = max(y2 - im.shape[0] + 1, 0)
+
+    # Crop target
+    im_crop = im[y1 + y1_pad:y2 - y2_pad, x1 + x1_pad:x2 - x2_pad, :]
+
+    # Pad
+    im_crop_padded = cv.copyMakeBorder(im_crop, y1_pad, y2_pad, x1_pad, x2_pad, cv.BORDER_REPLICATE)
+
+    # Resize image
+    im_out = cv.resize(im_crop_padded, tuple(output_sz.long().tolist()))
+
+    return im_out
 
 
 def crop_and_resize(im, box, crop_bb, output_sz, mask=None):
@@ -625,3 +664,43 @@ def sample_box_gmm(mean_box, proposal_sigma, gt_sigma=None, num_samples=1, add_m
         gt_density = torch.cat((torch.Tensor([1]), gt_density))
 
     return proposals, proposal_density, gt_density
+
+
+def find_local_maxima(scores, th, ks):
+    """Find local maxima in a heat map.
+        args:
+            scores - heat map to find the local maxima in.
+            th - threshold that defines the minamal value needed to be considered as a local maximum.
+            ks = local neighbourhood (kernel size) specifiying the minimal distance between two maxima.
+
+        returns:
+            coordinates and values of the local maxima.
+    """
+    ndims = scores.ndim
+
+    if ndims == 2:
+        scores = scores.view(1, 1, scores.shape[0], scores.shape[1])
+
+    scores_max = F.max_pool2d(scores, kernel_size=ks, stride=1, padding=ks//2)
+
+    peak_mask = (scores == scores_max) & (scores > th)
+    coords = torch.nonzero(peak_mask)
+    intensities = scores[peak_mask]
+
+    # Highest peak first
+    idx_maxsort = torch.argsort(-intensities)
+    coords = coords[idx_maxsort]
+    intensities = intensities[idx_maxsort]
+
+    if ndims == 4:
+
+        coords_batch, intensities_batch, = TensorList(), TensorList()
+        for i in range(scores.shape[0]):
+            mask = (coords[:, 0] == i)
+            coords_batch.append(coords[mask, 2:])
+            intensities_batch.append(intensities[mask])
+    else:
+        coords_batch = coords[:, 2:]
+        intensities_batch = intensities
+
+    return coords_batch, intensities_batch

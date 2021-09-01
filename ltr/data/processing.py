@@ -934,3 +934,502 @@ class KYSProcessing(BaseProcessing):
             data['test_label'] = self._generate_label_function(data['test_anno'], test_target_absent)
 
         return data
+
+
+class TargetCandiateMatchingProcessing(BaseProcessing):
+    """ The processing class used for training KeepTrack. The distractor dataset for LaSOT is required.
+        Two different modes are available partial supervision (partial_sup) or self-supervision (self_sup).
+
+        For partial supervision the candidates their meta data and the images of two consecutive frames are used to
+        form a single supervision cue among the candidates corresponding to the annotated target object. All other
+        candidates are ignored. First, the search area region is cropped from the image followed by augmentation.
+        Then, the candidate matching with the annotated target object is detected to supervise the matching. Then, the
+        score map coordinates of the candidates are transformed to full image coordinates. Next, it is randomly decided
+        whether the candidates corresponding to the target is dropped in one of the frames to simulate re-detection,
+        occlusions or normal tracking. To enable training in batches the number of candidates to match between
+        two frames is fixed. Hence, artificial candidates are added. Finally, the assignment matrix is formed where a 1
+        denotes a match between two candidates, -1 denotes that a match is not available and -2 denotes that no
+        information about the matching is available. These entries will be ignored.
+
+        The second method for partial supervision is used for validation only. It uses only the detected candidates and
+        thus results in different numbers of candidates for each frame-pair such that training in batches is not possible.
+
+        For self-supervision only a singe frame and its candidates are required. The second frame and candidates are
+        artificially created using augmentations. Here full supervision among all candidates is enabled.
+        First, the search area region is cropped from the full image. Then, the cropping coordinates are augmented to
+        crop a slightly different view that mimics search area region of the next frame.
+        Next, the two image regions are augmented further. Then, the matching between candidates is determined by randomly
+        dropping candidates to mimic occlusions or re-detections. Again, the number of candidates is fixed by adding
+        artificial candidates that are ignored during training. In addition, the scores  and coordinates of each
+        candidate are altered to increase matching difficulty. Finally, the assignment matrix is formed where a 1
+        denotes a match between two candidates, -1 denotes that a match is not available.
+        """
+
+    def __init__(self, output_sz, num_target_candidates=None, mode='self_sup',
+                 img_aug_transform=None, score_map_sz=None, enable_search_area_aug=True,
+                 search_area_jitter_value=100, real_target_candidates_only=False, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.output_sz = output_sz
+        self.num_target_candidates = num_target_candidates
+        self.mode = mode
+        self.img_aug_transform = img_aug_transform
+        self.enable_search_area_aug = enable_search_area_aug
+        self.search_area_jitter_value = search_area_jitter_value
+        self.real_target_candidates_only = real_target_candidates_only
+        self.score_map_sz = score_map_sz if score_map_sz is not None else (23, 23)
+
+    def __call__(self, data: TensorDict):
+        if data['sup_mode'] == 'self_sup':
+            data = self._original_and_augmented_frame(data)
+        elif data['sup_mode'] == 'partial_sup' and self.real_target_candidates_only == False:
+            data = self._previous_and_current_frame(data)
+        elif data['sup_mode'] == 'partial_sup' and self.real_target_candidates_only == True:
+            data = self._previous_and_current_frame_detected_target_candidates_only(data)
+        else:
+            raise NotImplementedError()
+
+        data = data.apply(stack_tensors)
+
+        return data
+
+    def _original_and_augmented_frame(self, data: TensorDict):
+        out = TensorDict()
+        img = data.pop('img')[0]
+        tsm_coords = data['target_candidate_coords'][0]
+        scores = data['target_candidate_scores'][0]
+        sa_box = data['search_area_box'][0]
+        sa_box0 = sa_box.clone()
+        sa_box1 = sa_box.clone()
+
+        out['img_shape0'] = [torch.tensor(img.shape[:2])]
+        out['img_shape1'] = [torch.tensor(img.shape[:2])]
+
+        # prepared cropped image
+        frame_crop0 = prutils.sample_target_from_crop_region(img, sa_box0, self.output_sz)
+
+        x, y, w, h = sa_box.long().tolist()
+
+        if self.enable_search_area_aug:
+            l = self.search_area_jitter_value
+            sa_box1 = torch.tensor([x + torch.randint(-w//l, w//l+1, (1,)),
+                                    y + torch.randint(-h//l, h//l+1, (1,)),
+                                    w + torch.randint(-w//l, w//l+1, (1,)),
+                                    h + torch.randint(-h//l, h//l+1, (1,))])
+
+        frame_crop1 = prutils.sample_target_from_crop_region(img, sa_box1, self.output_sz)
+
+        frame_crop0 = self.transform['train'](image=frame_crop0)
+        frame_crop1 = self.img_aug_transform(image=frame_crop1)
+
+        out['img_cropped0'] = [frame_crop0]
+        out['img_cropped1'] = [frame_crop1]
+
+        x, y, w, h = sa_box0.tolist()
+        img_coords = torch.stack([
+            h * (tsm_coords[:, 0].float() / (self.score_map_sz[0] - 1)) + y,
+            w * (tsm_coords[:, 1].float() / (self.score_map_sz[1] - 1)) + x
+        ]).permute(1, 0)
+
+        img_coords_pad0, img_coords_pad1, valid0, valid1 = self._candidate_drop_out(img_coords, img_coords.clone())
+
+        img_coords_pad0, img_coords_pad1 = self._pad_with_fake_candidates(img_coords_pad0, img_coords_pad1, valid0, valid1,
+                                                                          sa_box0, sa_box1, img.shape)
+
+        scores_pad0 = self._add_fake_candidate_scores(scores, valid0)
+        scores_pad1 = self._add_fake_candidate_scores(scores, valid1)
+
+        x0, y0, w0, h0 = sa_box0.long().tolist()
+
+        tsm_coords_pad0 = torch.stack([
+            torch.round((img_coords_pad0[:, 0] - y0) / h0 * (self.score_map_sz[0] - 1)).long(),
+            torch.round((img_coords_pad0[:, 1] - x0) / w0 * (self.score_map_sz[1] - 1)).long()
+        ]).permute(1, 0)
+
+        # make sure that the augmented search_are_box is only used for the fake img_coords the other need the original.
+        x1, y1, w1, h1 = sa_box1.long().tolist()
+        y = torch.where(valid1 == 1, torch.tensor(y0), torch.tensor(y1))
+        x = torch.where(valid1 == 1, torch.tensor(x0), torch.tensor(x1))
+        h = torch.where(valid1 == 1, torch.tensor(h0), torch.tensor(h1))
+        w = torch.where(valid1 == 1, torch.tensor(w0), torch.tensor(w1))
+
+        tsm_coords_pad1 = torch.stack([
+            torch.round((img_coords_pad1[:, 0] - y) / h * (self.score_map_sz[0] - 1)).long(),
+            torch.round((img_coords_pad1[:, 1] - x) / w * (self.score_map_sz[1] - 1)).long()
+        ]).permute(1, 0)
+
+        assert torch.all(tsm_coords_pad0 >= 0) and torch.all(tsm_coords_pad0 < self.score_map_sz[0])
+        assert torch.all(tsm_coords_pad1 >= 0) and torch.all(tsm_coords_pad1 < self.score_map_sz[0])
+
+        img_coords_pad1 = self._augment_coords(img_coords_pad1, img.shape, sa_box1)
+        scores_pad1 = self._augment_scores(scores_pad1, valid1, ~torch.all(valid0 == valid1))
+
+        out['candidate_img_coords0'] = [img_coords_pad0]
+        out['candidate_img_coords1'] = [img_coords_pad1]
+        out['candidate_tsm_coords0'] = [tsm_coords_pad0]
+        out['candidate_tsm_coords1'] = [tsm_coords_pad1]
+        out['candidate_scores0'] = [scores_pad0]
+        out['candidate_scores1'] = [scores_pad1]
+        out['candidate_valid0'] = [valid0]
+        out['candidate_valid1'] = [valid1]
+
+        # Prepare gt labels
+
+        gt_assignment = torch.zeros((self.num_target_candidates, self.num_target_candidates))
+        gt_assignment[torch.arange(self.num_target_candidates), torch.arange(self.num_target_candidates)] = valid0 * valid1
+
+        gt_matches0 = torch.arange(0, self.num_target_candidates).float()
+        gt_matches1 = torch.arange(0, self.num_target_candidates).float()
+
+        gt_matches0[(valid0==0) | (valid1==0)] = -1
+        gt_matches1[(valid0==0) | (valid1==0)] = -1
+
+        out['gt_matches0'] = [gt_matches0]
+        out['gt_matches1'] = [gt_matches1]
+        out['gt_assignment'] = [gt_assignment]
+
+        return out
+
+    def _previous_and_current_frame(self, data: TensorDict):
+        out = TensorDict()
+        imgs = data.pop('img')
+        img0 = imgs[0]
+        img1 = imgs[1]
+        sa_box0 = data['search_area_box'][0]
+        sa_box1 = data['search_area_box'][1]
+        tsm_anno_coord0 = data['target_anno_coord'][0]
+        tsm_anno_coord1 = data['target_anno_coord'][1]
+        tsm_coords0 = data['target_candidate_coords'][0]
+        tsm_coords1 = data['target_candidate_coords'][1]
+        scores0 = data['target_candidate_scores'][0]
+        scores1 = data['target_candidate_scores'][1]
+
+        out['img_shape0'] = [torch.tensor(img0.shape[:2])]
+        out['img_shape1'] = [torch.tensor(img1.shape[:2])]
+
+        frame_crop0 = prutils.sample_target_from_crop_region(img0, sa_box0, self.output_sz)
+        frame_crop1 = prutils.sample_target_from_crop_region(img1, sa_box1, self.output_sz)
+
+        frame_crop0 = self.transform['train'](image=frame_crop0)
+        frame_crop1 = self.transform['train'](image=frame_crop1)
+
+        out['img_cropped0'] = [frame_crop0]
+        out['img_cropped1'] = [frame_crop1]
+
+        gt_idx0 = self._find_gt_candidate_index(tsm_coords0, tsm_anno_coord0)
+        gt_idx1 = self._find_gt_candidate_index(tsm_coords1, tsm_anno_coord1)
+
+        x0, y0, w0, h0 = sa_box0.tolist()
+        x1, y1, w1, h1 = sa_box1.tolist()
+
+        img_coords0 = torch.stack([
+            h0 * (tsm_coords0[:, 0].float() / (self.score_map_sz[0] - 1)) + y0,
+            w0 * (tsm_coords0[:, 1].float() / (self.score_map_sz[1] - 1)) + x0
+        ]).permute(1, 0)
+
+        img_coords1 = torch.stack([
+            h1 * (tsm_coords1[:, 0].float() / (self.score_map_sz[0] - 1)) + y1,
+            w1 * (tsm_coords1[:, 1].float() / (self.score_map_sz[1] - 1)) + x1
+        ]).permute(1, 0)
+
+        frame_id, dropout = self._gt_candidate_drop_out()
+
+        drop0 = dropout & (frame_id == 0)
+        drop1 = dropout & (frame_id == 1)
+
+        img_coords_pad0, valid0 = self._pad_with_fake_candidates_drop_gt(img_coords0, drop0, gt_idx0, sa_box0, img0.shape)
+        img_coords_pad1, valid1 = self._pad_with_fake_candidates_drop_gt(img_coords1, drop1, gt_idx1, sa_box1, img1.shape)
+
+        scores_pad0 = self._add_fake_candidate_scores(scores0, valid0)
+        scores_pad1 = self._add_fake_candidate_scores(scores1, valid1)
+
+        x0, y0, w0, h0 = sa_box0.long().tolist()
+        x1, y1, w1, h1 = sa_box1.long().tolist()
+
+
+        tsm_coords_pad0 = torch.stack([
+            torch.round((img_coords_pad0[:, 0] - y0) / h0 * (self.score_map_sz[0] - 1)).long(),
+            torch.round((img_coords_pad0[:, 1] - x0) / w0 * (self.score_map_sz[1] - 1)).long()
+        ]).permute(1, 0)
+
+        tsm_coords_pad1 = torch.stack([
+            torch.round((img_coords_pad1[:, 0] - y1) / h1 * (self.score_map_sz[0] - 1)).long(),
+            torch.round((img_coords_pad1[:, 1] - x1) / w1 * (self.score_map_sz[1] - 1)).long()
+        ]).permute(1, 0)
+
+        assert torch.all(tsm_coords_pad0 >= 0) and torch.all(tsm_coords_pad0 < self.score_map_sz[0])
+        assert torch.all(tsm_coords_pad1 >= 0) and torch.all(tsm_coords_pad1 < self.score_map_sz[0])
+
+        out['candidate_img_coords0'] = [img_coords_pad0]
+        out['candidate_img_coords1'] = [img_coords_pad1]
+        out['candidate_tsm_coords0'] = [tsm_coords_pad0]
+        out['candidate_tsm_coords1'] = [tsm_coords_pad1]
+        out['candidate_scores0'] = [scores_pad0]
+        out['candidate_scores1'] = [scores_pad1]
+        out['candidate_valid0'] = [valid0]
+        out['candidate_valid1'] = [valid1]
+
+        # Prepare gt labels
+        gt_assignment = torch.zeros((self.num_target_candidates, self.num_target_candidates))
+        gt_assignment[gt_idx0, gt_idx1] = valid0[gt_idx0]*valid1[gt_idx1]
+
+        gt_matches0 = torch.zeros(self.num_target_candidates) - 2
+        gt_matches1 = torch.zeros(self.num_target_candidates) - 2
+
+        if drop0:
+            gt_matches0[gt_idx0] = -2
+            gt_matches1[gt_idx1] = -1
+        elif drop1:
+            gt_matches0[gt_idx0] = -1
+            gt_matches0[gt_idx1] = -2
+        else:
+            gt_matches0[gt_idx0] = gt_idx1
+            gt_matches1[gt_idx1] = gt_idx0
+
+        out['gt_matches0'] = [gt_matches0]
+        out['gt_matches1'] = [gt_matches1]
+        out['gt_assignment'] = [gt_assignment]
+
+        return out
+
+    def _previous_and_current_frame_detected_target_candidates_only(self, data: TensorDict):
+        out = TensorDict()
+        imgs = data.pop('img')
+        img0 = imgs[0]
+        img1 = imgs[1]
+        sa_box0 = data['search_area_box'][0]
+        sa_box1 = data['search_area_box'][1]
+        tsm_anno_coord0 = data['target_anno_coord'][0]
+        tsm_anno_coord1 = data['target_anno_coord'][1]
+        tsm_coords0 = data['target_candidate_coords'][0]
+        tsm_coords1 = data['target_candidate_coords'][1]
+        scores0 = data['target_candidate_scores'][0]
+        scores1 = data['target_candidate_scores'][1]
+
+        out['img_shape0'] = [torch.tensor(img0.shape[:2])]
+        out['img_shape1'] = [torch.tensor(img1.shape[:2])]
+
+        frame_crop0 = prutils.sample_target_from_crop_region(img0, sa_box0, self.output_sz)
+        frame_crop1 = prutils.sample_target_from_crop_region(img1, sa_box1, self.output_sz)
+
+        frame_crop0 = self.transform['train'](image=frame_crop0)
+        frame_crop1 = self.transform['train'](image=frame_crop1)
+
+        out['img_cropped0'] = [frame_crop0]
+        out['img_cropped1'] = [frame_crop1]
+
+        gt_idx0 = self._find_gt_candidate_index(tsm_coords0, tsm_anno_coord0)
+        gt_idx1 = self._find_gt_candidate_index(tsm_coords1, tsm_anno_coord1)
+
+        x0, y0, w0, h0 = sa_box0.tolist()
+        x1, y1, w1, h1 = sa_box1.tolist()
+
+        img_coords0 = torch.stack([
+            h0 * (tsm_coords0[:, 0].float() / (self.score_map_sz[0] - 1)) + y0,
+            w0 * (tsm_coords0[:, 1].float() / (self.score_map_sz[1] - 1)) + x0
+        ]).permute(1, 0)
+
+        img_coords1 = torch.stack([
+            h1 * (tsm_coords1[:, 0].float() / (self.score_map_sz[0] - 1)) + y1,
+            w1 * (tsm_coords1[:, 1].float() / (self.score_map_sz[1] - 1)) + x1
+        ]).permute(1, 0)
+
+        out['candidate_img_coords0'] = [img_coords0]
+        out['candidate_img_coords1'] = [img_coords1]
+        out['candidate_tsm_coords0'] = [tsm_coords0]
+        out['candidate_tsm_coords1'] = [tsm_coords1]
+        out['candidate_scores0'] = [scores0]
+        out['candidate_scores1'] = [scores1]
+        out['candidate_valid0'] = [torch.ones_like(scores0)]
+        out['candidate_valid1'] = [torch.ones_like(scores1)]
+
+        # Prepare gt labels
+        gt_assignment = torch.zeros((scores0.shape[0], scores1.shape[0]))
+        gt_assignment[gt_idx0, gt_idx1] = 1
+
+        gt_matches0 = torch.zeros(scores0.shape[0]) - 2
+        gt_matches1 = torch.zeros(scores1.shape[0]) - 2
+
+        gt_matches0[gt_idx0] = gt_idx1
+        gt_matches1[gt_idx1] = gt_idx0
+
+        out['gt_matches0'] = [gt_matches0]
+        out['gt_matches1'] = [gt_matches1]
+        out['gt_assignment'] = [gt_assignment]
+
+        return out
+
+    def _find_gt_candidate_index(self, coords, target_anno_coord):
+        gt_idx = torch.argmin(torch.sum((coords - target_anno_coord) ** 2, dim=1))
+        return gt_idx
+
+    def _gt_candidate_drop_out(self):
+        dropout = (torch.rand(1) < 0.25).item()
+        frameid = torch.randint(0, 2, (1,)).item()
+        return frameid, dropout
+
+    def _pad_with_fake_candidates_drop_gt(self, img_coords, dropout, gt_idx, sa_box, img_shape):
+        H, W = img_shape[:2]
+        num_peaks = min(img_coords.shape[0], self.num_target_candidates)
+        x, y, w, h = sa_box.long().tolist()
+
+        lowx, lowy, highx, highy = max(0, x), max(0, y), min(W, x + w), min(H, y + h)
+
+        img_coords_pad = torch.zeros((self.num_target_candidates, 2))
+        valid = torch.zeros(self.num_target_candidates)
+
+        img_coords_pad[:num_peaks] = img_coords[:num_peaks]
+        valid[:num_peaks] = 1
+
+        gt_coords = img_coords_pad[gt_idx].clone().unsqueeze(0)
+
+        if dropout:
+            valid[gt_idx] = 0
+            img_coords_pad[gt_idx] = 0
+
+        filled = valid.clone()
+        for i in range(0, self.num_target_candidates):
+            if filled[i] == 0:
+                cs = torch.cat([
+                    torch.rand((20, 1)) * (highy - lowy) + lowy,
+                    torch.rand((20, 1)) * (highx - lowx) + lowx
+                ], dim=1)
+
+                cs_used = torch.cat([img_coords_pad[filled == 1], gt_coords], dim=0)
+
+                dist = torch.sqrt(torch.sum((cs_used[:, None, :] - cs[None, :, :]) ** 2, dim=2))
+                min_dist = torch.min(dist, dim=0).values
+                max_min_dist_idx = torch.argmax(min_dist)
+                img_coords_pad[i] = cs[max_min_dist_idx]
+                filled[i] = 1
+
+        return img_coords_pad, valid
+
+    def _candidate_drop_out(self, coords0, coords1):
+        num_candidates = min(coords1.shape[0], self.num_target_candidates)
+        num_candidates_to_drop = torch.round(0.25*num_candidates*torch.rand(1)).long()
+        idx = torch.randperm(num_candidates)[:num_candidates_to_drop]
+
+        coords_pad0 = torch.zeros((self.num_target_candidates, 2))
+        valid0 = torch.zeros(self.num_target_candidates)
+        coords_pad1 = torch.zeros((self.num_target_candidates, 2))
+        valid1 = torch.zeros(self.num_target_candidates)
+
+        coords_pad0[:num_candidates] = coords0[:num_candidates]
+        coords_pad1[:num_candidates] = coords1[:num_candidates]
+
+        valid0[:num_candidates] = 1
+        valid1[:num_candidates] = 1
+
+        if torch.rand(1) < 0.5:
+            coords_pad0[idx] = 0
+            valid0[idx] = 0
+        else:
+            coords_pad1[idx] = 0
+            valid1[idx] = 0
+
+        return coords_pad0, coords_pad1, valid0, valid1
+
+    def _pad_with_fake_candidates(self, img_coords_pad0, img_coords_pad1, valid0, valid1, sa_box0, sa_box1, img_shape):
+        H, W = img_shape[:2]
+
+        x0, y0, w0, h0 = sa_box0.long().tolist()
+        x1, y1, w1, h1 = sa_box1.long().tolist()
+
+        lowx = [max(0, x0), max(0, x1)]
+        lowy = [max(0, y0), max(0, y1)]
+        highx = [min(W, x0 + w0), min(W, x1 + w1)]
+        highy = [min(H, y0 + h0), min(H, y1 + h1)]
+
+        filled = [valid0.clone(), valid1.clone()]
+        img_coords_pad = [img_coords_pad0.clone(), img_coords_pad1.clone()]
+
+        for i in range(0, self.num_target_candidates):
+            for k in range(0, 2):
+                if filled[k][i] == 0:
+                    cs = torch.cat([
+                        torch.rand((20, 1)) * (highy[k] - lowy[k]) + lowy[k],
+                        torch.rand((20, 1)) * (highx[k] - lowx[k]) + lowx[k]
+                    ], dim=1)
+
+                    cs_used = torch.cat([img_coords_pad[0][filled[0]==1], img_coords_pad[1][filled[1]==1]], dim=0)
+
+                    dist = torch.sqrt(torch.sum((cs_used[:, None, :] - cs[None, :, :]) ** 2, dim=2))
+                    min_dist = torch.min(dist, dim=0).values
+                    max_min_dist_idx = torch.argmax(min_dist)
+                    img_coords_pad[k][i] = cs[max_min_dist_idx]
+                    filled[k][i] = 1
+
+        return img_coords_pad[0], img_coords_pad[1]
+
+    def _add_fake_candidate_scores(self, scores, valid):
+        scores_pad = torch.zeros(valid.shape[0])
+        scores_pad[valid == 1] = scores[:self.num_target_candidates][valid[:scores.shape[0]] == 1]
+        scores_pad[valid == 0] = (torch.abs(torch.randn((valid==0).sum()))/50).clamp_max(0.025) + 0.05
+        return scores_pad
+
+    def _augment_scores(self, scores, valid, drop):
+        num_valid = (valid==1).sum()
+
+        noise = 0.1 * torch.randn(num_valid)
+
+        if num_valid > 2 and not drop:
+            if scores[1] > 0.5*scores[0] and torch.all(scores[:2] > 0.2):
+                # two valid peaks with a high score that are relatively close.
+                mode = torch.randint(0, 3, size=(1,))
+                if mode == 0:
+                    # augment randomly.
+                    scores_aug = torch.sort(noise + scores[valid==1], descending=True)[0]
+                elif mode == 1:
+                    # move peaks closer
+                    scores_aug = torch.sort(noise + scores[valid == 1], descending=True)[0]
+                    scores_aug[0] = scores[valid==1][0] - torch.abs(noise[0])
+                    scores_aug[1] = scores[valid==1][1] + torch.abs(noise[1])
+                    scores_aug[:2] = torch.sort(scores_aug[:2], descending=True)[0]
+                else:
+                    # move peaks closer and switch
+                    scores_aug = torch.sort(noise + scores[valid == 1], descending=True)[0]
+                    scores_aug[0] = scores[valid==1][0] - torch.abs(noise[0])
+                    scores_aug[1] = scores[valid==1][1] + torch.abs(noise[1])
+                    scores_aug[:2] = torch.sort(scores_aug[:2], descending=True)[0]
+
+                    idx = torch.arange(num_valid)
+                    idx[:2] = torch.tensor([1, 0])
+                    scores_aug = scores_aug[idx]
+            else:
+                scores_aug = torch.sort(scores[valid==1] + noise, descending=True)[0]
+
+        else:
+            scores_aug = torch.sort(scores[valid == 1] + noise, descending=True)[0]
+
+        scores_aug = scores_aug.clamp_min(0.075)
+
+        scores[valid==1] = scores_aug.clone()
+
+        return scores
+
+    def _augment_coords(self, coords, img_shape, search_area_box):
+        H, W = img_shape[:2]
+
+        _, _, w, h = search_area_box.float()
+
+        # add independent offset to each coord
+        d = torch.sqrt(torch.sum((coords[None, :] - coords[:, None])**2, dim=2))
+
+        if torch.all(d == 0):
+            xmin = 0.5*w/self.score_map_sz[1]
+            ymin = 0.5*h/self.score_map_sz[0]
+        else:
+            dmin = torch.min(d[d>0])
+            xmin = (math.sqrt(2)*dmin/4).clamp_max(w/self.score_map_sz[1])
+            ymin = (math.sqrt(2)*dmin/4).clamp_max(h/self.score_map_sz[0])
+
+        txi = torch.rand(coords.shape[0])*2*xmin - xmin
+        tyi = torch.rand(coords.shape[0])*2*ymin - ymin
+
+        coords[:, 0] += tyi
+        coords[:, 1] += txi
+
+        coords[:, 0] = coords[:, 0].clamp(0, H)
+        coords[:, 1] = coords[:, 1].clamp(0, W)
+
+        return coords

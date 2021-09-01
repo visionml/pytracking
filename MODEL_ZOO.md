@@ -14,6 +14,7 @@ of the models on standard tracking datasets.
     <th>NFS<br>AUC (%)</th>
     <th>UAV123<br>AUC (%)</th>
     <th>LaSOT<br>AUC (%)</th>
+    <th>LaSOTExtSub<br>AUC (%)</th>
     <th>TrackingNet<br>AUC (%)</th>
     <th>GOT-10k<br>AO (%)</th>
     <th>Links</th>
@@ -25,6 +26,7 @@ of the models on standard tracking datasets.
     <td>58.4</td>
     <td>64.2</td>
     <td>51.5</td>
+    <td>-</td>
     <td>70.3</td>
     <td>55.6</td>
     <td><a href="https://drive.google.com/open?id=1VNyr-Ds0khjM0zaq6lU-xfY74-iWxBvU">model</a></td>
@@ -36,6 +38,7 @@ of the models on standard tracking datasets.
     <td>61.0</td>
     <td>64.3</td>
     <td>53.5</td>
+    <td>-</td>
     <td>72.3</td>
     <td>57.9</td>
     <td><a href="https://drive.google.com/open?id=1MAjrRJDCbL0DSjUKFyDkUuYS1-cYBNjk">model</a></td>
@@ -47,6 +50,7 @@ of the models on standard tracking datasets.
     <td>61.9</td>
     <td>65.3</td>
     <td>56.9</td>
+    <td>-</td>
     <td>74.0</td>
     <td>61.1</td>
     <td><a href="https://drive.google.com/open?id=1qgachgqks2UGjKx-GdO1qylBDdB1f9KN">model</a></td>
@@ -58,6 +62,7 @@ of the models on standard tracking datasets.
     <td>63.3</td>
     <td>65.3</td>
     <td>56.4</td>
+    <td>-</td>
     <td>75.0</td>
     <td>61.2</td>
     <td><a href="https://drive.google.com/open?id=1ycm3Uu63j-uCkz4qt0SG6rY_k5UFlhVo">model</a></td>
@@ -69,6 +74,7 @@ of the models on standard tracking datasets.
     <td>63.5</td>
     <td>68.0</td>
     <td>59.8</td>
+    <td>-</td>
     <td>75.8</td>
     <td>63.4</td>
     <td><a href="https://drive.google.com/open?id=1zbQUVXKsGvBEOc-I1NuGU6yTMPth_aI5">model</a></td>
@@ -80,6 +86,7 @@ of the models on standard tracking datasets.
     <td>64.7</td>
     <td>68.1</td>
     <td>63.1</td>
+    <td>-</td>
     <td>78.1</td>
     <td>-</td>
     <td><a href="https://drive.google.com/open?id=1qDptswis2FxihLRYLVRGDvx6aUoAVVLv">model</a></td>
@@ -91,9 +98,22 @@ of the models on standard tracking datasets.
     <td>63.4</td>
     <td>-</td>
     <td>55.4</td>
+    <td>-</td>
     <td>74.0</td>
     <td>63.6</td>
     <td><a href="https://drive.google.com/open?id=1nJTBxpuBhN0WGSvG7Zm3yBc9JAC6LnEn">model</a></td>
+  </tr>
+  <tr>
+    <td>KeepTrack</td>
+    <td>-</td>
+    <td>70.9</td>
+    <td>66.4</td>
+    <td>69.7</td>
+    <td>67.1</td>
+    <td>48.2</td>
+    <td>-</td>
+    <td>-</td>
+    <td><a href="https://drive.google.com/file/d/1JIhzF1yd1EFbVCKJMakqEjWngthySIS5">model</a></td>
   </tr>
 </table>
 
@@ -103,7 +123,7 @@ You can also download and extract them manually from https://drive.google.com/op
 
 The raw results are in the format [top_left_x, top_left_y, width, height]. 
 Due to the stochastic nature of the trackers, the results reported here are an average over multiple runs. 
-For OTB-100, NFS, UAV123, and LaSOT, the results were averaged over 5 runs. For VOT2018, 15 runs were used 
+For OTB-100, NFS, UAV123, LaSOT and LaSOTExtSub, the results were averaged over 5 runs. For VOT2018, 15 runs were used 
 as per the VOT protocol. As TrackingNet results are obtained using the online evaluation server, only a 
 single run was used for TrackingNet. For GOT-10k, 3 runs are used as per protocol.
 
