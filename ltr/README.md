@@ -46,32 +46,31 @@ The framework consists of the following sub-modules.
  The framework currently contains the training code for the following trackers.
  
 ### KeepTrack
- In order to train KeepTrack the following three steps are required.
- - Prepare the base tracker: Download the weights <a href="https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg">super_dimp_simple.pth.tar</a> or retrain the tracker using the settings [dimp.super_dimp_simple](train_settings/dimp/super_dimp_simple.py).
- - Prepare the training dataset: Download <a href="https://drive.google.com/file/d/1gIlrYYpkYKAtZyNzkwUCaqAxYyMNC27S">target_candidates_dataset_dimp_simple_super_dimp_simple.json</a> or re-create the dataset by switching to `../pytracking/util_scripts` and
- running [create_distractor_dataset](../pytracking/util_scripts/create_distractor_dataset.py) using `python create_distractor_dataset.py dimp_simple super_dimp_simple lasot_train $DATASET_DIR`. Add the path to the dataset file to the `local.py` file.
- - Train KeepTrack using the settings [keep_track.keep_track](train_settings/keep_track/keep_track.py) using super_dimp_simple as base tracker.
+ In order to train KeepTrack the following three steps are required.  
+ - Prepare the base tracker: Download the weights [super_dimp_simple.pth.tar](https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg) or retrain the tracker using the settings [dimp.super_dimp_simple](train_settings/dimp/super_dimp_simple.py).  
+ - Prepare the training dataset: Download [target_candidates_dataset_dimp_simple_super_dimp_simple.json](https://drive.google.com/file/d/1gIlrYYpkYKAtZyNzkwUCaqAxYyMNC27S) or re-create the dataset by switching to `../pytracking/util_scripts` and running [create_distractor_dataset](../pytracking/util_scripts/create_distractor_dataset.py) using `python create_distractor_dataset.py dimp_simple super_dimp_simple lasot_train $DATASET_DIR`. Add the path to the dataset file to the `local.py` file.  
+ - Train KeepTrack using the settings [keep_track.keep_track](train_settings/keep_track/keep_track.py) using super_dimp_simple as base tracker.  
 
 ### LWL
- The following setting files can be used to train the LWL networks, or to know the exact training details. 
- - [lwl.lwl_stage1](train_settings/lwl/lwl_stage1.py): The default settings used for initial network training with fixed backbone weights. We initialize the backbone ResNet with pre-trained Mask-RCNN weights. These weights can be obtained from [here](https://drive.google.com/file/d/12pVHmhqtxaJ151dZrXN1dcgUa7TuAjdA/view?usp=sharing). Download and save these weights in env_settings().pretrained_networks directory.
- - [lwl.lwl_stage2](train_settings/lwl/lwl_stage2.py): The default settings used for training the final LWL model. This setting fine-tunes all layers in the model trained using [lwl_stage1](train_settings/lwl/lwl_stage1.py). 
- - [lwl.lwl_boxinit](train_settings/lwl/lwl_boxinit.py):  The default settings used for training the bounding box encoder network in order to enable VOS with box initialization.
+ The following setting files can be used to train the LWL networks, or to know the exact training details.   
+ - [lwl.lwl_stage1](train_settings/lwl/lwl_stage1.py): The default settings used for initial network training with fixed backbone weights. We initialize the backbone ResNet with pre-trained Mask-RCNN weights. These weights can be obtained from [here](https://drive.google.com/file/d/12pVHmhqtxaJ151dZrXN1dcgUa7TuAjdA/view?usp=sharing). Download and save these weights in `env_settings().pretrained_networks` directory.  
+ - [lwl.lwl_stage2](train_settings/lwl/lwl_stage2.py): The default settings used for training the final LWL model. This setting fine-tunes all layers in the model trained using [lwl_stage1](train_settings/lwl/lwl_stage1.py).   
+ - [lwl.lwl_boxinit](train_settings/lwl/lwl_boxinit.py):  The default settings used for training the bounding box encoder network in order to enable VOS with box initialization.  
  
 ### KYS
- The following setting file can be used to train the KYS networks, or to know the exact training details. 
+ The following setting file can be used to train the KYS networks, or to know the exact training details.  
  - [kys.kys](train_settings/kys/kys.py): The default settings used for training the KYS model with ResNet-50 backbone.
 
 ### PrDiMP
- The following setting files can be used to train the DiMP networks, or to know the exact training details. 
- - [dimp.prdimp18](train_settings/dimp/prdimp18.py): The default settings used for training the PrDiMP model with ResNet-18 backbone.
- - [dimp.prdimp50](train_settings/dimp/prdimp50.py): The default settings used for training the PrDiMP model with ResNet-50 backbone. 
- - [dimp.super_dimp](train_settings/dimp/super_dimp.py): Combines the bounding-box regressor of PrDiMP with the standard DiMP classifier and better training and inference settings. 
+ The following setting files can be used to train the DiMP networks, or to know the exact training details.  
+ - [dimp.prdimp18](train_settings/dimp/prdimp18.py): The default settings used for training the PrDiMP model with ResNet-18 backbone.  
+ - [dimp.prdimp50](train_settings/dimp/prdimp50.py): The default settings used for training the PrDiMP model with ResNet-50 backbone.   
+ - [dimp.super_dimp](train_settings/dimp/super_dimp.py): Combines the bounding-box regressor of PrDiMP with the standard DiMP classifier and better training and inference settings.   
  
 ### DiMP
- The following setting files can be used to train the DiMP networks, or to know the exact training details. 
- - [dimp.dimp18](train_settings/dimp/dimp18.py): The default settings used for training the DiMP model with ResNet-18 backbone.
- - [dimp.dimp50](train_settings/dimp/dimp50.py): The default settings used for training the DiMP model with ResNet-50 backbone.
+ The following setting files can be used to train the DiMP networks, or to know the exact training details.  
+ - [dimp.dimp18](train_settings/dimp/dimp18.py): The default settings used for training the DiMP model with ResNet-18 backbone.  
+ - [dimp.dimp50](train_settings/dimp/dimp50.py): The default settings used for training the DiMP model with ResNet-50 backbone.  
  
 ### ATOM
  The following setting file can be used to train the ATOM network, or to know the exact training details. 
