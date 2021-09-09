@@ -73,12 +73,12 @@ The tookit consists of the following sub-modules.
  The toolkit contains the implementation of the following trackers.  
 
 ### KeepTrack
-The official implementation for KeepTrack ([paper](https://arxiv.org/abs/2103.16556)).
+The official implementation for KeepTrack ([paper](https://arxiv.org/abs/2103.16556)).  
 The tracker implementation file can be found at [tracker.keep_track](tracker/keep_track).
 
 ##### Parameter Files
-Two parameter settings are provided.
-* **[default](parameter/keep_track/default.py)**: The default parameter setting was used to generate all results with SuperDiMP as base tracker.
+Two parameter settings are provided.  
+* **[default](parameter/keep_track/default.py)**: The default parameter setting was used to generate all results with SuperDiMP as base tracker.  
 * **[default_fast](parameter/keep_track/default_fast.py)**: The parameter setting for the speed optimized version that employs 3 instead of 10 box refinement iterations, a smaller search area, and a higher threshold for candidate detection of 0.1.
 
 ### LWL
