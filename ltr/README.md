@@ -48,7 +48,7 @@ The framework consists of the following sub-modules.
 ### KeepTrack
  In order to train KeepTrack the following three steps are required.  
  - Prepare the base tracker: Download the weights [super_dimp_simple.pth.tar](https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg) or retrain the tracker using the settings [dimp.super_dimp_simple](train_settings/dimp/super_dimp_simple.py).  
- - Prepare the training dataset: Download [target_candidates_dataset_dimp_simple_super_dimp_simple.json](https://drive.google.com/file/d/1gIlrYYpkYKAtZyNzkwUCaqAxYyMNC27S) or re-create the dataset by switching to `../pytracking/util_scripts` and running [create_distractor_dataset](../pytracking/util_scripts/create_distractor_dataset.py) using `python create_distractor_dataset.py dimp_simple super_dimp_simple lasot_train $DATASET_DIR`. Add the path to the dataset file to the `local.py` file.  
+ - Prepare the training dataset: Download [target_candidates_dataset_dimp_simple_super_dimp_simple.json](https://drive.google.com/file/d/1gIlrYYpkYKAtZyNzkwUCaqAxYyMNC27S) or re-create the dataset by switching to `../pytracking/util_scripts` and running [create_distractor_dataset](../pytracking/util_scripts/create_distractor_dataset.py) using `python create_distractor_dataset.py dimp_simple super_dimp_simple lasot_train $DATASET_DIR`. Add the path of the dataset file to the `local.py` file.  
  - Train KeepTrack using the settings [keep_track.keep_track](train_settings/keep_track/keep_track.py) using super_dimp_simple as base tracker.  
 
 ### LWL
