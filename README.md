@@ -37,7 +37,7 @@ The toolkit contains the implementation of the following trackers.
 ### KeepTrack
 
 **[[Paper]](https://arxiv.org/abs/2103.16556)  [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
-  [[MODELS]](MODEL_ZOO.md#Models-1)  [[Training Code]](./ltr/README.md#KeepTrack)  [[Tracker Code]](./pytracking/README.md#KeepTrack)**
+  [[Models]](MODEL_ZOO.md#Models-1)  [[Training Code]](./ltr/README.md#KeepTrack)  [[Tracker Code]](./pytracking/README.md#KeepTrack)**
 
 Official implementation of **KeepTrack**. KeepTrack actively handles distractor objects to
 continue tracking the target. It employs a learned target candidate association network, that
