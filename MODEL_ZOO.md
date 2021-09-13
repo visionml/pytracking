@@ -113,7 +113,7 @@ of the models on standard tracking datasets.
     <td>48.2</td>
     <td>-</td>
     <td>-</td>
-    <td><a href="https://drive.google.com/file/d/1JIhzF1yd1EFbVCKJMakqEjWngthySIS5">model</a></td>
+    <td><a href="https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg">base</a>, <a href="https://drive.google.com/file/d/1JIhzF1yd1EFbVCKJMakqEjWngthySIS5">model</a></td>
   </tr>
 </table>
 
