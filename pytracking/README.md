@@ -74,7 +74,9 @@ The tookit consists of the following sub-modules.
 
 ### KeepTrack
 The official implementation for KeepTrack ([paper](https://arxiv.org/abs/2103.16556)).  
-The tracker implementation file can be found at [tracker.keep_track](tracker/keep_track).
+The tracker implementation file can be found at [tracker.keep_track](tracker/keep_track).  
+The trained models of KeepTrack and the base tracker can be found at [keep_track.pth.tar](https://drive.google.com/file/d/1JIhzF1yd1EFbVCKJMakqEjWngthySIS5) and [super_dimp_simple.pth.tar](https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg).
+
 
 ##### Parameter Files
 Two parameter settings are provided.  

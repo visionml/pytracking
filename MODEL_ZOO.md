@@ -83,13 +83,25 @@ of the models on standard tracking datasets.
     <td>SuperDimp</td>
     <td>-</td>
     <td>70.1</td>
-    <td>64.7</td>
-    <td>68.1</td>
+    <td>64.8</td>
+    <td>67.7</td>
     <td>63.1</td>
     <td>-</td>
     <td>78.1</td>
     <td>-</td>
     <td><a href="https://drive.google.com/open?id=1qDptswis2FxihLRYLVRGDvx6aUoAVVLv">model</a></td>
+  </tr>
+  <tr>
+    <td>SuperDiMPSimple</td>
+    <td>-</td>
+    <td>70.5</td>
+    <td>64.4</td>
+    <td>68.2</td>
+    <td>63.5</td>
+    <td>43.7</td>
+    <td>-</td>
+    <td>-</td>
+    <td><a href="https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg">model</a></td>
   </tr>
   <tr>
     <td>KYS</td>
@@ -113,7 +125,7 @@ of the models on standard tracking datasets.
     <td>48.2</td>
     <td>-</td>
     <td>-</td>
-    <td><a href="https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg">base</a>, <a href="https://drive.google.com/file/d/1JIhzF1yd1EFbVCKJMakqEjWngthySIS5">model</a></td>
+    <td><a href="https://drive.google.com/file/d/1JIhzF1yd1EFbVCKJMakqEjWngthySIS5">model</a></td>
   </tr>
 </table>
 
