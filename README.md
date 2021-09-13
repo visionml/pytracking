@@ -31,10 +31,15 @@ Libraries for implementing and evaluating visual trackers. It includes
 * And much more...
 
 
+### [Model Zoo](MODEL_ZOO.md)
+The tracker models trained using PyTracking, along with their results on standard tracking 
+benchmarks are provided in the [model zoo](MODEL_ZOO.md). 
+
+
 ## Trackers
 The toolkit contains the implementation of the following trackers.
 
-### KeepTrack
+### KeepTrack (ICCV 2021)
 
 **[[Paper]](https://arxiv.org/abs/2103.16556)  [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
   [[Models]](MODEL_ZOO.md#Models-1)  [[Training Code]](./ltr/README.md#KeepTrack)  [[Tracker Code]](./pytracking/README.md#KeepTrack)**
@@ -48,7 +53,7 @@ it uses a training strategy that combines partial annotations with self-supervis
 ![KeepTrack_teaser_figure](pytracking/.figs/KeepTrack_teaser.png)
 
 
-### LWL
+### LWL (ECCV 2020)
 **[[Paper]](https://arxiv.org/pdf/2003.11540.pdf)  [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
   [[Models]](MODEL_ZOO.md#Models-1)  [[Training Code]](./ltr/README.md#LWL)  [[Tracker Code]](./pytracking/README.md#LWL)**
     
@@ -62,7 +67,7 @@ few-shot learner to train the target model. All modules in the architecture are 
 
 ![LWL overview figure](pytracking/.figs/lwtl_overview.png)
 
-### KYS
+### KYS (ECCV 2020)
 **[[Paper]](https://arxiv.org/pdf/2003.11014.pdf)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
   [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#KYS)  [[Tracker Code]](./pytracking/README.md#KYS)**
     
@@ -73,7 +78,7 @@ set of localized state vectors. These state vectors are propagated through the s
 model output to localize the target. The network is learned to effectively utilize the scene information by directly maximizing tracking performance on video segments
 ![KYS overview figure](pytracking/.figs/kys_overview.png)
 
-### PrDiMP
+### PrDiMP (CVPR 2020)
 **[[Paper]](https://arxiv.org/pdf/2003.12565)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
   [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#PrDiMP)  [[Tracker Code]](./pytracking/README.md#DiMP)**
     
@@ -83,7 +88,7 @@ The network predicts the conditional probability density of the target state giv
 The probability density is flexibly parametrized by the neural network itself.
 The regression network is trained by directly minimizing the Kullback-Leibler divergence. 
 
-### DiMP
+### DiMP (ICCV 2019)
 **[[Paper]](https://arxiv.org/pdf/1904.07220)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
   [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#DiMP)  [[Tracker Code]](./pytracking/README.md#DiMP)**
     
@@ -96,7 +101,7 @@ includes an initializer network that efficiently provides an initial estimate of
 
 ![DiMP overview figure](pytracking/.figs/dimp_overview.png)
  
-### ATOM
+### ATOM (CVPR 2019)
 **[[Paper]](https://arxiv.org/pdf/1811.07628)  [[Raw results]](MODEL_ZOO.md#Raw-Results)
   [[Models]](MODEL_ZOO.md#Models)  [[Training Code]](./ltr/README.md#ATOM)  [[Tracker Code]](./pytracking/README.md#ATOM)**  
  
@@ -108,7 +113,7 @@ optimization techniques to discriminate between the target object and background
  
 ![ATOM overview figure](pytracking/.figs/atom_overview.png)
  
-### ECO
+### ECO/UPDT (CVPR 2017/ECCV 2018)
 **[[Paper]](https://arxiv.org/pdf/1611.09224.pdf)  [[Models]](https://drive.google.com/open?id=1aWC4waLv_te-BULoy0k-n_zS-ONms21S)  [[Tracker Code]](./pytracking/README.md#ECO)**  
 
 An unofficial implementation of the **ECO** tracker. It is implemented based on an extensive and general library for [complex operations](pytracking/libs/complex.py) and [Fourier tools](pytracking/libs/fourier.py). The implementation differs from the version used in the original paper in a few important aspects. 
@@ -117,11 +122,6 @@ An unofficial implementation of the **ECO** tracker. It is implemented based on 
 3. The GMM memory module is not implemented, instead the raw projected samples are stored.  
 
 Please refer to the [official implementation of ECO](https://github.com/martin-danelljan/ECO) if you are looking to reproduce the results in the ECO paper or download the raw results.
-
-
-## [Model Zoo](MODEL_ZOO.md)
-The tracker models trained using PyTracking, along with their results on standard tracking 
-benchmarks are provided in the [model zoo](MODEL_ZOO.md). 
 
 
 ## Installation
