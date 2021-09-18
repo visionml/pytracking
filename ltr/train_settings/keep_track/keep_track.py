@@ -1,4 +1,4 @@
-import torch
+import os
 import torch.optim as optim
 from ltr.dataset import LasotCandidateMatching
 from ltr.data import processing, sampler, LTRLoader
@@ -8,7 +8,7 @@ import ltr.actors.tracking as tcm_actors
 from ltr.trainers import LTRTrainer
 import ltr.data.transforms as tfm
 from ltr import MultiGPU
-from ltr.admin.loading import load_pretrained
+import ltr.admin.loading as network_loading
 
 
 def run(settings):
@@ -96,8 +96,10 @@ def run(settings):
     net = tcm.target_candidate_matching_net_resnet50(backbone_pretrained=True,
                                                      frozen_backbone_layers=['conv1', 'bn1', 'layer1', 'layer2'])
 
-    net_pretrained, _ = load_pretrained('dimp', 'super_dimp_hinge', backbone_pretrained=False)
-    net.load_state_dict(net_pretrained.state_dict(), strict=False)
+    dimp_weights_path = os.path.join(settings.env.pretrained_networks, 'super_dimp_simple.pth.tar')
+    base_net, _ = network_loading.load_network(checkpoint=dimp_weights_path, backbone_pretrained=False)
+
+    net.load_state_dict(base_net.state_dict(), strict=False)
 
     for p in net.parameters():
         p.requires_grad_(True)
