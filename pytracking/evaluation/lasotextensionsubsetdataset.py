@@ -5,7 +5,7 @@ from pytracking.utils.load_text import load_text
 
 class LaSOTExtensionSubsetDataset(BaseDataset):
     """
-    LaSOT test set consisting of 280 videos (see Protocol-II in the LaSOT paper)
+    LaSOT Extension Subset dataset consisting of 150 videos
 
     Publication:
         LaSOT: A High-quality Large-scale Single Object Tracking Benchmark
