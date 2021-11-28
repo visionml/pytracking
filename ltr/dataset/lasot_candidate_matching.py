@@ -6,8 +6,6 @@ import numpy as np
 import pandas
 import csv
 import random
-from pytracking import dcf
-import ltr.data.processing_utils as prutils
 from collections import OrderedDict, defaultdict
 from ltr.dataset.base_video_dataset import BaseVideoDataset
 from ltr.data.image_loader import jpeg4py_loader
@@ -48,8 +46,6 @@ class LasotCandidateMatching(BaseVideoDataset):
         self.seq_per_class = self._build_class_list()
 
         self.dataset = self._load_dataset(path_to_json)
-        # self.dataset = self._load_dataset(os.path.join(root, 'target_candidates_dataset_new.json'))
-
 
     def _load_dataset(self, path):
         with open(path, 'r') as f:
@@ -199,22 +195,6 @@ class LasotCandidateMatching(BaseVideoDataset):
         target_anno_coord = torch.FloatTensor(data['target_anno_coord'][idx])
 
         img = self.image_loader(self._get_frame_path(seq_img_path, frame_id))
-
-        return dict(search_area_box=search_area_box, img=img, target_anno_coord=target_anno_coord,
-                    target_candidate_coords=target_candidate_coords, target_candidate_scores=target_candidate_scores)
-
-    def _get_dumped_data(self, seq_path, seq_img_path, frame_id):
-        data_numpy = np.load(self._get_dumped_data_path(seq_path, frame_id))
-
-        search_area_box = torch.tensor(data_numpy['search_area_box'].astype(np.float32))
-        target_scores = torch.tensor(data_numpy['target_scores'].astype(np.float32))
-        anno_label = torch.tensor(data_numpy['anno_label'].astype(np.float32))
-        img = self.image_loader(self._get_frame_path(seq_img_path, frame_id))
-
-        target_anno_score, target_anno_coord = dcf.max2d(anno_label)
-
-        target_candidate_coords, target_candidate_scores = prutils.find_local_maxima(target_scores.squeeze(), th=0.05, ks=5)
-
 
         return dict(search_area_box=search_area_box, img=img, target_anno_coord=target_anno_coord,
                     target_candidate_coords=target_candidate_coords, target_candidate_scores=target_candidate_scores)
