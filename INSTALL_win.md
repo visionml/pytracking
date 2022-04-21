@@ -2,6 +2,9 @@
 
 This document contains detailed instructions for installing the necessary dependencies for PyTracking on Windows. The instructions have been tested on a Windows 10 system with Visual Studio 2015. **Notice that Windows installation is much more complex. [Installation on Linux (Ubuntu) is highly recommended.](INSTALL.md)**
 
+If you have problems, please check these issues:
+* https://github.com/visionml/pytracking/issues/299#issue-1070519705
+
 ### Requirements  
 * Conda 64 installation with Python 3.7. If not already installed, install from https://www.anaconda.com/distribution/. 
 * Nvidia GPU.
