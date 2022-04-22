@@ -23,6 +23,9 @@ def apply_filter(feat, filter, dilation_factors=None):
 
     assert num_filters % groups == 0 and num_channels % groups == 0
 
+    if filter.shape[-2] == 1 and filter.shape[-1] == 1 and groups == 1:
+        return _apply_filter_ksz1(feat, filter)
+
     if multiple_filters:
         if dilation_factors is None:
             scores = F.conv2d(feat.reshape(num_images, -1, feat.shape[-2], feat.shape[-1]), filter.view(-1, *filter.shape[-3:]),
@@ -52,6 +55,36 @@ def apply_filter(feat, filter, dilation_factors=None):
                       padding=padding, groups=num_sequences)
 
     return scores.view(num_images, num_sequences, scores.shape[-2], scores.shape[-1])
+
+
+def _apply_filter_ksz1(feat, filter):
+    """Applies the filter on the input features (feat). The number of groups is automatically calculated.
+    args:
+        feat: These are the input features. Must have dimensions (images_in_sequence, sequences, feat_dim, H, W)
+        filter: The filter to apply. Must have dimensions (sequences, feat_dim, fH, fW) or (sequences, filters, feat_dim/groups, fH, fW)
+    output:
+        scores: Output of filtering. Dimensions (images_in_sequence, sequences, yH, yW) or (images_in_sequence, sequences, filters, yH, yW)
+    """
+
+    multiple_filters = (filter.dim() == 5)
+
+    assert filter.shape[-2] == 1 and filter.shape[-1] == 1
+
+    num_images = feat.shape[0]
+    num_sequences = feat.shape[1] if feat.dim() == 5 else 1
+    num_channels = feat.shape[-3]
+    groups = num_channels // filter.shape[-3]
+
+    assert groups == 1
+
+    # scores = torch.einsum('nc, incs->nis', filter.reshape(filter.shape[:-2]), feat.reshape(*feat.shape[:-2], -1))
+    scores = torch.matmul(filter.reshape(num_sequences, 1, 1, num_channels),
+                          feat.reshape(num_sequences, num_images, num_channels, -1))
+
+    if multiple_filters:
+        return scores.reshape(num_images, num_sequences, -1, feat.shape[-2], feat.shape[-1])
+
+    return scores.reshape(num_images, num_sequences, feat.shape[-2], feat.shape[-1])
 
 
 def apply_feat_transpose(feat, input, filter_ksz, training=True, groups=1):

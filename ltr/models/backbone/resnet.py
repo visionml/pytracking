@@ -272,3 +272,20 @@ def resnet50(output_layers=None, pretrained=False, **kwargs):
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['resnet50']))
     return model
+
+
+def resnet101(output_layers=None, pretrained=False, **kwargs):
+    """Constructs a ResNet-101 model.
+    """
+    if output_layers is None:
+        output_layers = ['default']
+    else:
+        for l in output_layers:
+            if l not in ['conv1', 'layer1', 'layer2', 'layer3', 'layer4', 'fc']:
+                raise ValueError('Unknown layer: {}'.format(l))
+
+
+    model = ResNet(Bottleneck, [3, 4, 23, 3], output_layers, **kwargs)
+    if pretrained:
+        model.load_state_dict(model_zoo.load_url(model_urls['resnet101']))
+    return model
