@@ -413,36 +413,6 @@ class KeepTrack(BaseTracker):
 
         prev_target_vec = (self.pos - sample_pos[scale_ind,:]) / ((self.img_support_sz / output_sz) * sample_scale)
 
-        if self.params.get('ideal_peak_localization', False):
-            gth_box = self.frame_reader.get_bbox(self.frame_num - 1, None)
-            if gth_box is not None:
-                gth_center = torch.tensor(gth_box[:2] + (gth_box[2:] - 1) / 2)[[1, 0]]
-                anno_y = self.get_label_function(gth_center, sample_pos[scale_ind, :], sample_scales[scale_ind])
-                max_score_anno, max_disp_anno = dcf.max2d(anno_y[0][0])
-                max_disp_anno = max_disp_anno.float().cpu().view(-1)
-                target_disp_anno = max_disp_anno - score_center
-                disp_norm_anno_1 = torch.sqrt(torch.sum((target_disp1 - target_disp_anno) ** 2))
-                disp_norm_anno_2 = torch.sqrt(torch.sum((target_disp2 - target_disp_anno) ** 2))
-
-                if disp_norm_anno_1 < disp_norm_anno_2:
-                    if max_score1.item() < self.params.target_not_found_threshold:
-                        return translation_vec1, scale_ind, scores_hn, 'not_found'
-                    elif max_score2 > self.params.distractor_threshold * max_score1:
-                        return translation_vec1, scale_ind, scores_hn, 'hard_negative'
-                    else:
-                        return translation_vec1, scale_ind, scores_hn, 'normal'
-
-                if disp_norm_anno_1 > disp_norm_anno_2:
-                    if max_score2.item() < self.params.target_not_found_threshold:
-                        return translation_vec2, scale_ind, scores_hn, 'not_found'
-                    elif max_score1 > self.params.distractor_threshold * max_score2:
-                        return translation_vec2, scale_ind, scores_hn, 'hard_negative'
-                    else:
-                        return translation_vec2, scale_ind, scores_hn, 'normal'
-
-                if disp_norm_anno_2 == disp_norm_anno_1:
-                    return translation_vec1, scale_ind, scores_hn, 'uncertain'
-
         # Handle the different cases
         if max_score2 > self.params.distractor_threshold * max_score1:
             disp_norm1 = torch.sqrt(torch.sum((target_disp1-prev_target_vec)**2))
@@ -1127,15 +1097,7 @@ class KeepTrack(BaseTracker):
 
     def visdom_draw_tracking(self, image, box, segmentation=None):
         if hasattr(self, 'search_area_box'):
-            if self.params.get('use_gt_box', False):
-                bbox_gth = self.frame_reader.get_bbox(self.frame_num - 1, None)
-                if np.any(np.isnan(bbox_gth)):
-                    self.visdom.register((image, box, self.search_area_box), 'Tracking', 1, 'Tracking')
-                else:
-                    self.visdom.register((image, box, self.search_area_box,torch.from_numpy(bbox_gth)),
-                                          'Tracking', 1, 'Tracking')
-            else:
-                self.visdom.register((image, box, self.search_area_box), 'Tracking', 1, 'Tracking')
+            self.visdom.register((image, box, self.search_area_box), 'Tracking', 1, 'Tracking')
         else:
             self.visdom.register((image, box), 'Tracking', 1, 'Tracking')
 
