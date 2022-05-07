@@ -97,7 +97,7 @@ def sample_patch(im: torch.Tensor, pos: torch.Tensor, sample_sz: torch.Tensor, o
     # Do downsampling
     if df > 1:
         os = posl % df              # offset
-        posl = (posl - os) // df     # new position
+        posl = (posl - os) / df     # new position
         im2 = im[..., os[0].item()::df, os[1].item()::df]   # downsample
     else:
         im2 = im
@@ -106,8 +106,8 @@ def sample_patch(im: torch.Tensor, pos: torch.Tensor, sample_sz: torch.Tensor, o
     szl = torch.max(sz.round(), torch.Tensor([2])).long()
 
     # Extract top and bottom coordinates
-    tl = posl - (szl - 1) // 2
-    br = posl + szl//2 + 1
+    tl = posl - (szl - 1) / 2
+    br = posl + szl/2 + 1
 
     # Shift the crop to inside
     if mode == 'inside' or mode == 'inside_major':
@@ -125,10 +125,13 @@ def sample_patch(im: torch.Tensor, pos: torch.Tensor, sample_sz: torch.Tensor, o
         # im_patch = im2[...,tl[0].item():br[0].item(),tl[1].item():br[1].item()]
 
     # Get image patch
+    pad = (-tl[1].int().item(), br[1].int().item() - im2.shape[3],
+           -tl[0].int().item(), br[0].int().item() - im2.shape[2])
+
     if not is_mask:
-        im_patch = F.pad(im2, (-tl[1].item(), br[1].item() - im2.shape[3], -tl[0].item(), br[0].item() - im2.shape[2]), pad_mode)
+        im_patch = F.pad(im2, pad, pad_mode)
     else:
-        im_patch = F.pad(im2, (-tl[1].item(), br[1].item() - im2.shape[3], -tl[0].item(), br[0].item() - im2.shape[2]))
+        im_patch = F.pad(im2, pad)
 
     # Get image coordinates
     patch_coord = df * torch.cat((tl, br)).view(1,4)
