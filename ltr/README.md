@@ -47,8 +47,8 @@ The framework consists of the following sub-modules.
 
 ### ToMP
 The following setting files can be used to train the ToMP tracker. We omit training with a separate test encoding since the training is more stable but leads to comparable performance. Set the flag to false to use the same setup as in the paper.
-- [tomp.tomp50](train_settings/tomp/tomp50.py): The default setting use for training with ResNet50 backbone. 
-- [tomp.tomp101](train_settings/tomp/tomp101.py): The default setting use for training with ResNet101 backbone.
+ - [tomp.tomp50](train_settings/tomp/tomp50.py): The default setting use for training with ResNet50 backbone. 
+ - [tomp.tomp101](train_settings/tomp/tomp101.py): The default setting use for training with ResNet101 backbone.
 
 ### KeepTrack
  In order to train KeepTrack the following three steps are required.  
