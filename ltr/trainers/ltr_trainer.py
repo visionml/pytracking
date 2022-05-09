@@ -4,11 +4,18 @@ from ltr.trainers import BaseTrainer
 from ltr.admin.stats import AverageMeter, StatValue
 from ltr.admin.tensorboard import TensorboardWriter
 import torch
+import torch.nn as nn
 import time
 
 
+def freeze_batchnorm_layers(net):
+    for module in net.modules():
+        if isinstance(module, nn.BatchNorm2d):
+            module.eval()
+
+
 class LTRTrainer(BaseTrainer):
-    def __init__(self, actor, loaders, optimizer, settings, lr_scheduler=None):
+    def __init__(self, actor, loaders, optimizer, settings, lr_scheduler=None, freeze_backbone_bn_layers=False):
         """
         args:
             actor - The actor for training the network
@@ -17,6 +24,7 @@ class LTRTrainer(BaseTrainer):
             optimizer - The optimizer used for training, e.g. Adam
             settings - Training settings
             lr_scheduler - Learning rate scheduler
+            freeze_backbone_bn_layers - Set to True to freeze the bach norm statistics in the backbone during training.
         """
         super().__init__(actor, loaders, optimizer, settings, lr_scheduler)
 
@@ -30,6 +38,8 @@ class LTRTrainer(BaseTrainer):
         self.tensorboard_writer = TensorboardWriter(tensorboard_writer_dir, [l.name for l in loaders])
 
         self.move_data_to_gpu = getattr(settings, 'move_data_to_gpu', True)
+
+        self.freeze_backbone_bn_layers = freeze_backbone_bn_layers
 
     def _set_default_settings(self):
         # Dict of all default values
@@ -45,6 +55,10 @@ class LTRTrainer(BaseTrainer):
         """Do a cycle of training or validation."""
 
         self.actor.train(loader.training)
+
+        if self.freeze_backbone_bn_layers:
+            freeze_batchnorm_layers(self.actor.net.feature_extractor)
+
         torch.set_grad_enabled(loader.training)
 
         self._init_timing()

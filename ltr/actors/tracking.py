@@ -511,3 +511,70 @@ class TargetCandiateMatchingActor(BaseActor):
                 stats[key] = torch.mean(val[~torch.isnan(val)]).item()
 
         return loss, stats
+
+
+class ToMPActor(BaseActor):
+    """Actor for training the DiMP network."""
+    def __init__(self, net, objective, loss_weight=None):
+        super().__init__(net, objective)
+        if loss_weight is None:
+            loss_weight = {'bb_ce': 1.0}
+        self.loss_weight = loss_weight
+
+    def compute_iou_at_max_score_pos(self, scores, ltrb_gth, ltrb_pred):
+        if ltrb_pred.dim() == 4:
+            ltrb_pred = ltrb_pred.unsqueeze(0)
+
+        n = scores.shape[1]
+        ids = scores.reshape(1, n, -1).max(dim=2)[1]
+        g = ltrb_gth.flatten(3)[0, torch.arange(0, n), :, ids].view(1, n, 4, 1, 1)
+        p = ltrb_pred.flatten(3)[0, torch.arange(0, n), :, ids].view(1, n, 4, 1, 1)
+
+        _, ious_pred_center = self.objective['giou'](p, g) # nf x ns x x 4 x h x w
+        ious_pred_center[g.view(n, 4).min(dim=1)[0] < 0] = 0
+
+        return ious_pred_center
+
+    def __call__(self, data):
+        """
+        args:
+            data - The input data, should contain the fields 'train_images', 'test_images', 'train_anno',
+                    'test_proposals', 'proposal_iou' and 'test_label'.
+
+        returns:
+            loss    - the training loss
+            stats  -  dict containing detailed losses
+        """
+        # Run network
+        target_scores, bbox_preds = self.net(train_imgs=data['train_images'],
+                                             test_imgs=data['test_images'],
+                                             train_bb=data['train_anno'],
+                                             train_label=data['train_label'],
+                                             train_ltrb_target=data['train_ltrb_target'])
+
+        loss_giou, ious = self.objective['giou'](bbox_preds, data['test_ltrb_target'], data['test_sample_region'])
+
+        # Classification losses for the different optimization iterations
+        clf_loss_test = self.objective['test_clf'](target_scores, data['test_label'], data['test_anno'])
+
+        loss = self.loss_weight['giou'] * loss_giou + self.loss_weight['test_clf'] * clf_loss_test
+
+        if torch.isnan(loss):
+            raise ValueError('NaN detected in loss')
+
+        ious_pred_center = self.compute_iou_at_max_score_pos(target_scores, data['test_ltrb_target'], bbox_preds)
+
+        stats = {'Loss/total': loss.item(),
+                 'Loss/GIoU': loss_giou.item(),
+                 'Loss/weighted_GIoU': self.loss_weight['giou']*loss_giou.item(),
+                 'Loss/clf_loss_test': clf_loss_test.item(),
+                 'Loss/weighted_clf_loss_test': self.loss_weight['test_clf']*clf_loss_test.item(),
+                 'mIoU': ious.mean().item(),
+                 'maxIoU': ious.max().item(),
+                 'minIoU': ious.min().item(),
+                 'mIoU_pred_center': ious_pred_center.mean().item()}
+
+        if ious.max().item() > 0:
+            stats['stdIoU'] = ious[ious>0].std().item()
+
+        return loss, stats

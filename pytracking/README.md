@@ -6,6 +6,7 @@ A general python library for visual tracking algorithms.
 * [Running a tracker](#running-a-tracker)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [ToMP](#ToMP) 
    * [KeepTrack](#KeepTrack)
    * [LWL](#LWL)
    * [KYS](#KYS)
@@ -71,6 +72,17 @@ The tookit consists of the following sub-modules.
  
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
+
+### ToMP
+The official implementation for ToMP ([paper](https://arxiv.org/abs/2203.11192)).  
+The tracker implementation file can be found at [tracker.tomp](tracker/tomp).  
+The trained models of KeepTrack and the base tracker can be found at [tomp50.pth.tar](https://drive.google.com/file/d/1dU1IYIv5x_7iOUVTgh8uOq36POFOQBWT) and [tomp101.pth.tar](https://drive.google.com/file/d/1XQAtrM9n_PHQn-B2i8y6Q-PQFcAoKObA).
+
+
+##### Parameter Files
+Two parameter settings are provided. 
+* **[tomp50](parameter/tomp/tomp50.py)**: This set of parameters was used to generate all results using a ResNet50 backbone.
+* **[tomp101](parameter/tomp/tomp101.py)**: This set of parameters was used to generate all results using a ResNet101 backbone.
 
 ### KeepTrack
 The official implementation for KeepTrack ([paper](https://arxiv.org/abs/2103.16556)).  
