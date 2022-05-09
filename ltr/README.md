@@ -44,7 +44,12 @@ The framework consists of the following sub-modules.
  
 ## Trackers
  The framework currently contains the training code for the following trackers.
- 
+
+### ToMP
+The following setting files can be used to train the ToMP tracker. We omit training with a separate test encoding since the training is more stable but leads to comparable performance. Set the flag to false to use the same setup as in the paper.
+- [tomp.tomp50](train_settings/tomp/tomp50.py): The default setting use for training with ResNet50 backbone. 
+- [tomp.tomp101](train_settings/tomp/tomp101.py): The default setting use for training with ResNet101 backbone.
+
 ### KeepTrack
  In order to train KeepTrack the following three steps are required.  
  - Prepare the base tracker: Download the weights [super_dimp_simple.pth.tar](https://drive.google.com/file/d/1lzwdeX9HBefQwznMaX5AKAGda7tqeQtg) or retrain the tracker using the settings [dimp.super_dimp_simple](train_settings/dimp/super_dimp_simple.py).  

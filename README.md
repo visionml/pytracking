@@ -2,7 +2,7 @@
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
 ### :fire: One tracking paper accepted at CVPR 2022! 👇
-* [Transforming Model Prediction for Tracking](https://arxiv.org/abs/2203.11192) | Code coming here soon...
+* [Transforming Model Prediction for Tracking](https://arxiv.org/abs/2203.11192) | **Code available!**
 
 ### Two tracking/VOS papers accepted at ICCV 2021!
 * [Learning Target Candidate Association to Keep Track of What Not to Track](https://arxiv.org/abs/2103.16556) | **Code available!**  
@@ -41,6 +41,18 @@ benchmarks are provided in the [model zoo](MODEL_ZOO.md).
 
 ## Trackers
 The toolkit contains the implementation of the following trackers.
+
+### ToMP (CVPR 2022)
+
+**[[Paper]](https://arxiv.org/abs/2203.11192) [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
+  [[Models]](MODEL_ZOO.md#Models-1) [[Training Code]](./ltr/README.md#ToMP)  [[Tracker Code]](./pytracking/README.md#ToMP)**
+
+Official implementation of **ToMP**. ToMP employs a Transformer-based 
+model prediction module in order to localize the target. The model predictor is further exteneded to estimate a second set
+of weights that are applied for accurate bounding box regression.
+The resulting tracker ToMP relies on training and on test frame information in order to predict all weights transductively.
+
+![ToMP_teaser_figure](pytracking/.figs/ToMP_teaser.png)
 
 ### KeepTrack (ICCV 2021)
 

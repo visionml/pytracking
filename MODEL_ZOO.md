@@ -127,6 +127,30 @@ of the models on standard tracking datasets.
     <td>-</td>
     <td><a href="https://drive.google.com/file/d/1JIhzF1yd1EFbVCKJMakqEjWngthySIS5">model</a></td>
   </tr>
+  <tr>
+    <td>ToMP-50</td>
+    <td>-</td>
+    <td>70.1</td>
+    <td>66.9</td>
+    <td>69.0</td>
+    <td>67.6</td>
+    <td>45.4</td>
+    <td>81.2</td>
+    <td>-</td>
+    <td><a href="https://drive.google.com/file/d/1dU1IYIv5x_7iOUVTgh8uOq36POFOQBWT">model</a></td>
+  </tr>
+  <tr>
+    <td>ToMP-101</td>
+    <td>-</td>
+    <td>70.1</td>
+    <td>66.7</td>
+    <td>66.9</td>
+    <td>68.5</td>
+    <td>45.9</td>
+    <td>81.5</td>
+    <td>-</td>
+    <td><a href="https://drive.google.com/file/d/1XQAtrM9n_PHQn-B2i8y6Q-PQFcAoKObA">model</a></td>
+  </tr>
 </table>
 
 ### Raw Results
