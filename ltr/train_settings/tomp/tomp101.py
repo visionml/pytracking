@@ -11,7 +11,7 @@ from ltr.models.loss.bbr_loss import GIoULoss
 
 
 def run(settings):
-    settings.description = 'ToMP101: CVPR submission settings.'
+    settings.description = 'ToMP101'
     settings.batch_size = 24
     settings.num_workers = 12
     settings.multi_gpu = True
@@ -46,6 +46,7 @@ def run(settings):
     settings.weight_clf = 100.0
     settings.normalized_bbreg_coords = True
     settings.center_sampling_radius = 1.0
+    settings.use_test_frame_encoding = False  # Set to True to use the same as in the paper but is less stable to train.
 
     # Train datasets
     lasot_train = Lasot(settings.env.lasot_dir, split='train')
@@ -120,7 +121,8 @@ def run(settings):
                              head_feat_norm=True, final_conv=True, out_feature_dim=256, feature_sz=settings.feature_sz,
                              frozen_backbone_layers=settings.frozen_backbone_layers,
                              num_encoder_layers=settings.num_encoder_layers,
-                             num_decoder_layers=settings.num_decoder_layers)
+                             num_decoder_layers=settings.num_decoder_layers,
+                             use_test_frame_encoding=settings.use_test_frame_encoding)
 
 
     # Wrap the network for multi GPU training

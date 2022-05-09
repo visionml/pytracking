@@ -81,7 +81,7 @@ class ToMPnet(nn.Module):
 @model_constructor
 def tompnet50(filter_size=4, head_layer='layer3', backbone_pretrained=True, head_feat_blocks=0, head_feat_norm=True,
               final_conv=True, out_feature_dim=512, frozen_backbone_layers=(), nhead=8, num_encoder_layers=6,
-              num_decoder_layers=6, dim_feedforward=2048, feature_sz=18):
+              num_decoder_layers=6, dim_feedforward=2048, feature_sz=18, use_test_frame_encoding=True):
     # Backbone
     backbone_net = backbones.resnet50(pretrained=backbone_pretrained, frozen_layers=frozen_backbone_layers)
 
@@ -105,7 +105,8 @@ def tompnet50(filter_size=4, head_layer='layer3', backbone_pretrained=True, head
                                     num_decoder_layers=num_decoder_layers, dim_feedforward=dim_feedforward)
 
 
-    filter_predictor = fp.FilterPredictor(transformer, feature_sz=feature_sz)
+    filter_predictor = fp.FilterPredictor(transformer, feature_sz=feature_sz,
+                                          use_test_frame_encoding=use_test_frame_encoding)
 
     classifier = heads.LinearFilterClassifier(num_channels=out_feature_dim)
 
@@ -122,7 +123,7 @@ def tompnet50(filter_size=4, head_layer='layer3', backbone_pretrained=True, head
 @model_constructor
 def tompnet101(filter_size=1, head_layer='layer3', backbone_pretrained=True, head_feat_blocks=0, head_feat_norm=True,
                final_conv=True, out_feature_dim=512, frozen_backbone_layers=(), nhead=8, num_encoder_layers=6,
-               num_decoder_layers=6, dim_feedforward=2048, feature_sz=18):
+               num_decoder_layers=6, dim_feedforward=2048, feature_sz=18, use_test_frame_encoding=True):
     # Backbone
     backbone_net = backbones.resnet101(pretrained=backbone_pretrained, frozen_layers=frozen_backbone_layers)
 
@@ -146,7 +147,8 @@ def tompnet101(filter_size=1, head_layer='layer3', backbone_pretrained=True, hea
                                     num_decoder_layers=num_decoder_layers, dim_feedforward=dim_feedforward)
 
 
-    filter_predictor = fp.FilterPredictor(transformer, feature_sz=feature_sz)
+    filter_predictor = fp.FilterPredictor(transformer, feature_sz=feature_sz,
+                                          use_test_frame_encoding=use_test_frame_encoding)
 
     classifier = heads.LinearFilterClassifier(num_channels=out_feature_dim)
 

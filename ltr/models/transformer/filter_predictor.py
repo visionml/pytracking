@@ -17,15 +17,19 @@ def MLP(channels, do_bn=True):
 
 
 class FilterPredictor(nn.Module):
-    def __init__(self, transformer, feature_sz):
+    def __init__(self, transformer, feature_sz, use_test_frame_encoding=True):
         super().__init__()
         self.transformer = transformer
         self.feature_sz = feature_sz
+        self.use_test_frame_encoding = use_test_frame_encoding
 
         self.box_encoding = MLP([4, self.transformer.d_model//4, self.transformer.d_model, self.transformer.d_model])
 
         self.query_embed_fg = nn.Embedding(1, self.transformer.d_model)
-        self.query_embed_test = nn.Embedding(1, self.transformer.d_model)
+
+        if self.use_test_frame_encoding:
+            self.query_embed_test = nn.Embedding(1, self.transformer.d_model)
+
         self.query_embed_fg_decoder = self.query_embed_fg
 
         self.pos_encoding = PositionEmbeddingSine(num_pos_feats=self.transformer.d_model//2, sine_type='lin_sine',
@@ -69,9 +73,12 @@ class FilterPredictor(nn.Module):
 
         train_ltrb_target_enc = self.box_encoding(train_ltrb_target_seq_T).permute(2,0,1) # Nf_tr*H*H,Ns,C
 
-        test_token = self.query_embed_test.weight.reshape(1, 1, -1)
-        test_label_enc = torch.ones_like(test_feat_seq) * test_token
-        feat = torch.cat([train_feat_seq + train_label_enc + train_ltrb_target_enc, test_feat_seq + test_label_enc], dim=0)
+        if self.use_test_frame_encoding:
+            test_token = self.query_embed_test.weight.reshape(1, 1, -1)
+            test_label_enc = torch.ones_like(test_feat_seq) * test_token
+            feat = torch.cat([train_feat_seq + train_label_enc + train_ltrb_target_enc, test_feat_seq + test_label_enc], dim=0)
+        else:
+            feat = torch.cat([train_feat_seq + train_label_enc + train_ltrb_target_enc, test_feat_seq], dim=0)
 
         pos = torch.cat([train_pos, test_pos], dim=0)
 
@@ -115,9 +122,12 @@ class FilterPredictor(nn.Module):
 
         train_ltrb_target_enc = self.box_encoding(train_ltrb_target_seq_T).permute(2, 0, 1)  # Nf_tr*H*H,Ns,C
 
-        test_token = self.query_embed_test.weight.reshape(1, 1, -1)
-        test_label_enc = torch.ones_like(test_feat_seq) * test_token
-        feat = torch.cat([train_feat_seq + train_label_enc + train_ltrb_target_enc, test_feat_seq + test_label_enc], dim=0)
+        if self.use_test_frame_encoding:
+            test_token = self.query_embed_test.weight.reshape(1, 1, -1)
+            test_label_enc = torch.ones_like(test_feat_seq) * test_token
+            feat = torch.cat([train_feat_seq + train_label_enc + train_ltrb_target_enc, test_feat_seq + test_label_enc], dim=0)
+        else:
+            feat = torch.cat([train_feat_seq + train_label_enc + train_ltrb_target_enc, test_feat_seq], dim=0)
 
         pos = torch.cat([train_pos, test_pos], dim=0)
 
