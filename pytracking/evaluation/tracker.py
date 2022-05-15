@@ -15,6 +15,7 @@ from pytracking.evaluation.multi_object_wrapper import MultiObjectWrapper
 from pathlib import Path
 import torch
 
+import threading
 
 _tracker_disp_colors = {1: (0, 255, 0), 2: (0, 0, 255), 3: (255, 0, 0),
                         4: (255, 255, 255), 5: (0, 0, 0), 6: (0, 255, 128),
@@ -50,6 +51,10 @@ class Tracker:
         self.parameter_name = parameter_name
         self.run_id = run_id
         self.display_name = display_name
+        self.rtsp = 'rtsp://192.168.0.60/0'                   # RTSP Stream or Web Stream = Use 0 if webcam needs to be used.
+        
+        self.skip_frame = 1                                   # Number of frames to skip while processing   
+        self.camera_flag = False
 
         env = env_settings()
         if self.run_id is None:
@@ -231,6 +236,56 @@ class Tracker:
         output['object_presence_score_threshold'] = tracker.params.get('object_presence_score_threshold', 0.55)
 
         return output
+    
+    def camera_video(self, videofilepath, sf):
+
+        self.cap = cv.VideoCapture(videofilepath)
+
+        self.camera_thread = False                             # Camera Function thread Flag
+
+        counter = 0
+        skip_frame = sf
+
+        while True:
+            if self.camera_flag == False:
+                self.success, self.frame = self.cap.read()
+
+                counter += 1
+
+                if counter == skip_frame + 1:
+                    self.camera_flag = True
+
+                    self.new_frame = self.frame
+
+                    counter = 0
+
+            if self.success == False:
+                break
+
+            if self.camera_thread == True:
+                print('Quit !!!')
+                break
+
+            time.sleep(0.005)
+
+    def camera_rtsp(self, rtsp):
+
+        self.cap = cv.VideoCapture(rtsp)
+
+        self.camera_thread = False                             # Camera Function thread Flag
+
+        while True:
+            self.success, self.frame = self.cap.read()
+            self.camera_flag = True
+
+            if self.success == False:
+                break
+
+            if self.camera_thread == True:
+                print('Quit !!!')
+                break
+
+            time.sleep(0.005)
 
     def run_video(self, videofilepath, optional_box=None, debug=None, visdom_info=None, save_results=False):
         """Run the tracker with the video file.
@@ -266,94 +321,103 @@ class Tracker:
 
         output_boxes = []
 
-        cap = cv.VideoCapture(videofilepath)
+        camera = threading.Thread(target=self.camera_video, args=(videofilepath, self.skip_frame,))
+        camera.start()
+        print('Camera initiated')
+
         display_name = 'Display: ' + tracker.params.tracker_name
         cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
         cv.resizeWindow(display_name, 960, 720)
-        success, frame = cap.read()
-        cv.imshow(display_name, frame)
+        cv.imshow(display_name, self.frame)
+
 
         def _build_init_info(box):
             return {'init_bbox': OrderedDict({1: box}), 'init_object_ids': [1, ], 'object_ids': [1, ],
                     'sequence_object_ids': [1, ]}
 
-        if success is not True:
+        if self.success is not True:
             print("Read frame from {} failed.".format(videofilepath))
             exit(-1)
         if optional_box is not None:
             assert isinstance(optional_box, (list, tuple))
             assert len(optional_box) == 4, "valid box's foramt is [x,y,w,h]"
-            tracker.initialize(frame, _build_init_info(optional_box))
+            tracker.initialize(self.frame, _build_init_info(optional_box))
             output_boxes.append(optional_box)
         else:
             while True:
-                # cv.waitKey()
-                frame_disp = frame.copy()
+                if self.camera_flag == True:
+                    frame_disp = self.new_frame.copy()
 
-                cv.putText(frame_disp, 'Select target ROI and press ENTER', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL,
-                           1.5, (0, 0, 0), 1)
+                    cv.putText(frame_disp, 'Select target ROI and press ENTER', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL,
+                               1.5, (0, 0, 255), 1)
 
-                x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
-                init_state = [x, y, w, h]
-                tracker.initialize(frame, _build_init_info(init_state))
-                output_boxes.append(init_state)
-                break
+                    x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
+                    init_state = [x, y, w, h]
+                    tracker.initialize(self.new_frame, _build_init_info(init_state))
+                    output_boxes.append(init_state)
+                    self.camera_flag = False
+
+                    break
+
+                else:
+                    time.sleep(0.01)
+
 
         while True:
-            ret, frame = cap.read()
 
-            if frame is None:
-                break
-
-            frame_disp = frame.copy()
-
-            # Draw box
-            out = tracker.track(frame)
-            state = [int(s) for s in out['target_bbox'][1]]
-            output_boxes.append(state)
-
-            cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
-                         (0, 255, 0), 5)
-
-            font_color = (0, 0, 0)
-            cv.putText(frame_disp, 'Tracking!', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                       font_color, 1)
-            cv.putText(frame_disp, 'Press r to reset', (20, 55), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                       font_color, 1)
-            cv.putText(frame_disp, 'Press q to quit', (20, 80), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                       font_color, 1)
-
-            # Display the resulting frame
-            cv.imshow(display_name, frame_disp)
-            key = cv.waitKey(1)
-            if key == ord('q'):
-                break
-            elif key == ord('r'):
-                ret, frame = cap.read()
-                frame_disp = frame.copy()
-
-                cv.putText(frame_disp, 'Select target ROI and press ENTER', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1.5,
-                           (0, 0, 0), 1)
-
+            if self.camera_flag == True:
+                frame_disp = self.new_frame.copy()
+                out = tracker.track(self.new_frame)
+                
+                state = [int(s) for s in out['target_bbox'][1]]
+                output_boxes.append(state)
+                
+                cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]), (0, 0, 255), 2)
+                
+                font_color = (0, 0, 255)
+                cv.putText(frame_disp, 'Tracking!', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 2, font_color, 1)
+                cv.putText(frame_disp, 'Press r to reset', (20, 55), cv.FONT_HERSHEY_COMPLEX_SMALL, 2, font_color, 1)
+                cv.putText(frame_disp, 'Press q to quit', (20, 80), cv.FONT_HERSHEY_COMPLEX_SMALL, 2, font_color, 1)
+                
+                # Display the resulting frame
                 cv.imshow(display_name, frame_disp)
-                x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
-                init_state = [x, y, w, h]
-                tracker.initialize(frame, _build_init_info(init_state))
-                output_boxes.append(init_state)
-
+                key = cv.waitKey(1)
+                if key == ord('q'):
+                    self.camera_thread = True
+                    camera.join()
+                    
+                    break
+                
+                elif key == ord('r'):
+                    frame_disp = self.new_frame.copy()
+                    
+                    cv.putText(frame_disp, 'Select target ROI and press ENTER', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 2.5, (0, 0, 255), 1)
+                    
+                    cv.imshow(display_name, frame_disp)
+                    x, y, w, h = cv.selectROI(display_name, frame_disp, fromCenter=False)
+                    init_state = [x, y, w, h]
+                    tracker.initialize(self.new_frame, _build_init_info(init_state))
+                    output_boxes.append(init_state)
+                    
+                self.camera_flag = False
+            
+            else:
+                time.sleep(0.01)
+        
         # When everything done, release the capture
-        cap.release()
+        self.cap.release()
         cv.destroyAllWindows()
-
+        
         if save_results:
             if not os.path.exists(self.results_dir):
                 os.makedirs(self.results_dir)
             video_name = Path(videofilepath).stem
             base_results_path = os.path.join(self.results_dir, 'video_{}'.format(video_name))
-
+            
             tracked_bb = np.array(output_boxes).astype(int)
             bbox_file = '{}.txt'.format(base_results_path)
             np.savetxt(bbox_file, tracked_bb, delimiter='\t', fmt='%d')
+
 
     def run_webcam(self, debug=None, visdom_info=None):
         """Run the tracker with the webcam.
@@ -415,80 +479,94 @@ class Tracker:
                 return bb
 
         ui_control = UIControl()
-        cap = cv.VideoCapture(0)
-        display_name = 'Display: ' + self.name
+
+        camera = threading.Thread(target=self.camera_rtsp, args=(self.rtsp,))
+        camera.start()
+        print('Camera initiated')
+
+        display_name = 'Display: ' + tracker.params.tracker_name
         cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
         cv.resizeWindow(display_name, 960, 720)
+
         cv.setMouseCallback(display_name, ui_control.mouse_callback)
 
         next_object_id = 1
         sequence_object_ids = []
         prev_output = OrderedDict()
+
         while True:
-            # Capture frame-by-frame
-            ret, frame = cap.read()
-            frame_disp = frame.copy()
-
-            info = OrderedDict()
-            info['previous_output'] = prev_output
-
-            if ui_control.new_init:
-                ui_control.new_init = False
-                init_state = ui_control.get_bb()
-
-                info['init_object_ids'] = [next_object_id, ]
-                info['init_bbox'] = OrderedDict({next_object_id: init_state})
-                sequence_object_ids.append(next_object_id)
-
-                next_object_id += 1
-
-            # Draw box
-            if ui_control.mode == 'select':
-                cv.rectangle(frame_disp, ui_control.get_tl(), ui_control.get_br(), (255, 0, 0), 2)
-
-            if len(sequence_object_ids) > 0:
-                info['sequence_object_ids'] = sequence_object_ids
-                out = tracker.track(frame, info)
-                prev_output = OrderedDict(out)
-
-                if 'segmentation' in out:
-                    frame_disp = overlay_mask(frame_disp, out['segmentation'])
-
-                if 'target_bbox' in out:
-                    for obj_id, state in out['target_bbox'].items():
-                        state = [int(s) for s in state]
-                        cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
-                                     _tracker_disp_colors[obj_id], 5)
-
-            # Put text
-            font_color = (0, 0, 0)
-            cv.putText(frame_disp, 'Select target', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, font_color, 1)
-            cv.putText(frame_disp, 'Press r to reset', (20, 55), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                       font_color, 1)
-            cv.putText(frame_disp, 'Press q to quit', (20, 85), cv.FONT_HERSHEY_COMPLEX_SMALL, 1,
-                       font_color, 1)
-
-            # Display the resulting frame
-            cv.imshow(display_name, frame_disp)
-            key = cv.waitKey(1)
-            if key == ord('q'):
-                break
-            elif key == ord('r'):
-                next_object_id = 1
-                sequence_object_ids = []
-                prev_output = OrderedDict()
+            if self.camera_flag == True:
+                frame_disp = self.frame.copy()
 
                 info = OrderedDict()
+                info['previous_output'] = prev_output
 
-                info['object_ids'] = []
-                info['init_object_ids'] = []
-                info['init_bbox'] = OrderedDict()
-                tracker.initialize(frame, info)
-                ui_control.mode = 'init'
+                if ui_control.new_init:
+                    ui_control.new_init = False
+                    init_state = ui_control.get_bb()
+
+                    info['init_object_ids'] = [next_object_id, ]
+                    info['init_bbox'] = OrderedDict({next_object_id: init_state})
+                    sequence_object_ids.append(next_object_id)
+
+                    next_object_id += 1
+
+                # Draw box
+                if ui_control.mode == 'select':
+                    cv.rectangle(frame_disp, ui_control.get_tl(), ui_control.get_br(), (255, 0, 0), 2)
+
+                if len(sequence_object_ids) > 0:
+                    info['sequence_object_ids'] = sequence_object_ids
+                    out = tracker.track(self.frame, info)
+                    prev_output = OrderedDict(out)
+
+                    if 'segmentation' in out:
+                        frame_disp = overlay_mask(frame_disp, out['segmentation'])
+
+                    if 'target_bbox' in out:
+                        for obj_id, state in out['target_bbox'].items():
+                            state = [int(s) for s in state]
+                            cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
+                                        _tracker_disp_colors[obj_id], 5)
+
+                # Put text
+                font_color = (0, 255, 0)
+                cv.putText(frame_disp, 'Select target', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, font_color, 1)
+                cv.putText(frame_disp, 'Press r to reset', (20, 55), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, font_color, 1)
+                cv.putText(frame_disp, 'Press q to quit', (20, 85), cv.FONT_HERSHEY_COMPLEX_SMALL, 1, font_color, 1)
+
+                # Display the resulting frame
+                cv.imshow(display_name, frame_disp)
+                key = cv.waitKey(1)
+                if key == ord('q'):
+                    self.camera_thread = True
+                    camera.join()
+
+                    break
+
+                elif key == ord('r'):
+                    next_object_id = 1
+                    sequence_object_ids = []
+                    prev_output = OrderedDict()
+
+                    info = OrderedDict()
+
+                    info['object_ids'] = []
+                    info['init_object_ids'] = []
+                    info['init_bbox'] = OrderedDict()
+                    tracker.initialize(self.frame, info)
+                    ui_control.mode = 'init'
+
+                self.camera_flag = False
+            
+            else:
+                time.sleep(0.005)
+        
 
         # When everything done, release the capture
-        cap.release()
+        self.cap.release()
         cv.destroyAllWindows()
+
 
     def run_vot2020(self, debug=None, visdom_info=None):
         params = self.get_parameters()
@@ -652,6 +730,7 @@ class Tracker:
             elif tracker.params.visualization:
                 self.visualize(image, out['target_bbox'], segmentation)
 
+
     def get_parameters(self):
         """Get parameters."""
         param_module = importlib.import_module('pytracking.parameter.{}.{}'.format(self.name, self.parameter_name))
@@ -710,6 +789,4 @@ class Tracker:
     def _read_image(self, image_file: str):
         im = cv.imread(image_file)
         return cv.cvtColor(im, cv.COLOR_BGR2RGB)
-
-
 
