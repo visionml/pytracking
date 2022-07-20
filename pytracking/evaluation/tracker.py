@@ -9,7 +9,6 @@ Set self.localPort as it's the Server communication port
 
 '''
 
-
 import importlib
 import os
 import numpy as np
@@ -21,12 +20,17 @@ from pytracking.utils.visdom import Visdom
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from pytracking.utils.plotting import draw_figure, overlay_mask
+from pytracking.utils.convert_vot_anno_to_rect import convert_vot_anno_to_rect
+from ltr.data.bounding_box_utils import masks_to_bboxes
 from pytracking.evaluation.multi_object_wrapper import MultiObjectWrapper
 from pathlib import Path
+import torch
 
 import threading
 
 import socket
+import argparse
+import imutils
 
 _tracker_disp_colors = {1: (0, 255, 0), 2: (0, 0, 255), 3: (255, 0, 0),
                         4: (255, 255, 255), 5: (0, 0, 0), 6: (0, 255, 128),
@@ -74,24 +78,11 @@ class Tracker:
         self.distance_flag = False                # Flag for distance calculation
 
         # Socket programming parameters
-        self.localIP     = "127.0.0.1"        # Server IP
+        self.localIP     = "127.0.0.1"            # Server IP
         self.localPort   = 8554                   # Server Port
         self.bufferSize  = 1024
         self.initBB = (0,0,0,0)
         self.initAA = (0,0,0,0)
-
-        # New parameters for NAHL
-        self.tilt_y = 0                           # Title Angle of Drone
-        self.tilt_x = 0                           # Roll Angle of Drone
-        self.height = 0                           # Height of Drone in meters
-        self.p_pitch = 0                          # Camera specification pixel pitch
-        self.F_lens = 0                           # Camera specification lens focal length, changes with zoom
-        self.Text_File = []
-        self.liny = 0
-        self.linx = 0
-
-        self.BB_centroid_x = 0                    # Bounding Box Centroid_x
-        self.BB_centroid_y = 0                    # Bounding Box Centroid_y
 
         env = env_settings()
         if self.run_id is None:
@@ -113,7 +104,6 @@ class Tracker:
     def connection(self, localIP, localPort):
 
         # Create a datagram socket and bind IP/Port Address
-
         UDPServerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         UDPServerSocket.bind((localIP, localPort))
 
@@ -181,10 +171,10 @@ class Tracker:
         txt = txt[2].split(".")
         txt = txt[0]
         
+
         self.camera_thread = False
 
         # VIDEO Writing
-
         frame_width = int(self.cap.get(3))
         frame_height = int(self.cap.get(4))
         self.out = cv.VideoWriter(txt + '_Result.avi',cv.VideoWriter_fourcc('M','J','P','G'), 15, (frame_width,frame_height))
@@ -317,6 +307,7 @@ class Tracker:
                 else:
                     time.sleep(0.01)
 
+
         while True:
 
             if self.camera_flag == True:
@@ -335,16 +326,6 @@ class Tracker:
                 cv.putText(frame_disp, 'Tracking!', (20, 30), cv.FONT_HERSHEY_COMPLEX_SMALL, 2, font_color, 1)
                 cv.putText(frame_disp, 'Press r to reset', (20, 55), cv.FONT_HERSHEY_COMPLEX_SMALL, 2, font_color, 1)
                 cv.putText(frame_disp, 'Press q to quit', (20, 80), cv.FONT_HERSHEY_COMPLEX_SMALL, 2, font_color, 1)
-                
-                # Tracked BoundBox Centroid
-                self.BB_centroid_x = state[0] + int(state[2]/2)
-                self.BB_centroid_y = state[1] + int(state[3]/2)
-                                
-                if self.distance_flag == True:
-                    self.distance_x , self.distance_y = self.im2distance(self.new_frame,self.BB_centroid_x,self.BB_centroid_y,self.liny,self.linx)
-                    lst = [self.distance_x, self.distance_y]
-                    
-                    self.Text_File.append(lst)
                 
                 # Display the resulting frame
                 cv.imshow(display_name, frame_disp)
@@ -375,6 +356,7 @@ class Tracker:
         # When everything done, release the capture
         self.cap.release()
         cv.destroyAllWindows()
+        
         
         if save_results:
             if not os.path.exists(self.results_dir):
@@ -464,6 +446,7 @@ class Tracker:
 
                     break
 
+
             while True:
 
                 if self.camera_flag == True:
@@ -481,6 +464,7 @@ class Tracker:
                     frame_disp = self.frame.copy()
 
                     if self.initBB is not None:
+                        # Draw box
                     
                         out = tracker.track(self.frame)
                         state = [int(s) for s in out['target_bbox'][1]]
@@ -489,21 +473,10 @@ class Tracker:
                         cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
                                     (0, 255, 0), 5)
 
-                        # Tracked BoundBox Centroid
-                        self.BB_centroid_x = state[0] + int(state[2]/2)
-                        self.BB_centroid_y = state[1] + int(state[3]/2)
-
-                        if self.distance_flag == True:
-                            self.distance_x , self.distance_y = self.im2distance(self.frame,self.BB_centroid_x,self.BB_centroid_y,self.liny,self.linx)
-                            lst = [self.distance_x, self.distance_y]
-                                                
-                            self.Text_File.append(lst)
                     
                         self.message2, self.address2 = self.receive_msg(self.conn, self.bufferSize)
 
                         if self.message2 == "Send Tracker Coordinates":
-
-                            print('state', state)
                             self.send_msg(self.conn, self.address2, state)
                     
                         elif self.message2 == "Close":
@@ -656,15 +629,6 @@ class Tracker:
                             cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
                                         _tracker_disp_colors[obj_id], 5)
 
-                    # Tracked BoundBox Centroid
-                    self.BB_centroid_x = state[0] + int(state[2]/2)
-                    self.BB_centroid_y = state[1] + int(state[3]/2)
-
-                    if self.distance_flag == True:
-                        self.distance_x , self.distance_y = self.im2distance(self.frame, self.BB_centroid_x, self.BB_centroid_y, self.liny, self.linx)
-                        lst = [self.distance_x, self.distance_y]
-                        
-                        self.Text_File.append(lst)
 
                 # Put text
                 font_color = (0, 255, 0)
@@ -764,4 +728,3 @@ class Tracker:
     def _read_image(self, image_file: str):
         im = cv.imread(image_file)
         return cv.cvtColor(im, cv.COLOR_BGR2RGB)
-
