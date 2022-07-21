@@ -1,7 +1,10 @@
 # PyTracking
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
-### :fire: One tracking paper accepted at CVPR 2022! 👇
+### :fire: One tracking paper accepted at ECCV 2022! 👇
+* [Robust Visual Tracking by Segmentation](https://arxiv.org/abs/2203.11191) | Code available here soon!
+
+### One tracking paper accepted at CVPR 2022!
 * [Transforming Model Prediction for Tracking](https://arxiv.org/abs/2203.11192) | **Code available!**
 
 ### Two tracking/VOS papers accepted at ICCV 2021!
