@@ -19,8 +19,8 @@ conda activate $conda_env_name
 
 echo ""
 echo ""
-echo "****************** Installing pytorch with cuda10 ******************"
-conda install -y pytorch torchvision cudatoolkit=10.0 -c pytorch
+echo "****************** Installing pytorch with cuda11 ******************"
+conda install -y pytorch torchvision cudatoolkit=11.3 -c pytorch
 
 echo ""
 echo ""
@@ -40,7 +40,8 @@ conda install -y tqdm
 echo ""
 echo ""
 echo "****************** Installing opencv ******************"
-pip install opencv-python
+pip install opencv-contrib-python
+
 
 echo ""
 echo ""
@@ -83,10 +84,10 @@ echo "****************** Installing LVIS toolkit ******************"
 pip install lvis
 
 
-echo ""
-echo ""
-echo "******** Installing spatial-correlation-sampler. Note: This is required only for KYS tracker **********"
-pip install spatial-correlation-sampler
+#echo ""
+#echo ""
+#echo "******** Installing spatial-correlation-sampler. Note: This is required only for KYS tracker **********"
+#pip install spatial-correlation-sampler
 
 echo ""
 echo ""
@@ -147,3 +148,10 @@ echo ""
 echo ""
 echo "****************** More networks can be downloaded from the google drive folder https://drive.google.com/drive/folders/1WVhJqvdu-_JG1U-V0IqfxTUa1SBPnL0O ******************"
 echo "****************** Or, visit the model zoo at https://github.com/visionml/pytracking/blob/master/MODEL_ZOO.md ******************"
+
+
+echo "Other packages that I need for MiVOS/STCN"
+pip install vot-toolkit
+pip install -U albumentations
+pip install icecream
+pip install PyYAML

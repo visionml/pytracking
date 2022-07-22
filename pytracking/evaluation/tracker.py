@@ -713,3 +713,59 @@ class Tracker:
 
 
 
+    def Init_BBox_head(self, frame, optional_box=None, debug=None, visdom_info=None):
+        params = self.get_parameters()
+
+        debug_ = debug
+        if debug is None:
+            debug_ = getattr(params, 'debug', 0)
+        params.debug = debug_
+
+        params.tracker_name = self.name
+        params.param_name = self.parameter_name
+        self._init_visdom(visdom_info, debug_)
+
+        multiobj_mode = getattr(params, 'multiobj_mode', getattr(self.tracker_class, 'multiobj_mode', 'default'))
+
+        if multiobj_mode == 'default':
+            tracker = self.create_tracker(params)
+            if hasattr(tracker, 'initialize_features'):
+                tracker.initialize_features()
+
+        elif multiobj_mode == 'parallel':
+            tracker = MultiObjectWrapper(self.tracker_class, params, self.visdom, fast_load=True)
+        else:
+            raise ValueError('Unknown multi object mode {}'.format(multiobj_mode))
+
+        output_boxes = []
+
+        def _build_init_info(box):
+            return {'init_bbox': OrderedDict({1: box}), 'init_object_ids': [1, ], 'object_ids': [1, ],
+                    'sequence_object_ids': [1, ]}
+
+
+        assert isinstance(optional_box, (list, tuple))
+        assert len(optional_box) == 4, "valid box's foramt is [x,y,w,h]"
+        tracker.initialize(frame, _build_init_info(optional_box))
+        output_boxes.append(optional_box)
+
+        return tracker, output_boxes
+
+
+
+    def run_BBox_head(self, frame, tracker, optional_box=None):
+        """Run the tracker with the video file.
+        args:
+            debug: Debug level.
+        """
+        output_boxes = []
+
+        # Draw box
+        out = tracker.track(frame)
+        state = [int(s) for s in out['target_bbox'][1]]
+        output_boxes.append(state)
+
+        # cv.rectangle(frame_disp, (state[0], state[1]), (state[2] + state[0], state[3] + state[1]),
+        #              (0, 255, 0), 5)
+
+        return state
