@@ -47,7 +47,7 @@ dataset_dict = dict(
 )
 
 
-def load_dataset(name: str):
+def load_dataset(name: str, **kwargs):
     """ Import and load a single dataset."""
     name = name.lower()
     dset_info = dataset_dict.get(name)
@@ -55,13 +55,26 @@ def load_dataset(name: str):
         raise ValueError('Unknown dataset \'%s\'' % name)
 
     m = importlib.import_module(dset_info.module)
-    dataset = getattr(m, dset_info.class_name)(**dset_info.kwargs)  # Call the constructor
-    return dataset.get_sequence_list()
+    dataset = getattr(m, dset_info.class_name)(**dset_info.kwargs, **kwargs)  # Call the constructor
+    return dataset
 
 
-def get_dataset(*args):
+def get_dataset(*args, **kwargs):
     """ Get a single or set of datasets."""
     dset = SequenceList()
     for name in args:
-        dset.extend(load_dataset(name))
+        dset.extend(load_dataset(name, **kwargs).get_sequence_list())
     return dset
+
+
+def get_dataset_attributes(name, mode='short', **kwargs):
+    """ Get a list of strings containing the short or long names of all attributes in the dataset. """
+    dset = load_dataset(name , **kwargs)
+    dsets = {}
+    if not hasattr(dset, 'get_attribute_names'):
+        dsets[name] = get_dataset(name)
+    else:
+        for att in dset.get_attribute_names(mode):
+            dsets[att] = get_dataset(name, attribute=att)
+
+    return dsets

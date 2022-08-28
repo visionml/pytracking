@@ -1,3 +1,5 @@
+import os
+import json
 import numpy as np
 from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
 from pytracking.utils.load_text import load_text
@@ -15,11 +17,16 @@ class LaSOTDataset(BaseDataset):
 
     Download the dataset from http://vision.cs.stonybrook.edu/~lasot/download.html
     """
-    def __init__(self):
+    def __init__(self, attribute=None):
         super().__init__()
         self.base_path = self.env_settings.lasot_path
         self.sequence_list = self._get_sequence_list()
         self.clean_list = self.clean_seq_list()
+
+        self.att_dict = None
+
+        if attribute is not None:
+            self.sequence_list = self._filter_sequence_list_by_attribute(attribute, self.sequence_list)
 
     def clean_seq_list(self):
         clean_lst = []
@@ -54,6 +61,31 @@ class LaSOTDataset(BaseDataset):
         target_class = class_name
         return Sequence(sequence_name, frames_list, 'lasot', ground_truth_rect.reshape(-1, 4),
                         object_class=target_class, target_visible=target_visible)
+
+    def get_attribute_names(self, mode='short'):
+        if self.att_dict is None:
+            self.att_dict = self._load_attributes()
+
+        names = self.att_dict['att_name_short'] if mode == 'short' else self.att_dict['att_name_long']
+        return names
+
+    def _load_attributes(self):
+        with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                               'dataset_attribute_specs', 'LaSOT_attributes.json'), 'r') as f:
+            att_dict = json.load(f)
+        return att_dict
+
+    def _filter_sequence_list_by_attribute(self, att, seq_list):
+        if self.att_dict is None:
+            self.att_dict = self._load_attributes()
+
+        if att not in self.att_dict['att_name_short']:
+            if att in self.att_dict['att_name_long']:
+                att = self.att_dict['att_name_short'][self.att_dict['att_name_long'].index(att)]
+            else:
+                raise ValueError('\'{}\' attribute invalid.')
+
+        return [s for s in seq_list if att in self.att_dict[s]]
 
     def __len__(self):
         return len(self.sequence_list)

@@ -1,0 +1,11473 @@
+{
+  "att_name_long": [
+    "Illumination Variation",
+    "Partial Occlusion",
+    "Deformation",
+    "Motion Blur",
+    "Camera Motion",
+    "Rotation",
+    "Background Clutter",
+    "Viewpoint Change",
+    "Scale Variation",
+    "Full Occlusion",
+    "Fast Motion",
+    "Out-of-View",
+    "Low Resolution",
+    "Aspect Ratio Change"
+  ],
+  "att_name_short": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lion-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "person-20": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "truck-1": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "swing-6": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "swing-9": [
+    "SV",
+    "ARC"
+  ],
+  "guitar-19": [
+    "IV",
+    "POC"
+  ],
+  "robot-11": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-8": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "drone-2": [
+    "IV",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gecko-2": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "cattle-20": [
+    "IV",
+    "DEF",
+    "CM",
+    "BC"
+  ],
+  "guitar-14": [
+    "IV",
+    "POC",
+    "ROT"
+  ],
+  "hand-11": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "microphone-7": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "yoyo-17": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "deer-2": [
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "kangaroo-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hand-7": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV"
+  ],
+  "crocodile-5": [
+    "CM"
+  ],
+  "tank-2": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "boat-20": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "guitar-16": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "shark-16": [
+    "IV",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bear-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "helmet-11": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-5": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "cup-11": [
+    "MB",
+    "CM",
+    "VC",
+    "SV"
+  ],
+  "hippo-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "surfboard-16": [
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "hippo-11": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "cattle-16": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "spider-2": [
+    "IV",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "bus-4": [
+    "POC",
+    "BC",
+    "SV"
+  ],
+  "fox-18": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-1": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "kite-8": [
+    "POC",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "airplane-6": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-10": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "guitar-15": [
+    "IV",
+    "POC",
+    "CM",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "electricfan-8": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "boat-7": [
+    "POC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "fox-3": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lion-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "tiger-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "horse-12": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "yoyo-13": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "crab-15": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "guitar-3": [
+    "IV",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "sheep-6": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "robot-6": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-5": [
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "turtle-13": [
+    "DEF",
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "skateboard-12": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "coin-4": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR"
+  ],
+  "squirrel-2": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "chameleon-5": [
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "cat-19": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gecko-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "crab-8": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "turtle-3": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "drone-8": [
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-4": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "car-20": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "microphone-9": [
+    "IV",
+    "POC",
+    "ROT",
+    "BC",
+    "LR"
+  ],
+  "kangaroo-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "basketball-11": [
+    "IV",
+    "POC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-9": [
+    "IV",
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "hand-2": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV"
+  ],
+  "gametarget-12": [
+    "IV",
+    "POC",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "flag-3": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "electricfan-7": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "volleyball-13": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "book-9": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "truck-18": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR"
+  ],
+  "airplane-4": [
+    "IV",
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "elephant-4": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "hand-20": [
+    "DEF",
+    "MB",
+    "SV",
+    "ARC"
+  ],
+  "flag-13": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "drone-15": [
+    "IV",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cat-10": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "shark-7": [
+    "IV",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "squirrel-5": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "truck-17": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "airplane-10": [
+    "IV",
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "surfboard-12": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-12": [
+    "IV",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "deer-12": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "elephant-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "ARC"
+  ],
+  "electricfan-10": [
+    "ROT"
+  ],
+  "spider-3": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "train-12": [
+    "CM",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "bicycle-11": [
+    "IV",
+    "POC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "lion-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "tiger-11": [
+    "CM",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hat-16": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "helmet-12": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "pig-14": [
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "fox-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-15": [
+    "POC"
+  ],
+  "hand-16": [
+    "DEF",
+    "MB",
+    "SV",
+    "ARC"
+  ],
+  "sheep-13": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-14": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "bus-7": [
+    "POC",
+    "CM",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "monkey-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "hat-10": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "train-4": [],
+  "sepia-3": [
+    "IV",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "rabbit-4": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "turtle-20": [
+    "DEF",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "basketball-2": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM"
+  ],
+  "horse-11": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "pool-6": [
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR"
+  ],
+  "elephant-3": [
+    "IV",
+    "POC",
+    "DEF",
+    "BC",
+    "ARC"
+  ],
+  "yoyo-6": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "giraffe-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "train-7": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "gecko-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hippo-16": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "microphone-17": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "airplane-9": [
+    "IV",
+    "POC",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-16": [
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "skateboard-6": [
+    "MB",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "cat-5": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-2": [
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "tiger-3": [
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "rabbit-11": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "train-18": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "spider-14": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "car-2": [
+    "IV",
+    "POC",
+    "MB",
+    "BC",
+    "SV"
+  ],
+  "cup-7": [
+    "CM",
+    "BC"
+  ],
+  "person-15": [
+    "IV",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "bear-2": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "gametarget-11": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "racing-6": [
+    "BC",
+    "VC",
+    "SV",
+    "LR"
+  ],
+  "bear-8": [
+    "IV",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "lion-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "deer-6": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "squirrel-6": [
+    "DEF",
+    "CM",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "flag-9": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "shark-18": [
+    "DEF",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "boat-1": [
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "tiger-19": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-10": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "ARC"
+  ],
+  "hat-15": [
+    "POC",
+    "ROT",
+    "SV"
+  ],
+  "fox-7": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gecko-12": [
+    "DEF",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "drone-20": [
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "airplane-20": [
+    "IV",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "flag-19": [
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "helmet-1": [
+    "IV",
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "squirrel-9": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "fox-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "frog-17": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-16": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "skateboard-15": [
+    "MB",
+    "CM",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "fox-1": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "hand-15": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sheep-8": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "squirrel-14": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "gorilla-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sheep-16": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-15": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hat-13": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bird-15": [
+    "IV",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "yoyo-1": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-19": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "racing-17": [
+    "POC",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "dog-4": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "bus-9": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV"
+  ],
+  "truck-14": [
+    "VC",
+    "SV"
+  ],
+  "yoyo-14": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "robot-18": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "giraffe-15": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "electricfan-2": [
+    "POC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "gecko-5": [
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "dog-14": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "robot-4": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "coin-12": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR"
+  ],
+  "motorcycle-5": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "hat-8": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "basketball-18": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bear-1": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "tank-11": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "swing-14": [
+    "POC",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "electricfan-13": [
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "bicycle-12": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "shark-1": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "cup-20": [
+    "POC",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "OV"
+  ],
+  "flag-5": [
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "cup-18": [
+    "POC",
+    "ROT",
+    "SV"
+  ],
+  "frog-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "goldfish-1": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "fox-15": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-18": [
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "hat-11": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gecko-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "bear-20": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "surfboard-10": [
+    "ROT",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "sepia-6": [
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "hat-12": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "pig-6": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "shark-12": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "drone-9": [
+    "CM",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "book-19": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "spider-17": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sepia-14": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "chameleon-1": [
+    "DEF",
+    "MB",
+    "CM",
+    "ARC"
+  ],
+  "kangaroo-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "giraffe-8": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "lizard-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hand-9": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "spider-6": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV"
+  ],
+  "cattle-6": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "sheep-14": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "chameleon-11": [
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "volleyball-19": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-16": [
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "swing-8": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lion-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "bus-15": [
+    "POC",
+    "SV"
+  ],
+  "swing-3": [
+    "POC",
+    "CM",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "microphone-13": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "racing-14": [
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "shark-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "frog-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-1": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "gorilla-13": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "kite-18": [
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "skateboard-17": [
+    "POC",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "tiger-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "gorilla-1": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pig-4": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-9": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "elephant-5": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "shark-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-17": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "shark-6": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bird-5": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "FM",
+    "ARC"
+  ],
+  "tank-20": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "boat-19": [
+    "CM",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "boat-16": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "microphone-5": [
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-18": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "mouse-15": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sepia-8": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "train-16": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "crab-14": [
+    "IV",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "rubicCube-18": [
+    "POC",
+    "ROT",
+    "SV"
+  ],
+  "skateboard-13": [
+    "IV",
+    "ROT",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "helmet-19": [
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sheep-9": [
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-16": [
+    "IV",
+    "POC",
+    "ROT",
+    "BC",
+    "SV"
+  ],
+  "tiger-20": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "chameleon-13": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bird-6": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "bird-3": [
+    "POC",
+    "DEF",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "motorcycle-9": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bird-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "racing-3": [
+    "VC",
+    "SV",
+    "OV",
+    "LR"
+  ],
+  "airplane-17": [
+    "IV",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "skateboard-9": [
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "leopard-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "truck-8": [
+    "VC",
+    "SV"
+  ],
+  "lion-11": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "person-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "pool-8": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "car-6": [
+    "IV",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FM"
+  ],
+  "truck-20": [
+    "OV"
+  ],
+  "book-12": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "crab-11": [
+    "POC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "squirrel-12": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bus-20": [
+    "IV",
+    "POC",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "squirrel-7": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "coin-5": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "basketball-20": [
+    "POC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "crocodile-19": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "umbrella-3": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "yoyo-18": [
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "sheep-17": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "microphone-15": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "tank-16": [
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "goldfish-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "crab-16": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "tank-17": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "squirrel-20": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "book-18": [
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "drone-5": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "tiger-18": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "helmet-9": [
+    "IV",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR"
+  ],
+  "gecko-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "hat-19": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR"
+  ],
+  "robot-2": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "bottle-13": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "shark-19": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "person-18": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-10": [
+    "MB",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "fox-11": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "robot-5": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "dog-12": [
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cup-13": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC"
+  ],
+  "crab-18": [
+    "ROT",
+    "BC",
+    "SV"
+  ],
+  "cup-2": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "book-16": [
+    "POC"
+  ],
+  "robot-15": [
+    "MB",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "pig-2": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "chameleon-7": [
+    "IV",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "cup-15": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "goldfish-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sheep-20": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "microphone-2": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "deer-18": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "bicycle-8": [
+    "IV",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-8": [
+    "DEF",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "drone-4": [
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "kite-7": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "fox-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "hand-12": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-8": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "leopard-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "drone-10": [
+    "CM",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "lizard-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "kangaroo-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "dog-3": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "hand-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "airplane-14": [
+    "IV",
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "ARC"
+  ],
+  "car-13": [
+    "IV",
+    "POC",
+    "CM",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "lion-12": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "kangaroo-2": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "boat-5": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "squirrel-1": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "umbrella-10": [
+    "IV",
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "airplane-15": [
+    "IV",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "robot-3": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "tiger-10": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "turtle-8": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "cattle-15": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "pool-7": [
+    "MB",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "fox-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "motorcycle-15": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "mouse-13": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bear-14": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "pool-9": [
+    "MB",
+    "FM",
+    "LR"
+  ],
+  "train-10": [],
+  "deer-13": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "crocodile-8": [
+    "DEF"
+  ],
+  "surfboard-20": [
+    "ROT",
+    "VC",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "sheep-10": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "pool-2": [
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-19": [
+    "DEF",
+    "MB",
+    "ROT",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "train-13": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "deer-10": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "train-9": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "boat-14": [
+    "IV",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "truck-3": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "bear-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "tank-6": [
+    "DEF",
+    "ROT",
+    "VC",
+    "SV"
+  ],
+  "hippo-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "chameleon-2": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "volleyball-18": [
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "basketball-12": [
+    "IV",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sepia-5": [
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-2": [
+    "POC",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "leopard-1": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "car-7": [
+    "POC",
+    "CM",
+    "SV"
+  ],
+  "kangaroo-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "gorilla-12": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "squirrel-4": [
+    "DEF",
+    "ROT",
+    "BC"
+  ],
+  "person-19": [
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "cattle-19": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "zebra-9": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "motorcycle-12": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hippo-19": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "racing-19": [
+    "VC",
+    "SV"
+  ],
+  "deer-9": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "deer-5": [
+    "DEF",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "dog-10": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "deer-7": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "skateboard-16": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "cat-6": [
+    "POC",
+    "DEF",
+    "SV"
+  ],
+  "umbrella-9": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "racing-20": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "kangaroo-9": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "person-6": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "monkey-8": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "gecko-18": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bird-7": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "horse-10": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "goldfish-3": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-11": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "mouse-19": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "guitar-4": [
+    "POC"
+  ],
+  "cup-4": [
+    "BC"
+  ],
+  "electricfan-18": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "rabbit-6": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "hat-2": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "mouse-12": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "shark-20": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "person-10": [
+    "IV",
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "elephant-18": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "lion-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "horse-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "lizard-1": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "hippo-20": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "horse-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "car-16": [
+    "IV",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "flag-12": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "person-8": [
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "car-3": [
+    "IV",
+    "BC",
+    "SV"
+  ],
+  "bicycle-20": [
+    "IV",
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "monkey-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "motorcycle-1": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "hippo-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "hippo-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-14": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "car-10": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "leopard-8": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "dog-6": [
+    "IV",
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "bicycle-16": [
+    "IV",
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "turtle-11": [
+    "DEF",
+    "CM",
+    "SV"
+  ],
+  "cat-2": [
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "mouse-11": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "crab-5": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "hat-18": [
+    "POC",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "fox-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pool-1": [
+    "MB",
+    "BC",
+    "FOC",
+    "LR"
+  ],
+  "tiger-15": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "surfboard-17": [
+    "MB",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "sheep-5": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "lion-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "guitar-7": [
+    "POC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "bird-4": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "surfboard-3": [
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-6": [
+    "IV",
+    "POC",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "ARC"
+  ],
+  "cup-9": [
+    "POC"
+  ],
+  "surfboard-19": [
+    "POC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "dog-5": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-7": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "airplane-7": [
+    "IV",
+    "SV"
+  ],
+  "basketball-5": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "leopard-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "cup-6": [
+    "ROT"
+  ],
+  "crab-10": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "sepia-7": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "cat-11": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "giraffe-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-16": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hippo-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "guitar-11": [
+    "IV",
+    "POC",
+    "MB",
+    "CM"
+  ],
+  "gecko-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "cat-3": [
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "zebra-8": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "crocodile-16": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "flag-4": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "electricfan-1": [
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "sheep-19": [
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "VC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bus-19": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "airplane-12": [
+    "IV",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "guitar-8": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "robot-20": [
+    "POC",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "kite-3": [
+    "CM",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "microphone-10": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "truck-13": [
+    "VC",
+    "SV",
+    "LR"
+  ],
+  "mouse-6": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "bottle-18": [
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "racing-7": [
+    "VC",
+    "SV",
+    "LR"
+  ],
+  "tank-3": [
+    "DEF",
+    "ROT",
+    "SV"
+  ],
+  "frog-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "kangaroo-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "racing-4": [
+    "CM",
+    "BC",
+    "SV"
+  ],
+  "hand-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "surfboard-11": [
+    "ROT",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "swing-13": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "racing-5": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bus-10": [
+    "POC",
+    "CM",
+    "SV"
+  ],
+  "motorcycle-19": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "pool-3": [
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "racing-10": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR"
+  ],
+  "skateboard-3": [
+    "POC",
+    "CM",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-3": [
+    "MB",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "horse-9": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-10": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lion-14": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "zebra-14": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-20": [
+    "POC",
+    "MB",
+    "ROT",
+    "ARC"
+  ],
+  "zebra-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "fox-8": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "cattle-14": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "volleyball-6": [
+    "POC",
+    "MB",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "zebra-10": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "sepia-18": [
+    "IV",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "kangaroo-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "basketball-6": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pig-8": [
+    "IV",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "book-1": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "book-3": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "racing-2": [
+    "POC",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR"
+  ],
+  "basketball-9": [
+    "POC",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "robot-1": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "robot-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "elephant-13": [
+    "IV",
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "shark-13": [
+    "POC",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "crocodile-2": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "pool-15": [
+    "MB",
+    "CM",
+    "BC",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "horse-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "giraffe-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "robot-17": [
+    "CM",
+    "VC",
+    "SV"
+  ],
+  "sepia-9": [
+    "DEF",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "cup-1": [
+    "MB",
+    "CM",
+    "BC",
+    "SV"
+  ],
+  "person-16": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "kangaroo-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "turtle-12": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "basketball-8": [
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bottle-10": [
+    "POC",
+    "ROT"
+  ],
+  "turtle-4": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-20": [
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-13": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-17": [
+    "IV",
+    "SV",
+    "LR"
+  ],
+  "lizard-10": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bus-17": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "SV"
+  ],
+  "shark-8": [
+    "MB",
+    "CM",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "electricfan-20": [
+    "POC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-2": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "coin-9": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR"
+  ],
+  "bus-2": [
+    "POC",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "giraffe-16": [
+    "POC",
+    "DEF",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "spider-5": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "pool-16": [
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "bear-11": [
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV"
+  ],
+  "swing-16": [
+    "POC",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "electricfan-4": [
+    "MB",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "train-5": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "helmet-17": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-12": [
+    "POC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "flag-16": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "guitar-17": [
+    "IV",
+    "POC",
+    "ROT",
+    "SV",
+    "FOC"
+  ],
+  "book-14": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "rubicCube-4": [
+    "POC",
+    "ROT"
+  ],
+  "drone-3": [
+    "IV",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "racing-13": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC"
+  ],
+  "bicycle-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "coin-17": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "book-2": [
+    "POC",
+    "DEF",
+    "SV",
+    "FM",
+    "ARC"
+  ],
+  "giraffe-7": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-6": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "yoyo-11": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "fox-16": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-5": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "crocodile-18": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-14": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-7": [
+    "IV",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "sepia-20": [
+    "DEF",
+    "VC",
+    "OV"
+  ],
+  "fox-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "turtle-16": [
+    "IV",
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cup-12": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "sepia-2": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "leopard-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "goldfish-15": [
+    "POC",
+    "DEF",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "racing-12": [
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "person-11": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC"
+  ],
+  "pig-19": [
+    "IV",
+    "DEF",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "elephant-11": [
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "umbrella-13": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "flag-8": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-11": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT"
+  ],
+  "crocodile-20": [
+    "IV",
+    "POC",
+    "DEF",
+    "SV",
+    "FM",
+    "ARC"
+  ],
+  "frog-5": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "train-15": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "bear-5": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "person-5": [
+    "IV",
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "robot-16": [
+    "MB",
+    "CM",
+    "VC",
+    "SV"
+  ],
+  "truck-12": [
+    "SV",
+    "ARC"
+  ],
+  "rubicCube-13": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "ARC"
+  ],
+  "electricfan-14": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "person-4": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-17": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cattle-9": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "racing-8": [
+    "SV"
+  ],
+  "deer-11": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "bus-6": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "monkey-11": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "book-8": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "guitar-13": [
+    "IV",
+    "POC",
+    "CM",
+    "ROT"
+  ],
+  "deer-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "robot-9": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV"
+  ],
+  "skateboard-2": [
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "pig-13": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "deer-15": [
+    "IV",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "elephant-2": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "turtle-18": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "sepia-16": [
+    "IV",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "truck-10": [
+    "POC",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "guitar-1": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "bottle-7": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "lizard-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "fox-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "lizard-2": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "gecko-4": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bird-20": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "monkey-12": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "drone-18": [
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "cat-8": [
+    "IV",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "crocodile-6": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "lion-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "yoyo-3": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pig-5": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "person-12": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "zebra-12": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "rabbit-3": [
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "rubicCube-5": [
+    "POC",
+    "MB",
+    "ROT"
+  ],
+  "train-6": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "leopard-11": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "monkey-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "horse-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "dog-11": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "fox-4": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "frog-2": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "monkey-15": [
+    "DEF",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bus-18": [
+    "IV",
+    "BC",
+    "SV"
+  ],
+  "chameleon-3": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "cat-13": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "ARC"
+  ],
+  "horse-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "zebra-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "volleyball-1": [
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "crocodile-14": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV"
+  ],
+  "helmet-7": [
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "book-13": [
+    "CM"
+  ],
+  "bear-12": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "airplane-16": [
+    "IV",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "pool-17": [
+    "MB",
+    "CM",
+    "BC",
+    "VC",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "bear-9": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "boat-8": [
+    "POC",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "book-10": [
+    "DEF",
+    "SV"
+  ],
+  "gametarget-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "bird-2": [
+    "IV",
+    "POC",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "microphone-18": [
+    "POC",
+    "ROT",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "kite-10": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "hand-4": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "spider-8": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FM",
+    "ARC"
+  ],
+  "crab-1": [
+    "POC",
+    "DEF"
+  ],
+  "microphone-3": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "pool-10": [
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR"
+  ],
+  "truck-5": [
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "kangaroo-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "spider-12": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-6": [
+    "POC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "chameleon-9": [
+    "IV",
+    "POC",
+    "DEF",
+    "ARC"
+  ],
+  "spider-9": [
+    "DEF",
+    "ROT"
+  ],
+  "deer-19": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "licenseplate-13": [
+    "SV",
+    "LR"
+  ],
+  "boat-10": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "pig-11": [
+    "DEF",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "mouse-2": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pig-16": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-8": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "microphone-12": [
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "person-1": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "helmet-15": [
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bus-12": [
+    "IV",
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "OV"
+  ],
+  "frog-6": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "pig-10": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "frog-9": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV"
+  ],
+  "motorcycle-10": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "monkey-14": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "turtle-10": [
+    "IV",
+    "DEF",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "lion-8": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "surfboard-5": [
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cup-17": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "giraffe-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "tank-4": [
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "bird-19": [
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "motorcycle-17": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "yoyo-4": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "crocodile-4": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "swing-15": [
+    "POC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "crab-12": [
+    "IV",
+    "POC",
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "electricfan-3": [
+    "POC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "giraffe-4": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "chameleon-16": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "sheep-18": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "basketball-7": [
+    "POC",
+    "MB",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "crocodile-15": [
+    "POC",
+    "CM",
+    "ARC"
+  ],
+  "monkey-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-16": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "truck-16": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cattle-4": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "pool-13": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-5": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "crab-19": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "car-17": [
+    "IV",
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "cat-20": [
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "leopard-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "coin-8": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "tiger-6": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "shark-11": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "hand-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "spider-4": [
+    "DEF",
+    "ROT",
+    "VC",
+    "SV"
+  ],
+  "person-7": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "drone-14": [
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-9": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "frog-11": [
+    "POC",
+    "DEF",
+    "MB",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "hippo-12": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "chameleon-6": [
+    "IV",
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "dog-18": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "zebra-16": [
+    "POC",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-2": [
+    "IV",
+    "SV",
+    "OV",
+    "LR"
+  ],
+  "horse-8": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bear-17": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "kite-13": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "car-8": [
+    "POC",
+    "ROT",
+    "SV"
+  ],
+  "rubicCube-19": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "robot-12": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-2": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "elephant-15": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "bottle-5": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "coin-3": [
+    "IV",
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "chameleon-15": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "swing-7": [
+    "FOC"
+  ],
+  "tank-8": [
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pool-14": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "FOC",
+    "LR"
+  ],
+  "sepia-19": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "basketball-4": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "flag-10": [
+    "DEF",
+    "BC"
+  ],
+  "pig-3": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "person-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "kangaroo-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "helmet-20": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hand-14": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "basketball-17": [
+    "POC",
+    "ROT",
+    "BC",
+    "FOC",
+    "FM",
+    "LR"
+  ],
+  "sheep-11": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "coin-18": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "coin-20": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "crocodile-9": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-20": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "microphone-11": [
+    "POC",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "spider-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pig-20": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "gecko-16": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "gecko-14": [
+    "DEF",
+    "MB",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hippo-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "volleyball-9": [
+    "MB",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "chameleon-19": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "book-11": [
+    "POC"
+  ],
+  "fox-20": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "leopard-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "train-3": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "bicycle-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "crab-3": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "car-12": [
+    "IV",
+    "SV"
+  ],
+  "leopard-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "bird-12": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "spider-13": [
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-11": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "coin-15": [
+    "POC",
+    "BC",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "book-4": [
+    "ROT",
+    "SV"
+  ],
+  "bear-6": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "tank-19": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "kangaroo-15": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "surfboard-1": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "cup-3": [
+    "POC",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "licenseplate-8": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "squirrel-11": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "truck-7": [
+    "ROT",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-8": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "skateboard-5": [
+    "VC",
+    "SV",
+    "LR"
+  ],
+  "microphone-14": [
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "deer-20": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "hippo-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "truck-15": [
+    "POC",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "giraffe-14": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "robot-10": [
+    "MB",
+    "CM",
+    "ROT",
+    "SV"
+  ],
+  "tank-15": [
+    "IV",
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "kite-6": [
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hippo-5": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "electricfan-15": [
+    "VC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "elephant-16": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "yoyo-12": [
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "tiger-13": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "ARC"
+  ],
+  "chameleon-12": [
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "guitar-12": [
+    "IV",
+    "POC",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "book-17": [
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "swing-2": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "motorcycle-7": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-3": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "cattle-10": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "hat-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "hand-8": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "monkey-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "bear-13": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "bus-14": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "cat-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "lizard-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "chameleon-4": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "spider-7": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "bird-16": [
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "mouse-4": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "truck-2": [
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "squirrel-10": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "dog-9": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "skateboard-20": [
+    "MB",
+    "CM",
+    "VC",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-20": [
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR"
+  ],
+  "crab-13": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "monkey-19": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-4": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "squirrel-18": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "kangaroo-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "kite-5": [
+    "POC",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "microphone-1": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hat-9": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "mouse-18": [
+    "IV",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pig-12": [
+    "DEF",
+    "CM",
+    "SV"
+  ],
+  "motorcycle-14": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "kite-19": [
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-16": [
+    "POC",
+    "BC",
+    "SV"
+  ],
+  "monkey-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "racing-9": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cat-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "horse-1": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "leopard-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "hippo-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV"
+  ],
+  "fox-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "basketball-3": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "pig-7": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "ARC"
+  ],
+  "umbrella-4": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "hand-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "boat-18": [
+    "POC",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-2": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "ARC"
+  ],
+  "gecko-7": [
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "swing-10": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "gametarget-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV"
+  ],
+  "robot-13": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lion-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "microphone-16": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "surfboard-15": [
+    "POC",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "elephant-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "yoyo-19": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "train-20": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "coin-7": [
+    "IV",
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "ARC"
+  ],
+  "elephant-10": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "microphone-4": [
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "cattle-12": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "horse-16": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "goldfish-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "boat-12": [
+    "POC",
+    "VC",
+    "SV",
+    "LR"
+  ],
+  "gametarget-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "swing-5": [
+    "POC",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "bottle-12": [
+    "POC",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "truck-6": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-16": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT"
+  ],
+  "kite-15": [
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "fox-12": [
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "pig-1": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "zebra-1": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "tank-1": [
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "skateboard-10": [
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "monkey-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "frog-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "airplane-5": [
+    "IV",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "person-14": [
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "rabbit-5": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "car-14": [
+    "IV",
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "car-9": [
+    "IV",
+    "POC",
+    "BC",
+    "SV"
+  ],
+  "crocodile-17": [
+    "POC",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "ARC"
+  ],
+  "pool-19": [
+    "MB",
+    "CM",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "electricfan-9": [
+    "POC",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-9": [
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "hippo-8": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "truck-19": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "flag-7": [
+    "DEF",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "person-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "elephant-19": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hand-19": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "gorilla-15": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "giraffe-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "deer-14": [
+    "POC",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "volleyball-8": [
+    "MB",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cup-5": [
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-4": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bus-11": [
+    "IV",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FM",
+    "ARC"
+  ],
+  "drone-19": [
+    "IV",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "sepia-17": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "crocodile-7": [
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "electricfan-5": [
+    "ROT"
+  ],
+  "coin-11": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "sheep-12": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "spider-18": [
+    "DEF",
+    "ROT",
+    "SV"
+  ],
+  "bicycle-19": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "swing-20": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "microphone-6": [
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR"
+  ],
+  "kite-2": [
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sepia-1": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bus-13": [
+    "IV",
+    "SV"
+  ],
+  "leopard-9": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "drone-17": [
+    "IV",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gecko-3": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "drone-1": [
+    "IV",
+    "CM",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "lion-15": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "swing-12": [
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "crocodile-13": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "boat-2": [
+    "SV",
+    "ARC"
+  ],
+  "monkey-16": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "flag-2": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "microphone-20": [
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "dog-20": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "cattle-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "shark-5": [
+    "IV",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "skateboard-7": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-13": [
+    "ROT",
+    "BC",
+    "SV",
+    "LR"
+  ],
+  "electricfan-6": [
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "hand-18": [
+    "IV",
+    "DEF",
+    "MB",
+    "LR",
+    "ARC"
+  ],
+  "coin-13": [
+    "MB",
+    "CM",
+    "BC",
+    "SV"
+  ],
+  "flag-14": [
+    "DEF",
+    "CM",
+    "ARC"
+  ],
+  "cup-8": [
+    "IV",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "person-3": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "guitar-18": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-11": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-18": [
+    "IV",
+    "SV",
+    "LR"
+  ],
+  "giraffe-11": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "FOC",
+    "OV"
+  ],
+  "car-19": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "lizard-7": [
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "helmet-5": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "train-1": [
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "sepia-12": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "cattle-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "monkey-20": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "gecko-15": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "lizard-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "gecko-8": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "microphone-8": [
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "shark-15": [
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "sheep-2": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "racing-18": [
+    "ROT",
+    "VC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-16": [
+    "VC",
+    "FM",
+    "LR"
+  ],
+  "rubicCube-7": [
+    "POC",
+    "ROT",
+    "SV"
+  ],
+  "rabbit-12": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "yoyo-10": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "kite-20": [
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-2": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "cattle-3": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "elephant-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "lizard-12": [
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "gorilla-16": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "mouse-10": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cup-10": [
+    "POC",
+    "MB",
+    "CM",
+    "FOC"
+  ],
+  "basketball-13": [
+    "POC",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR"
+  ],
+  "leopard-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "car-1": [
+    "IV",
+    "SV"
+  ],
+  "pig-18": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "boat-17": [
+    "SV",
+    "ARC"
+  ],
+  "frog-3": [
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "kite-17": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "swing-1": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-19": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "horse-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "licenseplate-14": [
+    "POC",
+    "MB",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "tank-5": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "tiger-12": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "turtle-5": [
+    "DEF",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "elephant-14": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "cat-12": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "chameleon-14": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "tank-12": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "frog-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "flag-15": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "racing-15": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC"
+  ],
+  "electricfan-17": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bird-10": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-1": [
+    "MB",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "deer-3": [
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "cattle-7": [
+    "MB",
+    "CM",
+    "BC",
+    "SV"
+  ],
+  "dog-2": [
+    "POC",
+    "DEF",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "ARC"
+  ],
+  "kangaroo-11": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "guitar-6": [
+    "IV",
+    "POC",
+    "SV"
+  ],
+  "bicycle-15": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bird-11": [
+    "IV",
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "flag-11": [
+    "DEF"
+  ],
+  "hat-6": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "mouse-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-12": [
+    "POC",
+    "DEF",
+    "SV"
+  ],
+  "gorilla-19": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "book-5": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "zebra-20": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "gorilla-3": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "spider-19": [
+    "IV",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-6": [
+    "SV",
+    "LR"
+  ],
+  "frog-15": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV"
+  ],
+  "spider-20": [
+    "DEF",
+    "ROT",
+    "LR",
+    "ARC"
+  ],
+  "mouse-1": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "tank-14": [
+    "POC",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "helmet-14": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "mouse-17": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-19": [
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "mouse-5": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "motorcycle-11": [
+    "IV",
+    "POC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "drone-12": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "turtle-9": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "monkey-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-18": [
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "giraffe-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "deer-16": [
+    "IV",
+    "POC",
+    "DEF",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-18": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "chameleon-10": [
+    "IV",
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "coin-19": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "monkey-10": [
+    "DEF",
+    "ROT",
+    "SV",
+    "LR"
+  ],
+  "train-8": [
+    "POC",
+    "FOC",
+    "ARC"
+  ],
+  "crab-9": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "crab-20": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "giraffe-2": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "pool-4": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM",
+    "LR"
+  ],
+  "zebra-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "tiger-8": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "volleyball-14": [
+    "MB",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "robot-7": [
+    "MB",
+    "CM",
+    "ROT"
+  ],
+  "hippo-1": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FM",
+    "ARC"
+  ],
+  "lion-1": [
+    "DEF",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "giraffe-9": [
+    "POC",
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-9": [
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "yoyo-7": [
+    "POC",
+    "MB",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "swing-11": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "coin-6": [
+    "IV",
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "hat-14": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "leopard-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "elephant-1": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "hat-1": [
+    "POC",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-7": [
+    "IV",
+    "POC",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "zebra-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "spider-16": [
+    "IV",
+    "DEF",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-20": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "horse-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "cattle-5": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "tiger-17": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "skateboard-1": [
+    "POC",
+    "CM",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "frog-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV"
+  ],
+  "crab-4": [
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "LR"
+  ],
+  "gametarget-15": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "mouse-16": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "gorilla-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "turtle-17": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "hand-1": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "bear-7": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "volleyball-7": [
+    "POC",
+    "MB",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "crab-7": [
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "ARC"
+  ],
+  "cattle-2": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "airplane-18": [
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "basketball-15": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "kangaroo-16": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cattle-11": [
+    "MB",
+    "CM",
+    "SV"
+  ],
+  "cup-16": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "lion-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "bird-13": [
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "elephant-8": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "elephant-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "crocodile-1": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-7": [
+    "IV",
+    "CM",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "monkey-17": [
+    "DEF",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "goldfish-9": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "boat-4": [
+    "SV",
+    "ARC"
+  ],
+  "zebra-17": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "helmet-2": [
+    "IV",
+    "POC",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "guitar-9": [
+    "IV",
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "train-14": [
+    "SV",
+    "ARC"
+  ],
+  "squirrel-8": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "dog-15": [
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "airplane-8": [
+    "IV",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "shark-17": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "basketball-19": [
+    "IV",
+    "POC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "guitar-5": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV"
+  ],
+  "bottle-14": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "hat-5": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-9": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "goldfish-20": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "licenseplate-5": [
+    "IV",
+    "POC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hand-3": [
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cup-19": [
+    "ROT",
+    "BC"
+  ],
+  "crocodile-12": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "electricfan-12": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "mouse-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "tank-9": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "boat-9": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "motorcycle-2": [
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "frog-7": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "cattle-8": [
+    "POC",
+    "DEF",
+    "CM",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "coin-10": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "gametarget-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "drone-11": [
+    "CM",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "airplane-1": [
+    "POC",
+    "ROT",
+    "SV",
+    "LR"
+  ],
+  "gecko-1": [
+    "IV",
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hand-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "yoyo-15": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "swing-17": [
+    "POC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "pool-20": [
+    "MB",
+    "BC",
+    "FM",
+    "LR"
+  ],
+  "kangaroo-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "motorcycle-18": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "boat-15": [
+    "IV",
+    "POC",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "frog-12": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-1": [
+    "POC",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "bear-10": [
+    "IV",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "boat-11": [
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "kite-16": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "book-20": [
+    "POC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "bird-8": [
+    "IV",
+    "SV",
+    "ARC"
+  ],
+  "cat-15": [
+    "DEF",
+    "MB",
+    "CM"
+  ],
+  "bear-16": [
+    "IV",
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "skateboard-18": [
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sheep-1": [
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "chameleon-8": [
+    "IV",
+    "POC"
+  ],
+  "bear-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "licenseplate-15": [
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hippo-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "licenseplate-11": [
+    "POC",
+    "SV",
+    "FM",
+    "LR"
+  ],
+  "frog-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "squirrel-3": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bicycle-5": [
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "racing-16": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-2": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-1": [
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "leopard-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "boat-13": [
+    "SV",
+    "ARC"
+  ],
+  "yoyo-16": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "flag-1": [
+    "DEF",
+    "ROT",
+    "LR"
+  ],
+  "robot-14": [
+    "ROT",
+    "LR"
+  ],
+  "train-19": [
+    "POC",
+    "VC",
+    "SV"
+  ],
+  "book-6": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "leopard-12": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "frog-8": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pig-9": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "monkey-9": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "licenseplate-4": [
+    "POC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-20": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hat-3": [
+    "POC",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cat-14": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "dog-16": [
+    "POC",
+    "DEF",
+    "MB",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "motorcycle-8": [
+    "SV",
+    "LR"
+  ],
+  "coin-14": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "boat-6": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "airplane-11": [
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "goldfish-8": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "cat-7": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "turtle-6": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "frog-16": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "umbrella-8": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-6": [
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "pool-5": [
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "person-13": [
+    "IV",
+    "SV",
+    "LR"
+  ],
+  "dog-8": [
+    "IV",
+    "DEF",
+    "MB",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "horse-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "mouse-14": [
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "basketball-10": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bird-1": [
+    "CM",
+    "SV",
+    "LR"
+  ],
+  "yoyo-2": [
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bicycle-17": [
+    "IV",
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "hippo-15": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "kite-4": [
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bear-15": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "basketball-16": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "boat-3": [
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "guitar-20": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "horse-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "umbrella-11": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "sepia-4": [
+    "IV",
+    "DEF",
+    "SV"
+  ],
+  "swing-18": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bear-18": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "turtle-15": [
+    "DEF",
+    "CM",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "squirrel-17": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "turtle-2": [
+    "DEF",
+    "MB",
+    "CM",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "lizard-15": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "helmet-16": [
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pool-12": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "gecko-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "airplane-3": [
+    "IV",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "tiger-16": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "skateboard-11": [
+    "POC",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "cat-9": [
+    "IV",
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "cup-14": [
+    "POC",
+    "ROT",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "motorcycle-3": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "kangaroo-7": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "gecko-10": [
+    "DEF",
+    "SV"
+  ],
+  "licenseplate-1": [
+    "POC",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "truck-11": [
+    "IV",
+    "CM",
+    "SV"
+  ],
+  "crab-6": [
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "dog-7": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "cat-18": [
+    "DEF",
+    "CM",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "train-17": [
+    "POC",
+    "CM",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "dog-17": [
+    "IV",
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "horse-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "crab-2": [
+    "DEF",
+    "CM",
+    "SV"
+  ],
+  "gametarget-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "spider-10": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "electricfan-19": [
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "kite-1": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "kite-14": [
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "deer-4": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "pool-18": [
+    "POC",
+    "MB",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "turtle-14": [
+    "DEF",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "rubicCube-15": [
+    "POC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "hippo-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "sepia-11": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "coin-16": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "goldfish-11": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "cattle-13": [
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-8": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "kite-9": [
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "car-11": [
+    "POC",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "helmet-6": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "car-15": [
+    "IV",
+    "BC",
+    "SV",
+    "LR"
+  ],
+  "sheep-15": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "helmet-8": [
+    "IV",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR"
+  ],
+  "hippo-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV"
+  ],
+  "kite-11": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "giraffe-19": [
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "tiger-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "car-4": [
+    "IV",
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "ARC"
+  ],
+  "giraffe-20": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "volleyball-3": [
+    "POC",
+    "MB",
+    "FOC",
+    "FM",
+    "OV",
+    "LR"
+  ],
+  "bus-1": [
+    "IV",
+    "MB",
+    "VC",
+    "SV"
+  ],
+  "hat-7": [
+    "IV",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV"
+  ],
+  "sheep-4": [
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "racing-1": [
+    "ROT",
+    "SV",
+    "LR"
+  ],
+  "tiger-7": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "deer-8": [
+    "POC",
+    "DEF",
+    "VC",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "yoyo-8": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "tank-18": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC"
+  ],
+  "motorcycle-20": [
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "spider-11": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "racing-11": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "skateboard-19": [
+    "IV",
+    "MB",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "skateboard-4": [
+    "MB",
+    "SV",
+    "ARC"
+  ],
+  "shark-4": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "elephant-20": [
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "cat-4": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "helmet-13": [
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lizard-3": [
+    "POC",
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "mouse-8": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-15": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "dog-19": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "airplane-13": [
+    "POC",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "helmet-3": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "spider-15": [
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bus-8": [
+    "CM",
+    "BC",
+    "SV"
+  ],
+  "lion-10": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "zebra-3": [
+    "POC",
+    "DEF",
+    "BC"
+  ],
+  "rabbit-15": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-17": [
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "horse-15": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "gametarget-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "zebra-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "chameleon-17": [
+    "MB",
+    "CM",
+    "BC"
+  ],
+  "flag-17": [
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "flag-18": [
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "horse-6": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bus-3": [
+    "IV",
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "car-18": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "leopard-16": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "bottle-6": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "book-7": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "gametarget-4": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "leopard-15": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "umbrella-14": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "squirrel-16": [
+    "DEF",
+    "ROT"
+  ],
+  "bird-9": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "chameleon-18": [
+    "CM",
+    "VC",
+    "SV"
+  ],
+  "horse-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "airplane-2": [
+    "IV",
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "drone-6": [
+    "MB",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "helmet-4": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "tiger-2": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "squirrel-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "shark-3": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "tank-13": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "zebra-5": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "goldfish-18": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "motorcycle-4": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-11": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "train-11": [
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "truck-9": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "robot-8": [
+    "MB",
+    "CM",
+    "ROT",
+    "VC",
+    "SV"
+  ],
+  "car-5": [
+    "POC",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "crocodile-10": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "helmet-10": [
+    "IV",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-4": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "helmet-18": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "frog-18": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "giraffe-10": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "giraffe-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "umbrella-12": [
+    "POC",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-1": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-2": [
+    "POC",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-8": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bottle-3": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "coin-1": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "bottle-20": [
+    "IV",
+    "POC"
+  ],
+  "kangaroo-12": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "airplane-19": [
+    "IV",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "goldfish-7": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "volleyball-12": [
+    "MB",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "drone-16": [
+    "SV",
+    "OV",
+    "LR"
+  ],
+  "train-2": [
+    "MB",
+    "CM",
+    "VC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sheep-7": [
+    "MB",
+    "CM",
+    "SV"
+  ],
+  "tiger-14": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "motorcycle-6": [
+    "POC",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "fox-2": [
+    "DEF",
+    "ROT",
+    "BC",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "yoyo-5": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-6": [
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "dog-13": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "turtle-7": [
+    "DEF",
+    "MB",
+    "CM"
+  ],
+  "skateboard-14": [
+    "ROT",
+    "VC",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "book-15": [
+    "POC",
+    "SV",
+    "ARC"
+  ],
+  "umbrella-18": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "gametarget-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "squirrel-13": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-14": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "electricfan-16": [
+    "POC",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "yoyo-20": [
+    "POC",
+    "MB",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "lion-4": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "guitar-2": [
+    "IV",
+    "POC",
+    "ROT",
+    "BC",
+    "SV"
+  ],
+  "crab-17": [
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "mouse-3": [
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "sheep-3": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "rubicCube-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT"
+  ],
+  "monkey-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "hat-4": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "zebra-15": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "swing-4": [
+    "CM",
+    "SV"
+  ],
+  "bicycle-3": [
+    "IV",
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "basketball-14": [
+    "POC",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "motorcycle-13": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "leopard-6": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "microphone-19": [
+    "POC",
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "kangaroo-8": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "surfboard-7": [
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "guitar-10": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "pool-11": [
+    "POC",
+    "MB",
+    "BC",
+    "VC",
+    "FOC",
+    "LR"
+  ],
+  "zebra-13": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "deer-17": [
+    "POC",
+    "DEF",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "hat-20": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "drone-13": [
+    "MB",
+    "CM",
+    "BC",
+    "VC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "motorcycle-16": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "tank-7": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "drone-7": [
+    "IV",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "turtle-1": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "lion-16": [
+    "IV",
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "electricfan-11": [
+    "IV",
+    "POC",
+    "MB",
+    "CM",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "basketball-1": [
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "LR"
+  ],
+  "elephant-12": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "BC",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "ARC"
+  ],
+  "cattle-18": [
+    "IV",
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "ARC"
+  ],
+  "flag-20": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "kite-12": [
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "bird-14": [
+    "POC",
+    "DEF",
+    "CM",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "squirrel-15": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "gecko-11": [
+    "POC",
+    "DEF",
+    "ROT",
+    "VC",
+    "SV",
+    "OV",
+    "ARC"
+  ],
+  "mouse-9": [
+    "ROT",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "dog-1": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "swing-19": [
+    "POC",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "yoyo-9": [
+    "POC",
+    "MB",
+    "SV",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "shark-14": [
+    "POC",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "tank-10": [
+    "POC",
+    "ROT",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "lion-6": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "shark-2": [
+    "POC",
+    "MB",
+    "ROT",
+    "BC",
+    "SV",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "flag-6": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "rabbit-13": [
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "LR",
+    "ARC"
+  ],
+  "pig-15": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bird-18": [
+    "POC",
+    "DEF",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "truck-4": [
+    "SV"
+  ],
+  "crocodile-11": [
+    "DEF",
+    "SV",
+    "ARC"
+  ],
+  "cat-16": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "FM",
+    "LR",
+    "ARC"
+  ],
+  "pig-17": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "sepia-10": [
+    "DEF",
+    "VC",
+    "SV",
+    "ARC"
+  ],
+  "crocodile-3": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "giraffe-12": [
+    "POC",
+    "DEF",
+    "ROT",
+    "BC",
+    "SV",
+    "FOC",
+    "ARC"
+  ],
+  "skateboard-8": [
+    "POC",
+    "VC",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "rabbit-18": [
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "ARC"
+  ],
+  "sepia-15": [
+    "DEF",
+    "CM",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "chameleon-20": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "SV",
+    "FOC"
+  ],
+  "leopard-10": [
+    "DEF",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "bottle-9": [
+    "POC",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "bottle-17": [
+    "POC",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "FM",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "bus-16": [
+    "IV",
+    "MB",
+    "CM",
+    "SV"
+  ],
+  "tiger-9": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "zebra-11": [
+    "POC",
+    "DEF",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "sepia-13": [
+    "POC",
+    "DEF",
+    "MB",
+    "CM",
+    "ROT",
+    "BC",
+    "SV",
+    "ARC"
+  ],
+  "coin-2": [
+    "POC",
+    "MB",
+    "ROT",
+    "SV",
+    "ARC"
+  ],
+  "zebra-18": [
+    "POC",
+    "DEF",
+    "MB",
+    "ROT",
+    "SV",
+    "FOC",
+    "OV",
+    "LR",
+    "ARC"
+  ],
+  "turtle-19": [
+    "POC",
+    "DEF",
+    "ROT",
+    "SV",
+    "FOC",
+    "LR",
+    "ARC"
+  ],
+  "bus-5": [
+    "IV",
+    "MB",
+    "CM",
+    "BC",
+    "SV"
+  ]
+}

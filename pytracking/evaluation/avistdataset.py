@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import json
 from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
 from pytracking.utils.load_text import load_text
 
@@ -16,10 +17,15 @@ class AVisTDataset(BaseDataset):
 
     Download the dataset from https://sites.google.com/view/avist-benchmark
     """
-    def __init__(self):
+    def __init__(self, attribute=None):
         super().__init__()
         self.base_path = self.env_settings.avist_path
         self.sequence_list = self._get_sequence_list()
+
+        self.att_dict = None
+
+        if attribute is not None:
+            self.sequence_list = self._filter_sequence_list_by_attribute(attribute, self.sequence_list)
 
     def get_sequence_list(self):
         return SequenceList([self._construct_sequence(s) for s in self.sequence_list])
@@ -44,6 +50,31 @@ class AVisTDataset(BaseDataset):
         frames_list = ['{}/img_{:05d}.jpg'.format(frames_path, frame_number) for frame_number in range(1, ground_truth_rect.shape[0] + 1)]
 
         return Sequence(sequence_name, frames_list, 'avist', ground_truth_rect.reshape(-1, 4), target_visible=target_visible)
+
+    def get_attribute_names(self, mode='short'):
+        if self.att_dict is None:
+            self.att_dict = self._load_attributes()
+
+        names = self.att_dict['att_name_short'] if mode == 'short' else self.att_dict['att_name_long']
+        return names
+
+    def _load_attributes(self):
+        with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                               'dataset_attribute_specs', 'avist_attributes.json'), 'r') as f:
+            att_dict = json.load(f)
+        return att_dict
+
+    def _filter_sequence_list_by_attribute(self, att, seq_list):
+        if self.att_dict is None:
+            self.att_dict = self._load_attributes()
+
+        if att not in self.att_dict['att_name_short']:
+            if att in self.att_dict['att_name_long']:
+                att = self.att_dict['att_name_short'][self.att_dict['att_name_long'].index(att)]
+            else:
+                raise ValueError('\'{}\' attribute invalid.')
+
+        return [s for s in seq_list if att in self.att_dict[s]]
 
     def _get_anno_frame_path(self, seq_path, frame_name):
         return os.path.join(seq_path, frame_name)  # frames start from 1

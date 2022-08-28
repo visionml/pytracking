@@ -1,0 +1,694 @@
+{
+  "att_name_long": [
+    "Illumination Variation",
+    "Scale Variation",
+    "Occlusion",
+    "Deformation",
+    "Motion Blur",
+    "Fast Motion",
+    "In-Plane Rotation",
+    "Out-of-Plane Rotation",
+    "Out-of-View",
+    "Background Clutter",
+    "Low Resolution"
+  ],
+  "att_name_short": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR",
+    "OV",
+    "BC",
+    "LR"
+  ],
+  "Basketball": [
+    "IV",
+    "OCC",
+    "DEF",
+    "OPR",
+    "BC"
+  ],
+  "Biker": [
+    "SV",
+    "OCC",
+    "MB",
+    "FM",
+    "OPR",
+    "OV",
+    "LR"
+  ],
+  "Bird1": [
+    "DEF",
+    "FM",
+    "OV"
+  ],
+  "BlurBody": [
+    "SV",
+    "DEF",
+    "MB",
+    "FM",
+    "IPR"
+  ],
+  "BlurCar2": [
+    "SV",
+    "MB",
+    "FM"
+  ],
+  "BlurFace": [
+    "MB",
+    "FM",
+    "IPR"
+  ],
+  "BlurOwl": [
+    "SV",
+    "MB",
+    "FM",
+    "IPR"
+  ],
+  "Bolt": [
+    "OCC",
+    "DEF",
+    "IPR",
+    "OPR"
+  ],
+  "Box": [
+    "IV",
+    "SV",
+    "OCC",
+    "MB",
+    "IPR",
+    "OPR",
+    "OV",
+    "BC",
+    "LR"
+  ],
+  "Car1": [
+    "IV",
+    "SV",
+    "MB",
+    "FM",
+    "BC",
+    "LR"
+  ],
+  "Car4": [
+    "IV",
+    "SV"
+  ],
+  "CarDark": [
+    "IV",
+    "BC"
+  ],
+  "CarScale": [
+    "SV",
+    "OCC",
+    "FM",
+    "IPR",
+    "OPR"
+  ],
+  "ClifBar": [
+    "SV",
+    "OCC",
+    "MB",
+    "FM",
+    "IPR",
+    "OV",
+    "BC"
+  ],
+  "Couple": [
+    "SV",
+    "DEF",
+    "FM",
+    "OPR",
+    "BC"
+  ],
+  "Crowds": [
+    "IV",
+    "DEF",
+    "BC"
+  ],
+  "David": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF",
+    "MB",
+    "IPR",
+    "OPR"
+  ],
+  "Deer": [
+    "MB",
+    "FM",
+    "IPR",
+    "BC",
+    "LR"
+  ],
+  "Diving": [
+    "SV",
+    "DEF",
+    "IPR"
+  ],
+  "DragonBaby": [
+    "SV",
+    "OCC",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR",
+    "OV"
+  ],
+  "Dudek": [
+    "SV",
+    "OCC",
+    "DEF",
+    "FM",
+    "IPR",
+    "OPR",
+    "OV",
+    "BC"
+  ],
+  "Football": [
+    "OCC",
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "Freeman4": [
+    "SV",
+    "OCC",
+    "IPR",
+    "OPR"
+  ],
+  "Girl": [
+    "SV",
+    "OCC",
+    "IPR",
+    "OPR"
+  ],
+  "Human3": [
+    "SV",
+    "OCC",
+    "DEF",
+    "OPR",
+    "BC"
+  ],
+  "Human4": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF"
+  ],
+  "Human4_1": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF"
+  ],
+  "Human4_2": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF"
+  ],
+  "Human6": [
+    "SV",
+    "OCC",
+    "DEF",
+    "FM",
+    "OPR",
+    "OV"
+  ],
+  "Human9": [
+    "IV",
+    "SV",
+    "DEF",
+    "MB",
+    "FM"
+  ],
+  "Ironman": [
+    "IV",
+    "SV",
+    "OCC",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR",
+    "OV",
+    "BC",
+    "LR"
+  ],
+  "Jump": [
+    "SV",
+    "OCC",
+    "DEF",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR"
+  ],
+  "Jumping": [
+    "MB",
+    "FM"
+  ],
+  "Liquor": [
+    "IV",
+    "SV",
+    "OCC",
+    "MB",
+    "FM",
+    "OPR",
+    "OV",
+    "BC"
+  ],
+  "Matrix": [
+    "IV",
+    "SV",
+    "OCC",
+    "FM",
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "MotorRolling": [
+    "IV",
+    "SV",
+    "MB",
+    "FM",
+    "IPR",
+    "BC",
+    "LR"
+  ],
+  "Panda": [
+    "SV",
+    "OCC",
+    "DEF",
+    "IPR",
+    "OPR",
+    "OV",
+    "LR"
+  ],
+  "RedTeam": [
+    "SV",
+    "OCC",
+    "IPR",
+    "OPR",
+    "LR"
+  ],
+  "Shaking": [
+    "IV",
+    "SV",
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "Singer2": [
+    "IV",
+    "DEF",
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "Skating1": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF",
+    "OPR",
+    "BC"
+  ],
+  "Skating2": [
+    "SV",
+    "OCC",
+    "DEF",
+    "FM",
+    "OPR"
+  ],
+  "Skating2_1": [
+    "SV",
+    "OCC",
+    "DEF",
+    "FM",
+    "OPR"
+  ],
+  "Skating2_2": [
+    "SV",
+    "OCC",
+    "DEF",
+    "FM",
+    "OPR"
+  ],
+  "Skiing": [
+    "IV",
+    "SV",
+    "DEF",
+    "IPR",
+    "OPR"
+  ],
+  "Soccer": [
+    "IV",
+    "SV",
+    "OCC",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "Surfer": [
+    "SV",
+    "FM",
+    "IPR",
+    "OPR",
+    "LR"
+  ],
+  "Sylvester": [
+    "IV",
+    "IPR",
+    "OPR"
+  ],
+  "Tiger2": [
+    "IV",
+    "OCC",
+    "DEF",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR",
+    "OV"
+  ],
+  "Trellis": [
+    "IV",
+    "SV",
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "Walking": [
+    "SV",
+    "OCC",
+    "DEF",
+    ""
+  ],
+  "Walking2": [
+    "SV",
+    "OCC",
+    "LR"
+  ],
+  "Woman": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF",
+    "MB",
+    "FM",
+    "OPR"
+  ],
+  "Bird2": [
+    "OCC",
+    "DEF",
+    "FM",
+    "IPR",
+    "OPR"
+  ],
+  "BlurCar1": [
+    "MB",
+    "FM"
+  ],
+  "BlurCar3": [
+    "MB",
+    "FM"
+  ],
+  "BlurCar4": [
+    "MB",
+    "FM"
+  ],
+  "Board": [
+    "SV",
+    "MB",
+    "FM",
+    "OPR",
+    "OV",
+    "BC"
+  ],
+  "Bolt2": [
+    "DEF",
+    "BC"
+  ],
+  "Boy": [
+    "SV",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR"
+  ],
+  "Car2": [
+    "IV",
+    "SV",
+    "MB",
+    "FM",
+    "BC"
+  ],
+  "Car24": [
+    "IV",
+    "SV",
+    "BC"
+  ],
+  "Coke": [
+    "IV",
+    "OCC",
+    "FM",
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "Coupon": [
+    "OCC",
+    "BC"
+  ],
+  "Crossing": [
+    "SV",
+    "DEF",
+    "FM",
+    "OPR",
+    "BC"
+  ],
+  "Dancer": [
+    "SV",
+    "DEF",
+    "IPR",
+    "OPR"
+  ],
+  "Dancer2": [
+    "DEF"
+  ],
+  "David2": [
+    "IPR",
+    "OPR"
+  ],
+  "David3": [
+    "OCC",
+    "DEF",
+    "OPR",
+    "BC"
+  ],
+  "Dog": [
+    "SV",
+    "DEF",
+    "OPR"
+  ],
+  "Dog1": [
+    "SV",
+    "IPR",
+    "OPR"
+  ],
+  "Doll": [
+    "IV",
+    "SV",
+    "OCC",
+    "IPR",
+    "OPR"
+  ],
+  "FaceOcc1": [
+    "OCC"
+  ],
+  "FaceOcc2": [
+    "IV",
+    "OCC",
+    "IPR",
+    "OPR"
+  ],
+  "Fish": [
+    "IV"
+  ],
+  "FleetFace": [
+    "SV",
+    "DEF",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR"
+  ],
+  "Football1": [
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "Freeman1": [
+    "SV",
+    "IPR",
+    "OPR"
+  ],
+  "Freeman3": [
+    "SV",
+    "IPR",
+    "OPR"
+  ],
+  "Girl2": [
+    "SV",
+    "OCC",
+    "DEF",
+    "MB",
+    "OPR"
+  ],
+  "Gym": [
+    "SV",
+    "DEF",
+    "IPR",
+    "OPR"
+  ],
+  "Human2": [
+    "IV",
+    "SV",
+    "MB",
+    "OPR"
+  ],
+  "Human5": [
+    "SV",
+    "OCC",
+    "DEF"
+  ],
+  "Human7": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF",
+    "MB",
+    "FM"
+  ],
+  "Human8": [
+    "IV",
+    "SV",
+    "DEF"
+  ],
+  "Jogging": [
+    "OCC",
+    "DEF",
+    "OPR"
+  ],
+  "Jogging_1": [
+    "OCC",
+    "DEF",
+    "OPR"
+  ],
+  "Jogging_2": [
+    "OCC",
+    "DEF",
+    "OPR"
+  ],
+  "KiteSurf": [
+    "IV",
+    "OCC",
+    "IPR",
+    "OPR"
+  ],
+  "Lemming": [
+    "IV",
+    "SV",
+    "OCC",
+    "FM",
+    "OPR",
+    "OV"
+  ],
+  "Man": [
+    "IV"
+  ],
+  "Mhyang": [
+    "IV",
+    "DEF",
+    "OPR",
+    "BC"
+  ],
+  "MountainBike": [
+    "IPR",
+    "OPR",
+    "BC"
+  ],
+  "Rubik": [
+    "SV",
+    "OCC",
+    "IPR",
+    "OPR"
+  ],
+  "Singer1": [
+    "IV",
+    "SV",
+    "OCC",
+    "OPR"
+  ],
+  "Skater": [
+    "SV",
+    "DEF",
+    "IPR",
+    "OPR"
+  ],
+  "Skater2": [
+    "SV",
+    "DEF",
+    "FM",
+    "IPR",
+    "OPR"
+  ],
+  "Subway": [
+    "OCC",
+    "DEF",
+    "BC"
+  ],
+  "Suv": [
+    "OCC",
+    "IPR",
+    "OV"
+  ],
+  "Tiger1": [
+    "IV",
+    "OCC",
+    "DEF",
+    "MB",
+    "FM",
+    "IPR",
+    "OPR"
+  ],
+  "Toy": [
+    "SV",
+    "FM",
+    "IPR",
+    "OPR"
+  ],
+  "Trans": [
+    "IV",
+    "SV",
+    "OCC",
+    "DEF"
+  ],
+  "Twinnings": [
+    "SV",
+    "OPR"
+  ],
+  "Vase": [
+    "SV",
+    "FM",
+    "IPR"
+  ]
+}

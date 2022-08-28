@@ -101,7 +101,7 @@ def calc_seq_err_robust(pred_bb, anno_bb, dataset, target_visible=None):
 
 
 def extract_results(trackers, dataset, report_name, skip_missing_seq=False, plot_bin_gap=0.05,
-                    exclude_invalid_frames=False):
+                    exclude_invalid_frames=False, verbose=True):
     settings = env_settings()
     eps = 1e-16
 
@@ -160,7 +160,7 @@ def extract_results(trackers, dataset, report_name, skip_missing_seq=False, plot
             ave_success_rate_plot_center[seq_id, trk_id, :] = (err_center.view(-1, 1) <= threshold_set_center.view(1, -1)).sum(0).float() / seq_length
             ave_success_rate_plot_center_norm[seq_id, trk_id, :] = (err_center_normalized.view(-1, 1) <= threshold_set_center_norm.view(1, -1)).sum(0).float() / seq_length
 
-    print('\n\nComputed results over {} / {} sequences'.format(valid_sequence.long().sum().item(), valid_sequence.shape[0]))
+    if verbose: print('\n\nComputed results over {} / {} sequences'.format(valid_sequence.long().sum().item(), valid_sequence.shape[0]))
 
     # Prepare dictionary for saving data
     seq_names = [s.name for s in dataset]

@@ -1,3 +1,5 @@
+import os
+import json
 import numpy as np
 from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
 from pytracking.utils.load_text import load_text
@@ -14,10 +16,15 @@ class UAVDataset(BaseDataset):
 
     Download the dataset from https://ivul.kaust.edu.sa/Pages/pub-benchmark-simulator-uav.aspx
     """
-    def __init__(self):
+    def __init__(self, attribute=None):
         super().__init__()
         self.base_path = self.env_settings.uav_path
         self.sequence_info_list = self._get_sequence_info_list()
+
+        self.att_dict = None
+
+        if attribute is not None:
+            self.sequence_info_list = self._filter_sequence_info_list_by_attribute(attribute, self.sequence_info_list)
 
     def get_sequence_list(self):
         return SequenceList([self._construct_sequence(s) for s in self.sequence_info_list])
@@ -42,6 +49,31 @@ class UAVDataset(BaseDataset):
 
         return Sequence(sequence_info['name'], frames, 'uav', ground_truth_rect[init_omit:,:],
                         object_class=sequence_info['object_class'])
+
+    def get_attribute_names(self, mode='short'):
+        if self.att_dict is None:
+            self.att_dict = self._load_attributes()
+
+        names = self.att_dict['att_name_short'] if mode == 'short' else self.att_dict['att_name_long']
+        return names
+
+    def _load_attributes(self):
+        with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                               'dataset_attribute_specs', 'UAV123_attributes.json'), 'r') as f:
+            att_dict = json.load(f)
+        return att_dict
+
+    def _filter_sequence_info_list_by_attribute(self, att, seq_list):
+        if self.att_dict is None:
+            self.att_dict = self._load_attributes()
+
+        if att not in self.att_dict['att_name_short']:
+            if att in self.att_dict['att_name_long']:
+                att = self.att_dict['att_name_short'][self.att_dict['att_name_long'].index(att)]
+            else:
+                raise ValueError('\'{}\' attribute invalid.')
+
+        return [s for s in seq_list if att in self.att_dict[s['name'][4:]]]
 
     def __len__(self):
         return len(self.sequence_info_list)

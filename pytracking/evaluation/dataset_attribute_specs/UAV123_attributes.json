@@ -1,0 +1,883 @@
+{
+  "att_name_long": [
+    "Scale Variation",
+    "Aspect Ratio Change",
+    "Low Resolution",
+    "Fast Motion",
+    "Full Occlusion",
+    "Partial Occlusion",
+    "Out-of-View",
+    "Background Clutter",
+    "Illumination Variation",
+    "Viewpoint Change",
+    "Camera Motion",
+    "Similar Object"
+  ],
+  "att_name_short": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "FOC",
+    "POC",
+    "OV",
+    "BC",
+    "IV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "car1_s": [
+    "SV",
+    "ARC",
+    "FM",
+    "POC",
+    "OV",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "boat7": [
+    "SV",
+    "ARC",
+    "FM",
+    "VC",
+    "CM"
+  ],
+  "person14_2": [
+    "BC",
+    "CM"
+  ],
+  "building4": [],
+  "person18": [
+    "SV",
+    "ARC",
+    "POC",
+    "OV",
+    "VC",
+    "CM"
+  ],
+  "car1_1": [
+    "SV",
+    "CM",
+    "SOB"
+  ],
+  "person14_1": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "BC",
+    "CM"
+  ],
+  "boat9": [
+    "SV",
+    "ARC",
+    "LR",
+    "POC",
+    "VC"
+  ],
+  "truck4_1": [
+    "SV",
+    "LR",
+    "POC"
+  ],
+  "wakeboard4": [
+    "SV",
+    "ARC",
+    "VC"
+  ],
+  "uav1_3": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "FOC",
+    "POC",
+    "OV",
+    "BC",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "car15": [
+    "SV",
+    "ARC",
+    "LR",
+    "POC",
+    "SOB"
+  ],
+  "person2_s": [],
+  "group1_3": [
+    "SV",
+    "ARC",
+    "LR",
+    "POC",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "boat5": [
+    "SV",
+    "ARC",
+    "VC"
+  ],
+  "person17_1": [
+    "SV",
+    "ARC",
+    "FOC",
+    "POC",
+    "IV"
+  ],
+  "uav3": [
+    "SV",
+    "LR",
+    "FM",
+    "CM"
+  ],
+  "car6_3": [
+    "SV",
+    "ARC",
+    "IV",
+    "VC",
+    "SOB"
+  ],
+  "truck1": [
+    "SV",
+    "ARC",
+    "POC",
+    "VC"
+  ],
+  "person19_1": [
+    "SV",
+    "ARC",
+    "FM",
+    "FOC",
+    "POC",
+    "OV",
+    "CM"
+  ],
+  "wakeboard9": [
+    "SV",
+    "LR",
+    "CM"
+  ],
+  "person20": [
+    "SV",
+    "ARC",
+    "POC",
+    "OV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "car1_3": [
+    "SV",
+    "ARC",
+    "FOC",
+    "POC",
+    "OV",
+    "VC",
+    "SOB"
+  ],
+  "group2_1": [
+    "SV",
+    "ARC",
+    "FOC",
+    "POC",
+    "BC",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "building2": [
+    "SV"
+  ],
+  "boat4": [
+    "SV",
+    "ARC",
+    "IV",
+    "VC"
+  ],
+  "wakeboard8": [
+    "SV",
+    "ARC",
+    "LR",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "wakeboard7": [
+    "SV",
+    "ARC",
+    "VC"
+  ],
+  "group1_4": [
+    "SV",
+    "ARC",
+    "POC",
+    "IV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "wakeboard1": [
+    "SV",
+    "ARC",
+    "IV"
+  ],
+  "person9": [
+    "SV",
+    "ARC",
+    "FOC",
+    "POC",
+    "OV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "person7_1": [
+    "SV",
+    "ARC",
+    "FM",
+    "FOC",
+    "POC",
+    "OV",
+    "VC",
+    "CM"
+  ],
+  "person6": [
+    "VC",
+    "CM"
+  ],
+  "car6_1": [
+    "SV"
+  ],
+  "uav2": [
+    "SV",
+    "LR",
+    "FOC",
+    "POC"
+  ],
+  "car2": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "OV",
+    "CM",
+    "SOB"
+  ],
+  "wakeboard10": [
+    "SV",
+    "LR"
+  ],
+  "person4_1": [
+    "SV",
+    "POC",
+    "OV",
+    "CM",
+    "SOB"
+  ],
+  "person19_3": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "FOC",
+    "POC",
+    "OV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "person2_2": [
+    "POC",
+    "OV",
+    "CM"
+  ],
+  "group2_3": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "BC",
+    "IV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "person3": [
+    "SV",
+    "CM"
+  ],
+  "car2_s": [
+    "SV",
+    "FM",
+    "POC",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "wakeboard3": [
+    "SV",
+    "ARC",
+    "LR",
+    "VC",
+    "CM"
+  ],
+  "truck4_2": [
+    "SV",
+    "LR",
+    "POC",
+    "VC"
+  ],
+  "group2_2": [
+    "SV",
+    "FOC",
+    "POC",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "car17": [
+    "SV",
+    "ARC",
+    "LR",
+    "VC",
+    "CM"
+  ],
+  "person4_2": [
+    "SV",
+    "CM"
+  ],
+  "bird1_1": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "FOC",
+    "POC",
+    "OV"
+  ],
+  "person12_2": [
+    "SV",
+    "ARC",
+    "FOC",
+    "POC",
+    "IV",
+    "CM"
+  ],
+  "person5_2": [
+    "VC"
+  ],
+  "car10": [
+    "SV",
+    "POC",
+    "SOB"
+  ],
+  "car4_s": [
+    "SV",
+    "ARC",
+    "FM",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "car8_2": [
+    "SV",
+    "IV",
+    "SOB"
+  ],
+  "building3": [
+    "SV",
+    "SOB"
+  ],
+  "group3_3": [
+    "SV",
+    "ARC",
+    "POC",
+    "BC",
+    "CM",
+    "SOB"
+  ],
+  "person13": [
+    "POC",
+    "BC",
+    "IV",
+    "VC"
+  ],
+  "person17_2": [
+    "SV",
+    "ARC",
+    "POC",
+    "BC",
+    "IV",
+    "CM"
+  ],
+  "boat3": [
+    "SV",
+    "ARC",
+    "VC"
+  ],
+  "uav5": [
+    "SV",
+    "LR",
+    "BC"
+  ],
+  "person8_2": [
+    "SV",
+    "ARC",
+    "POC",
+    "OV"
+  ],
+  "car1_2": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "wakeboard5": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "POC",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "bike1": [
+    "SV",
+    "ARC",
+    "FM",
+    "IV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "person1_s": [
+    "SV",
+    "FM",
+    "POC",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "truck2": [
+    "SV",
+    "ARC",
+    "LR",
+    "POC"
+  ],
+  "group1_1": [
+    "SV",
+    "POC",
+    "SOB"
+  ],
+  "car13": [
+    "SV",
+    "LR",
+    "CM"
+  ],
+  "person22": [
+    "SV",
+    "LR",
+    "VC"
+  ],
+  "person12_1": [
+    "BC",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "person1": [
+    "CM"
+  ],
+  "boat6": [
+    "SV"
+  ],
+  "uav8": [
+    "SV",
+    "LR",
+    "BC",
+    "IV"
+  ],
+  "car6_4": [
+    "SV",
+    "IV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "person8_1": [
+    "SV",
+    "ARC",
+    "FM",
+    "FOC",
+    "POC",
+    "OV",
+    "CM"
+  ],
+  "person19_2": [
+    "SV",
+    "ARC",
+    "FM",
+    "FOC",
+    "POC",
+    "OV",
+    "CM"
+  ],
+  "boat1": [
+    "SV"
+  ],
+  "car12": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "VC",
+    "SOB"
+  ],
+  "person15": [
+    "SV",
+    "POC",
+    "SOB"
+  ],
+  "group3_2": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "BC",
+    "IV",
+    "CM",
+    "SOB"
+  ],
+  "group1_2": [
+    "SV",
+    "POC",
+    "SOB"
+  ],
+  "boat2": [
+    "SV"
+  ],
+  "person7_2": [
+    "SV",
+    "ARC",
+    "FM",
+    "POC",
+    "OV",
+    "VC",
+    "CM"
+  ],
+  "truck3": [
+    "LR",
+    "POC",
+    "BC"
+  ],
+  "person2_1": [
+    "CM"
+  ],
+  "car8_1": [
+    "SV",
+    "ARC",
+    "POC",
+    "OV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "car3_s": [
+    "SV",
+    "FM",
+    "POC",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "uav4": [
+    "SV",
+    "LR",
+    "SOB"
+  ],
+  "uav1_2": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "OV",
+    "BC",
+    "IV",
+    "VC"
+  ],
+  "car5": [
+    "SV"
+  ],
+  "car16_1": [
+    "SV",
+    "LR",
+    "FM",
+    "POC",
+    "OV",
+    "VC",
+    "CM"
+  ],
+  "person5_1": [
+    "SV",
+    "VC"
+  ],
+  "person10": [
+    "SV",
+    "FOC",
+    "POC",
+    "OV",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "group3_4": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "BC",
+    "IV",
+    "CM",
+    "SOB"
+  ],
+  "car11": [
+    "SV",
+    "LR",
+    "FOC",
+    "POC",
+    "VC",
+    "CM",
+    "SOB"
+  ],
+  "person11": [
+    "SV",
+    "ARC",
+    "POC",
+    "VC",
+    "SOB"
+  ],
+  "person14_3": [
+    "POC",
+    "OV",
+    "BC",
+    "VC",
+    "CM"
+  ],
+  "car4": [
+    "SV",
+    "ARC",
+    "LR",
+    "POC",
+    "CM",
+    "SOB"
+  ],
+  "car6_2": [
+    "SV",
+    "ARC",
+    "POC",
+    "OV",
+    "VC",
+    "CM"
+  ],
+  "person16": [
+    "SV",
+    "ARC",
+    "FOC",
+    "POC",
+    "BC",
+    "IV",
+    "CM"
+  ],
+  "wakeboard2": [
+    "SV",
+    "ARC",
+    "FM",
+    "VC",
+    "CM"
+  ],
+  "group3_1": [
+    "SV",
+    "ARC",
+    "LR",
+    "POC",
+    "SOB"
+  ],
+  "building5": [
+    "CM"
+  ],
+  "bird1_3": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "FOC",
+    "POC",
+    "OV",
+    "CM"
+  ],
+  "building1": [],
+  "car18": [
+    "SV",
+    "ARC",
+    "FM",
+    "VC",
+    "CM"
+  ],
+  "car16_2": [
+    "SV",
+    "ARC",
+    "FM",
+    "VC",
+    "CM"
+  ],
+  "car7": [
+    "SV",
+    "ARC",
+    "FOC",
+    "POC",
+    "VC",
+    "SOB"
+  ],
+  "person3_s": [
+    "SV",
+    "ARC",
+    "FM",
+    "POC",
+    "OV",
+    "IV",
+    "CM"
+  ],
+  "bike2": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "BC",
+    "IV"
+  ],
+  "car6_5": [
+    "SV",
+    "ARC",
+    "POC",
+    "OV",
+    "VC",
+    "CM"
+  ],
+  "uav1_1": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "OV",
+    "BC",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "car3": [
+    "SV",
+    "LR",
+    "POC",
+    "OV",
+    "CM",
+    "SOB"
+  ],
+  "person23": [
+    "SV",
+    "FM",
+    "CM"
+  ],
+  "bike3": [
+    "SV",
+    "LR",
+    "POC"
+  ],
+  "wakeboard6": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "IV",
+    "VC",
+    "CM"
+  ],
+  "bird1_2": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "FOC",
+    "POC",
+    "OV"
+  ],
+  "car9": [
+    "SV",
+    "ARC",
+    "LR",
+    "FM",
+    "POC",
+    "CM",
+    "SOB"
+  ],
+  "boat8": [
+    "SV",
+    "ARC",
+    "LR",
+    "VC"
+  ],
+  "uav6": [
+    "SV",
+    "LR",
+    "FM",
+    "FOC",
+    "POC",
+    "CM",
+    "SOB"
+  ],
+  "car14": [
+    "SV",
+    "ARC",
+    "LR",
+    "FOC",
+    "POC",
+    "OV",
+    "VC",
+    "CM"
+  ],
+  "uav7": [
+    "SV",
+    "LR",
+    "FOC",
+    "POC",
+    "BC"
+  ],
+  "person21": [
+    "SV",
+    "ARC",
+    "LR",
+    "POC",
+    "BC",
+    "IV",
+    "VC",
+    "SOB"
+  ]
+}

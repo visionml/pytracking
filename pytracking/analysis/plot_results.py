@@ -5,6 +5,7 @@ import os
 import torch
 import pickle
 import json
+import math
 from pytracking.evaluation.environment import env_settings
 from pytracking.analysis.extract_results import extract_results
 
@@ -486,3 +487,162 @@ def print_per_sequence_results(trackers, dataset, report_name, merge_results=Fal
     report_text = generate_formatted_report(sequence_names, scores_per_tracker)
 
     print(report_text)
+
+
+def print_results_per_attribute(trackers, datasets, report_name, merge_results=False, verbose=False, **kwargs):
+    """ Print per-attribute results for the given trackers.
+
+        args:
+            trackers - List of trackers to evaluate
+            datasets - Dict of sequences to evaluate, each list of sequences corresponds to one attribute.
+            report_name - Name of the folder in env_settings.perm_mat_path where the computed results and plots are saved
+            merge_results - If True, multiple random runs for a non-deterministic trackers are averaged
+            mode - 'short' or 'long' prints either full or abbreviated attribute names in table
+    """
+    scores = {}
+
+    for name, dataset in datasets.items():
+        # Load pre-computed results
+        eval_data = check_and_load_precomputed_results(trackers, dataset, report_name, verbose=verbose, **kwargs)
+
+        # Merge results from multiple runs
+        if merge_results:
+            eval_data = merge_multiple_runs(eval_data)
+
+        tracker_names = eval_data['trackers']
+        valid_sequence = torch.tensor(eval_data['valid_sequence'], dtype=torch.bool)
+
+        # ********************************  Success Plot **************************************
+        ave_success_rate_plot_overlap = torch.tensor(eval_data['ave_success_rate_plot_overlap'])
+
+        # Index out valid sequences
+        auc_curve, auc = get_auc_curve(ave_success_rate_plot_overlap, valid_sequence)
+        scores[name] = auc
+
+    tracker_disp_names = [get_tracker_display_name(trk) for trk in tracker_names]
+    report_text = generate_formatted_report(tracker_disp_names, scores, table_name=report_name)
+    print(report_text)
+
+    return scores, tracker_disp_names
+
+
+def plot_attributes_radar(trackers, datasets, report_name, merge_results=False, plot_opts=None, verbose=False, **kwargs):
+
+    if plot_opts is None:
+        plot_opts = {}
+
+    # Load data
+    settings = env_settings()
+    result_plot_path = os.path.join(settings.result_plot_path, report_name)
+
+    plot_draw_styles = get_plot_draw_styles()
+
+    scores = {}
+
+    for name, dataset in datasets.items():
+        # Load pre-computed results
+        eval_data = check_and_load_precomputed_results(trackers, dataset, report_name, verbose=verbose, **kwargs)
+
+        # Merge results from multiple runs
+        if merge_results:
+            eval_data = merge_multiple_runs(eval_data)
+
+        valid_sequence = torch.tensor(eval_data['valid_sequence'], dtype=torch.bool)
+
+        # ********************************  Success Plot **************************************
+        ave_success_rate_plot_overlap = torch.tensor(eval_data['ave_success_rate_plot_overlap'])
+
+        # Index out valid sequences
+        auc_curve, auc = get_auc_curve(ave_success_rate_plot_overlap, valid_sequence)
+        scores[name] = auc
+
+    tracker_names = eval_data['trackers']
+
+    plot_radar_draw_save(scores, tracker_names, plot_draw_styles, result_plot_path, plot_opts)
+
+
+def plot_radar_draw_save(scores, trackers, plot_draw_styles, result_plot_path, plot_opts):
+    # Plot settings
+    font_size = plot_opts.get('font_size', 12)
+    font_size_axis = plot_opts.get('font_size_axis', 13)
+    line_width = plot_opts.get('line_width', 2)
+    marker_size = plot_opts.get('marker_size', 5)
+    marker = plot_opts.get('marker', 'o')
+    bbox_to_anchor = plot_opts.get('bbox_to_anchor', (0.5, -0.2))
+    font_size_legend = plot_opts.get('font_size_legend', 13)
+    handlelength = plot_opts.get('handlelength', 1)
+    yticks = plot_opts.get('yticks', [20, 40, 60])
+    legend_loc = plot_opts.get('legend_loc', 'upper center')
+    ylim = plot_opts.get('ylim', [0, 75])
+    tick_pad = plot_opts.get('tick_pad', 10)
+
+    matplotlib.rcParams.update({'font.size': font_size})
+    matplotlib.rcParams.update({'axes.titlesize': font_size_axis})
+    matplotlib.rcParams.update({'axes.titleweight': 'black'})
+    matplotlib.rcParams.update({'axes.labelsize': font_size_axis})
+    matplotlib.rcParams["legend.labelspacing"] = 0.3
+    matplotlib.rcParams["legend.borderpad"] = 0.3
+
+    fig, ax = plt.subplots()
+    ax = plt.subplot(111, polar=True)
+
+    # number of variable
+    attributes = list(scores.keys())
+    N = len(attributes)
+
+    # What will be the angle of each axis in the plot? (we divide the plot / number of variable)
+    angles = [n / float(N) * 2 * math.pi for n in range(N)]
+    angles += angles[:1]
+
+    avg_score_per_tracker = torch.Tensor([torch.mean(torch.Tensor([scores[a][i] for a in attributes])) for i in range(len(trackers))])
+
+    x_tick_labels = []
+    for att in attributes:
+        x_tick_labels.append('\n'.join(att.split(' ')))
+
+    # Draw one axe per variable + add labels
+    ax.set_thetagrids(torch.Tensor(angles[:-1]) / (2 * math.pi) * 360, labels=x_tick_labels)
+    ax.xaxis.set_tick_params(pad=tick_pad)
+
+    # Draw ylabels
+    ax.set_rlabel_position(0)
+    ax.set_yticks(yticks)
+    ax.set_ylim(ylim)
+    ax.tick_params(axis='y', colors='grey')
+    plt.setp(ax.spines.values(), color='grey')
+
+    index_sort = avg_score_per_tracker.argsort(descending=False)
+
+    plotted_lines = []
+    legend_text = []
+
+    for id, id_sort in enumerate(index_sort):
+        # We are going to plot the first line of the data frame.
+        # But we need to repeat the first value to close the circular graph:
+        values = [scores[att][id_sort] for att in attributes]
+        values += values[:1]
+
+        tracker = trackers[id_sort]
+        disp_name = get_tracker_display_name(tracker)
+
+        # Plot data
+        line = ax.plot(angles, values, linewidth=line_width, markersize=marker_size, marker=marker,
+                       color=plot_draw_styles[index_sort.numel() - id - 1]['color'],
+                       linestyle=plot_draw_styles[index_sort.numel() - id - 1]['line_style'])
+
+        plotted_lines.append(line[0])
+
+        if len(disp_name) > 3 and disp_name[:3] == r'\bf':
+            legend_text.append(r'$\mathbf{{{}}}$ $\mathbf{{[{:.1f}]}}$'.format(disp_name[3:], avg_score_per_tracker[id_sort]))
+        else:
+            legend_text.append('{} [{:.1f}]'.format(disp_name, avg_score_per_tracker[id_sort]))
+
+
+    ax.legend(plotted_lines[::-1], legend_text[::-1], loc=legend_loc, fancybox=False, edgecolor='black',
+              fontsize=font_size_legend, framealpha=1.0, handlelength=handlelength, handletextpad=0.3,
+              bbox_to_anchor=bbox_to_anchor, ncol=min(len(trackers), 3))
+
+    fig.tight_layout()
+    fig.savefig('{}/radar_plot.pdf'.format(result_plot_path), dpi=300, format='pdf', transparent=True,
+                bbox_inches='tight')
+    plt.draw()
