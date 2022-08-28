@@ -175,7 +175,7 @@ For OTB-100, NFS, UAV123, LaSOT and LaSOTExtSub, the results were averaged over 
 as per the VOT protocol. As TrackingNet results are obtained using the online evaluation server, only a 
 single run was used for TrackingNet. For GOT-10k, 3 runs are used as per protocol.
 
-The raw results on the AVisT benchmark for the trackers in this repository (see above) and some external trackers is available [here](https://drive.google.com/open?id=1Sacgh5TZVjfpanmwCFvKkpnOA7UHZCY0).
+The raw results on the AVisT benchmark for the trackers in this repository (see above) and some external trackers are available [here](https://drive.google.com/open?id=1Sacgh5TZVjfpanmwCFvKkpnOA7UHZCY0).
 
 
 ## VOS
