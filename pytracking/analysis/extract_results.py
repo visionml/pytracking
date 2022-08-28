@@ -75,9 +75,9 @@ def calc_seq_err_robust(pred_bb, anno_bb, dataset, target_visible=None):
 
     if target_visible is not None:
         target_visible = target_visible.bool()
-        valid = ((anno_bb[:, 2:] > 0.0).sum(1) == 2) & target_visible
+        valid = ((anno_bb > 0.0).sum(1) == 4) & target_visible
     else:
-        valid = ((anno_bb[:, 2:] > 0.0).sum(1) == 2)
+        valid = ((anno_bb > 0.0).sum(1) == 4)
 
     err_center = calc_err_center(pred_bb, anno_bb)
     err_center_normalized = calc_err_center(pred_bb, anno_bb, normalized=True)

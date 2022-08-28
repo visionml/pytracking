@@ -26,7 +26,12 @@ def get_plot_draw_styles():
                        {'color': (0.6, 0.3, 0.9), 'line_style': '-'},
                        {'color': (0.4, 0.7, 0.1), 'line_style': '-'},
                        {'color': (0.2, 0.1, 0.7), 'line_style': '-'},
-                       {'color': (0.7, 0.6, 0.2), 'line_style': '-'}]
+                       {'color': (0.7, 0.6, 0.2), 'line_style': '-'},
+                       {'color': (255.0 / 255.0, 102.0 / 255.0, 102.0 / 255.0), 'line_style': '-'},
+                       {'color': (153.0 / 255.0, 255.0 / 255.0, 153.0 / 255.0), 'line_style': '-'},
+                       {'color': (102.0 / 255.0, 102.0 / 255.0, 255.0 / 255.0), 'line_style': '-'},
+                       {'color': (255.0 / 255.0, 192.0 / 255.0, 203.0 / 255.0), 'line_style': '-'},
+                       ]
 
     return plot_draw_style
 
