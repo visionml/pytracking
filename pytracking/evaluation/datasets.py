@@ -23,6 +23,7 @@ dataset_dict = dict(
                                        kwargs=dict()),
     oxuva_dev=DatasetInfo(module=pt % "oxuva", class_name="OxUvADataset", kwargs=dict(split='dev')),
     oxuva_test=DatasetInfo(module=pt % "oxuva", class_name="OxUvADataset", kwargs=dict(split='test')),
+    avist=DatasetInfo(module=pt % "avist", class_name="AVisTDataset", kwargs=dict()),
     dv2017_val=DatasetInfo(module="ltr.dataset.davis", class_name="Davis", kwargs=dict(version='2017', split='val')),
     dv2016_val=DatasetInfo(module="ltr.dataset.davis", class_name="Davis", kwargs=dict(version='2016', split='val')),
     dv2017_test_dev=DatasetInfo(module="ltr.dataset.davis", class_name="Davis",
