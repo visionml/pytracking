@@ -3,7 +3,7 @@ A general python framework for visual object tracking and video object segmentat
 
 ### :fire: We released AVisT a new tracking dataset for adverse visibility! 👇
 * [AVisT: A Benchmark for Visual Object Tracking in Adverse Visibility
-](https://arxiv.org/abs/2208.06888) | The data is available [here](https://sites.google.com/view/avist-benchmark) and the evaluation code will be released soon! 
+](https://arxiv.org/abs/2208.06888) | The [dataset](https://sites.google.com/view/avist-benchmark), the integration [avistdataset.py](pytracking/evaluation/avistdataset.py) and the evaluation code [analyze_avist_results.ipynb](pytracking/notebooks/analyze_avist_results.ipynb) are available! 
 
 
 ### :fire: One tracking paper accepted at ECCV 2022! 👇
