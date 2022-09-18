@@ -58,7 +58,7 @@ class Lasot(BaseVideoDataset):
                 file_path = os.path.join(ltr_path, 'data_specs', 'lasot_train_split.txt')
             else:
                 raise ValueError('Unknown split name.')
-            sequence_list = pandas.read_csv(file_path, header=None, squeeze=True).values.tolist()
+            sequence_list = pandas.read_csv(file_path, header=None).squeeze("columns").values.tolist()
         elif vid_ids is not None:
             sequence_list = [c+'-'+str(v) for c in self.class_list for v in vid_ids]
         else:
