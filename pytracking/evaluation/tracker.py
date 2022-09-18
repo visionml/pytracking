@@ -190,11 +190,26 @@ class Tracker:
         prev_output = OrderedDict(out)
 
         init_default = {'target_bbox': init_info.get('init_bbox'),
+                        'clf_target_bbox': init_info.get('init_bbox'),
                         'time': time.time() - start_time,
                         'segmentation': init_info.get('init_mask'),
                         'object_presence_score': 1.}
 
         _store_outputs(out, init_default)
+
+        segmentation = out['segmentation'] if 'segmentation' in out else None
+        bboxes = [init_default['target_bbox']]
+        if 'clf_target_bbox' in out:
+            bboxes.append(out['clf_target_bbox'])
+        if 'clf_search_area' in out:
+            bboxes.append(out['clf_search_area'])
+        if 'segm_search_area' in out:
+            bboxes.append(out['segm_search_area'])
+
+        if self.visdom is not None:
+            tracker.visdom_draw_tracking(image, bboxes, segmentation)
+        elif tracker.params.visualization:
+            self.visualize(image, bboxes, segmentation)
 
         for frame_num, frame_path in enumerate(seq.frames[1:], start=1):
             while True:
@@ -218,15 +233,25 @@ class Tracker:
             _store_outputs(out, {'time': time.time() - start_time})
 
             segmentation = out['segmentation'] if 'segmentation' in out else None
+
+            bboxes = [out['target_bbox']]
+            if 'clf_target_bbox' in out:
+                bboxes.append(out['clf_target_bbox'])
+            if 'clf_search_area' in out:
+                bboxes.append(out['clf_search_area'])
+            if 'segm_search_area' in out:
+                bboxes.append(out['segm_search_area'])
+
             if self.visdom is not None:
-                tracker.visdom_draw_tracking(image, out['target_bbox'], segmentation)
+                tracker.visdom_draw_tracking(image, bboxes, segmentation)
             elif tracker.params.visualization:
-                self.visualize(image, out['target_bbox'], segmentation)
+                self.visualize(image, bboxes, segmentation)
 
         for key in ['target_bbox', 'segmentation']:
             if key in output and len(output[key]) <= 1:
                 output.pop(key)
 
+        # next two lines are needed for oxuva output format.
         output['image_shape'] = image.shape[:2]
         output['object_presence_score_threshold'] = tracker.params.get('object_presence_score_threshold', 0.55)
 
@@ -674,6 +699,8 @@ class Tracker:
 
         if isinstance(state, (OrderedDict, dict)):
             boxes = [v for k, v in state.items()]
+        elif isinstance(state, list):
+            boxes = state
         else:
             boxes = (state,)
 

@@ -181,8 +181,12 @@ class MultiObjectWrapper:
         return out_merged
 
     def visdom_draw_tracking(self, image, box, segmentation):
-        if isinstance(box, (OrderedDict, dict)):
+        if box is None:
+            box = []
+        elif isinstance(box, (OrderedDict, dict)):
             box = [v for k, v in box.items()]
+        elif isinstance(box, list):
+            box = [list(col)[0] for col in zip(*[d.values() for d in box])]
         else:
             box = (box,)
         if segmentation is None:
