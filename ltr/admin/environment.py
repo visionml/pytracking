@@ -11,6 +11,7 @@ def create_default_local_file():
         'workspace_dir': empty_str,
         'tensorboard_dir': 'self.workspace_dir + \'/tensorboard/\'',
         'pretrained_networks': 'self.workspace_dir + \'/pretrained_networks/\'',
+        'pregenerated_masks': empty_str,
         'lasot_dir': empty_str,
         'got10k_dir': empty_str,
         'trackingnet_dir': empty_str,

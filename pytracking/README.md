@@ -6,6 +6,7 @@ A general python library for visual tracking algorithms.
 * [Running a tracker](#running-a-tracker)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [RTS](#RTS) 
    * [ToMP](#ToMP) 
    * [KeepTrack](#KeepTrack)
    * [LWL](#LWL)
@@ -73,10 +74,21 @@ The tookit consists of the following sub-modules.
 ## Trackers
  The toolkit contains the implementation of the following trackers.  
 
+### RTS
+The official implementation for RTS ([paper](https://arxiv.org/abs/2203.11191)).  
+The tracker implementation file can be found at [tracker.rts](tracker/rts).  
+The trained models of RTS and STA can be found at [this url](https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW).
+
+
+##### Parameter Files
+One parameter settings is provided.
+* **[rts50](parameter/rts/rts50.py)**: This set of parameters was used to generate all results using a ResNet50 backbone.
+
+
 ### ToMP
 The official implementation for ToMP ([paper](https://arxiv.org/abs/2203.11192)).  
 The tracker implementation file can be found at [tracker.tomp](tracker/tomp).  
-The trained models of KeepTrack and the base tracker can be found at [tomp50.pth.tar](https://drive.google.com/file/d/1dU1IYIv5x_7iOUVTgh8uOq36POFOQBWT) and [tomp101.pth.tar](https://drive.google.com/file/d/1XQAtrM9n_PHQn-B2i8y6Q-PQFcAoKObA).
+The trained models of ToMP and the base tracker can be found at [tomp50.pth.tar](https://drive.google.com/file/d/1dU1IYIv5x_7iOUVTgh8uOq36POFOQBWT) and [tomp101.pth.tar](https://drive.google.com/file/d/1XQAtrM9n_PHQn-B2i8y6Q-PQFcAoKObA).
 
 
 ##### Parameter Files

@@ -163,6 +163,19 @@ of the models on standard tracking datasets.
     <td>50.9</td>
     <td><a href="https://drive.google.com/file/d/1XQAtrM9n_PHQn-B2i8y6Q-PQFcAoKObA">model</a></td>
   </tr>
+  <tr>
+    <td>RTS</td>
+    <td>-</td>
+    <td>-</td>
+    <td>65.4</td>
+    <td>67.9</td>
+    <td>69.7</td>
+    <td>-</td>
+    <td>81.6</td>
+    <td>-</td>
+    <td>-</td>
+    <td><a href="https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW?usp=sharing">model</a></td>
+  </tr>
 </table>
 
 ### Raw Results
@@ -181,10 +194,12 @@ The raw results on the AVisT benchmark for the trackers in this repository (see 
 ## VOS
 
 ### Models
-|    Model    | YouTube-VOS 2018 (Overall Score) | YouTube-VOS 2019 (Overall Score) | DAVIS 2017 val (J&F score) | Links |
-|:-----------:|:--------------------------------:|:--------------------------------:|:--------------------------:|:-----:|
-|  [LWL_ytvos](ltr/train_settings/lwl/lwl_stage2.py)  |               81.5               |               81.0               |              --             | [model](https://drive.google.com/file/d/1Xnm4A2BRBliDBKO4EEFHAQfGyfOMsVyY/view?usp=sharing) |
-| [LWL_boxinit](ltr/train_settings/lwl/lwl_boxinit.py) |               70.4               |                 --                |            70.8            | [model](https://drive.google.com/file/d/1aAsj_N1LAMpmmcb1iOxo2z66tJM6MEuM/view?usp=sharing) |
+|                        Model                         | YouTube-VOS 2018 (Overall Score) | YouTube-VOS 2019 (Overall Score) | DAVIS 2017 val (J&F score) | Links |
+|:----------------------------------------------------:|:--------------------------------:|:--------------------------------:|:--------------------------:|:-----:|
+|  [LWL_ytvos](ltr/train_settings/lwl/lwl_stage2.py)   |               81.5               |               81.0               |             --             | [model](https://drive.google.com/file/d/1Xnm4A2BRBliDBKO4EEFHAQfGyfOMsVyY/view?usp=sharing) |
+| [LWL_boxinit](ltr/train_settings/lwl/lwl_boxinit.py) |               70.4               |                --                |            70.8            | [model](https://drive.google.com/file/d/1aAsj_N1LAMpmmcb1iOxo2z66tJM6MEuM/view?usp=sharing) |
+|                         RTS                          |                --                |               79.7               |            80.2            | [model](https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW?usp=sharing) |
+|                      RTS (Box)                       |                --                |               70.8               |            72.6            | [model](https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW?usp=sharing) |
 
 
 ### Raw Results

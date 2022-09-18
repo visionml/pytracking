@@ -1,6 +1,9 @@
 # PyTracking
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
+### :fire: One tracking paper accepted at ECCV 2022! 👇
+* [Robust Visual Tracking by Segmentation](https://arxiv.org/abs/2203.11191) | **Code available!**
+
 ### :fire: We released AVisT a new tracking dataset for adverse visibility! 👇
 * [AVisT: A Benchmark for Visual Object Tracking in Adverse Visibility
 ](https://arxiv.org/abs/2208.06888) | The [dataset](https://sites.google.com/view/avist-benchmark), the integration [avistdataset.py](pytracking/evaluation/avistdataset.py) and the evaluation code [analyze_avist_results.ipynb](pytracking/notebooks/analyze_avist_results.ipynb) are available! 
@@ -19,9 +22,9 @@ A general python framework for visual object tracking and video object segmentat
 
 ## Highlights
 
-### ToMP, KeepTrack, LWL, KYS, PrDiMP, DiMP and ATOM Trackers
+### RTS, ToMP, KeepTrack, LWL, KYS, PrDiMP, DiMP and ATOM Trackers
 
-Official implementation of the **ToMP** (CVPR 2022), **KeepTrack** (ICCV 2021), **LWL** (ECCV 2020), **KYS** (ECCV 2020), **PrDiMP** (CVPR 2020), 
+Official implementation of the **RTS** (ECCV 2022), **ToMP** (CVPR 2022), **KeepTrack** (ICCV 2021), **LWL** (ECCV 2020), **KYS** (ECCV 2020), **PrDiMP** (CVPR 2020),
 **DiMP** (ICCV 2019), and **ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
 
 ### [Tracking Libraries](pytracking)
@@ -50,13 +53,25 @@ benchmarks are provided in the [model zoo](MODEL_ZOO.md).
 ## Trackers
 The toolkit contains the implementation of the following trackers.
 
+### RTS (ECCV 2022)
+
+**[[Paper]](https://arxiv.org/abs/2203.11191) [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
+[[Models]](MODEL_ZOO.md#Models-1) [[Training Code]](./ltr/README.md#RTS)  [[Tracker Code]](./pytracking/README.md#RTS)**
+
+Official implementation of **RTS**. RTS is a robust, end-to-end trainable, segmentation-centric pipeline that internally
+works with segmentation masks instead of bounding boxes. Thus, it can learn a better target representation that clearly
+differentiates the target from the background. To achieve the necessary robustness for challenging tracking scenarios,
+a separate instance localization component is used to condition the segmentation decoder when producing the output mask.
+
+![RTS_teaser_figure](pytracking/.figs/rts_overview.png)
+
 ### ToMP (CVPR 2022)
 
 **[[Paper]](https://arxiv.org/abs/2203.11192) [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
   [[Models]](MODEL_ZOO.md#Models-1) [[Training Code]](./ltr/README.md#ToMP)  [[Tracker Code]](./pytracking/README.md#ToMP)**
 
 Official implementation of **ToMP**. ToMP employs a Transformer-based 
-model prediction module in order to localize the target. The model predictor is further exteneded to estimate a second set
+model prediction module in order to localize the target. The model predictor is further extended to estimate a second set
 of weights that are applied for accurate bounding box regression.
 The resulting tracker ToMP relies on training and on test frame information in order to predict all weights transductively.
 
@@ -191,6 +206,7 @@ python run_webcam.py dimp dimp50
 * [Martin Danelljan](https://martin-danelljan.github.io/)  
 * [Goutam Bhat](https://goutamgmb.github.io/)
 * [Christoph Mayer](https://2006pmach.github.io/)
+* [Matthieu Paul](https://github.com/mattpfr)
 
 ### Guest Contributors
 * [Felix Järemo-Lawin](https://liu.se/en/employee/felja34) [LWL]

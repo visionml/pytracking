@@ -1611,3 +1611,135 @@ class LTRBDenseRegressionProcessing(BaseProcessing):
         data['train_ltrb_target'], data['train_sample_region'] = self._generate_ltbr_regression_targets(data['train_anno'])
 
         return data
+
+
+class RTSProcessing(BaseProcessing):
+    """ The processing class used for training RTS. Based from LWLProcessing
+        and extended with the _generate_label_function from DiMP.
+    """
+
+    def __init__(self, search_area_factor, output_sz, center_jitter_factor, scale_jitter_factor, crop_type='replicate',
+                 max_scale_change=None, mode='pair', new_roll=False, label_function_params=None, *args, **kwargs):
+        """
+        args:
+            search_area_factor - The size of the search region  relative to the target size.
+            output_sz - The size (width, height) to which the search region is resized. The aspect ratio is always
+                        preserved when resizing the search region
+            center_jitter_factor - A dict containing the amount of jittering to be applied to the target center before
+                                    extracting the search region. See _get_jittered_box for how the jittering is done.
+            scale_jitter_factor - A dict containing the amount of jittering to be applied to the target size before
+                                    extracting the search region. See _get_jittered_box for how the jittering is done.
+            crop_type - Determines how out-of-frame regions are handled when cropping the search region.
+                        If 'replicate', the boundary pixels are replicated in case the search region crop goes out of
+                                        image.
+                        If 'inside', the search region crop is shifted/shrunk to fit completely inside the image.
+                        If 'inside_major', the search region crop is shifted/shrunk to fit completely inside one axis
+                        of the image.
+            max_scale_change - Maximum allowed scale change when shrinking the search region to fit the image
+                               (only applicable to 'inside' and 'inside_major' cropping modes). In case the desired
+                               shrink factor exceeds the max_scale_change, the search region is only shrunk to the
+                               factor max_scale_change. Out-of-frame regions are then handled by replicating the
+                               boundary pixels. If max_scale_change is set to None, unbounded shrinking is allowed.
+
+            mode - Either 'pair' or 'sequence'. If mode='sequence', then output has an extra dimension for frames
+            new_roll - Whether to use the same random roll values for train and test frames when applying the joint
+                       transformation. If True, a new random roll is performed for the test frame transformations. Thus,
+                       if performing random flips, the set of train frames and the set of test frames will be flipped
+                       independently.
+           label_function_params - Arguments for the label generation process. See _generate_label_function for details.
+
+        """
+        super().__init__(*args, **kwargs)
+        self.search_area_factor = search_area_factor
+        self.output_sz = output_sz
+        self.center_jitter_factor = center_jitter_factor
+        self.scale_jitter_factor = scale_jitter_factor
+        self.crop_type = crop_type
+        self.mode = mode
+        self.max_scale_change = max_scale_change
+
+        self.new_roll = new_roll
+
+        self.label_function_params = label_function_params
+
+    def _get_jittered_box(self, box, mode):
+        """ Jitter the input box
+        args:
+            box - input bounding box
+            mode - string 'train' or 'test' indicating train or test data
+
+        returns:
+            torch.Tensor - jittered box
+        """
+
+        if self.scale_jitter_factor.get('mode', 'gauss') == 'gauss':
+            jittered_size = box[2:4] * torch.exp(torch.randn(2) * self.scale_jitter_factor[mode])
+        elif self.scale_jitter_factor.get('mode', 'gauss') == 'uniform':
+            jittered_size = box[2:4] * torch.exp(torch.FloatTensor(2).uniform_(-self.scale_jitter_factor[mode],
+                                                                               self.scale_jitter_factor[mode]))
+        else:
+            raise Exception
+
+        max_offset = (jittered_size.prod().sqrt() * torch.tensor(self.center_jitter_factor[mode])).float()
+        jittered_center = box[0:2] + 0.5 * box[2:4] + max_offset * (torch.rand(2) - 0.5)
+
+        return torch.cat((jittered_center - 0.5 * jittered_size, jittered_size), dim=0)
+
+
+    def _generate_label_function(self, target_bb):
+        """ Taken from DiMP processing
+        Generates the gaussian label function centered at target_bb
+        args:
+            target_bb - target bounding box (num_images, 4)
+
+        returns:
+            torch.Tensor - Tensor of shape (num_images, label_sz, label_sz) containing the label for each sample
+        """
+
+        gauss_label = prutils.gaussian_label_function(target_bb.view(-1, 4), self.label_function_params['sigma_factor'],
+                                                      self.label_function_params['kernel_sz'],
+                                                      self.label_function_params['feature_sz'], self.output_sz,
+                                                      end_pad_if_even=self.label_function_params.get('end_pad_if_even', True))
+
+        return gauss_label
+
+
+    def __call__(self, data: TensorDict):
+        # Apply joint transformations. i.e. All train/test frames in a sequence are applied the transformation with the
+        # same parameters
+        if self.transform['joint'] is not None:
+            data['train_images'], data['train_anno'], data['train_masks'] = self.transform['joint'](
+                image=data['train_images'], bbox=data['train_anno'], mask=data['train_masks'])
+            data['test_images'], data['test_anno'], data['test_masks'] = self.transform['joint'](
+                image=data['test_images'], bbox=data['test_anno'], mask=data['test_masks'], new_roll=self.new_roll)
+
+        for s in ['train', 'test']:
+            assert self.mode == 'sequence' or len(data[s + '_images']) == 1, \
+                "In pair mode, num train/test frames must be 1"
+
+            # Add a uniform noise to the center pos
+            jittered_anno = [self._get_jittered_box(a, s) for a in data[s + '_anno']]
+            orig_anno = data[s + '_anno']
+
+            # Extract a crop containing the target
+            crops, boxes, mask_crops = prutils.target_image_crop(data[s + '_images'], jittered_anno,
+                                                                 data[s + '_anno'], self.search_area_factor,
+                                                                 self.output_sz, mode=self.crop_type,
+                                                                 max_scale_change=self.max_scale_change,
+                                                                 masks=data[s + '_masks'])
+
+            # Apply independent transformations to each image
+            data[s + '_images'], data[s + '_anno'], data[s + '_masks'] = self.transform[s](image=crops, bbox=boxes, mask=mask_crops, joint=False)
+
+        # Prepare output
+        if self.mode == 'sequence':
+            data = data.apply(stack_tensors)
+        else:
+            data = data.apply(lambda x: x[0] if isinstance(x, list) else x)
+
+        # Generate label functions
+        if self.label_function_params is not None:
+            data['train_label'] = self._generate_label_function(data['train_anno'])
+            data['test_label'] = self._generate_label_function(data['test_anno'])
+
+        return data
