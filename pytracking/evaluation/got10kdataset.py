@@ -2,6 +2,8 @@ import numpy as np
 from pytracking.evaluation.data import Sequence, BaseDataset, SequenceList
 from pytracking.utils.load_text import load_text
 import os
+from PIL import Image
+from pathlib import Path
 
 
 class GOT10KDataset(BaseDataset):
@@ -15,7 +17,7 @@ class GOT10KDataset(BaseDataset):
 
     Download dataset from http://got-10k.aitestunion.com/downloads
     """
-    def __init__(self, split):
+    def __init__(self, split, vos_mode=False):
         super().__init__()
         # Split can be test, val, or ltrval (a validation split consisting of videos from the official train set)
         if split == 'test' or split == 'val':
@@ -25,6 +27,12 @@ class GOT10KDataset(BaseDataset):
 
         self.sequence_list = self._get_sequence_list(split)
         self.split = split
+
+        self.vos_mode = vos_mode
+
+        self.mask_path = None
+        if self.vos_mode:
+            self.mask_path = self.env_settings.got10k_mask_path
 
     def get_sequence_list(self):
         return SequenceList([self._construct_sequence(s) for s in self.sequence_list])
@@ -39,7 +47,26 @@ class GOT10KDataset(BaseDataset):
         frame_list.sort(key=lambda f: int(f[:-4]))
         frames_list = [os.path.join(frames_path, frame) for frame in frame_list]
 
-        return Sequence(sequence_name, frames_list, 'got10k', ground_truth_rect.reshape(-1, 4))
+        masks = None
+        if self.vos_mode:
+            seq_mask_path = '{}/{}'.format(self.mask_path, sequence_name)
+            masks = [self._load_mask(Path(self._get_anno_frame_path(seq_mask_path, f[:-3] + 'png'))) for f in
+                     frame_list[0:1]]
+
+        return Sequence(sequence_name, frames_list, 'got10k', ground_truth_rect.reshape(-1, 4),
+                        ground_truth_seg=masks)
+
+    @staticmethod
+    def _load_mask(path):
+        if not path.exists():
+            print('Error: Could not read: ', path, flush=True)
+            return None
+        im = np.array(Image.open(path))
+        im = np.atleast_3d(im)[..., 0]
+        return im
+
+    def _get_anno_frame_path(self, seq_path, frame_name):
+        return os.path.join(seq_path, frame_name)
 
     def __len__(self):
         return len(self.sequence_list)
