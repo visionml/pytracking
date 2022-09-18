@@ -85,11 +85,15 @@ class LinearFilterLearnGen(nn.Module):
         return TensorList([data_residual, reg_residual])
 
 
+
 class LinearFilterHinge(nn.Module):
-    def __init__(self, feat_stride=16, init_filter_reg=1e-2, hinge_threshold=-999, activation_leak=0.0, score_act='bentpar', act_param=None):
+    def __init__(self, feat_stride=16, init_filter_reg=1e-2, hinge_threshold=-999, activation_leak=0.0, score_act='bentpar', act_param=None, learn_filter_reg=True):
         super().__init__()
 
-        self.filter_reg = nn.Parameter(init_filter_reg * torch.ones(1))
+        if learn_filter_reg:
+            self.filter_reg = nn.Parameter(init_filter_reg * torch.ones(1))
+        else:
+            self.filter_reg = init_filter_reg
         self.feat_stride = feat_stride
         self.hinge_threshold = hinge_threshold
         self.activation_leak = activation_leak
