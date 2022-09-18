@@ -98,6 +98,6 @@ def imwrite_indexed(filename, array, color_palette=None):
     if np.atleast_3d(array).shape[2] != 1:
         raise Exception("Saving indexed PNGs requires 2D array.")
 
-    im = Image.fromarray(array)
+    im = Image.fromarray(array.astype('uint8'))
     im.putpalette(color_palette.ravel())
     im.save(filename, format='PNG')
