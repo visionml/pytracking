@@ -2,7 +2,7 @@ import torch
 import torch.utils.data.dataloader
 import importlib
 import collections
-from torch._six import string_classes
+
 from pytracking import TensorDict, TensorList
 
 string_classes = (str, bytes)
