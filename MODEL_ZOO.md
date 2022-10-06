@@ -173,7 +173,7 @@ of the models on standard tracking datasets.
     <td>-</td>
     <td>81.6</td>
     <td>-</td>
-    <td>-</td>
+    <td>50.8</td>
     <td><a href="https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW?usp=sharing">model</a></td>
   </tr>
 </table>
