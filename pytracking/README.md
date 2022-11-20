@@ -77,7 +77,7 @@ The tookit consists of the following sub-modules.
 ### RTS
 The official implementation for RTS ([paper](https://arxiv.org/abs/2203.11191)).  
 The tracker implementation file can be found at [tracker.rts](tracker/rts).  
-The trained models of RTS and STA can be found at [this url](https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW).
+The trained models of RTS and STA can be found at [this url](https://drive.google.com/drive/folders/1mOSA6HZ80zDu-6R7EOSiW8YwQMlzR5SQ).
 
 
 ##### Parameter Files

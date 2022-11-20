@@ -174,7 +174,7 @@ of the models on standard tracking datasets.
     <td>81.6</td>
     <td>-</td>
     <td>50.8</td>
-    <td><a href="https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW?usp=sharing">model</a></td>
+    <td><a href="https://drive.google.com/drive/folders/1mOSA6HZ80zDu-6R7EOSiW8YwQMlzR5SQ?usp=sharing">model</a></td>
   </tr>
 </table>
 
@@ -198,8 +198,8 @@ The raw results on the AVisT benchmark for the trackers in this repository (see 
 |:----------------------------------------------------:|:--------------------------------:|:--------------------------------:|:--------------------------:|:-----:|
 |  [LWL_ytvos](ltr/train_settings/lwl/lwl_stage2.py)   |               81.5               |               81.0               |             --             | [model](https://drive.google.com/file/d/1Xnm4A2BRBliDBKO4EEFHAQfGyfOMsVyY/view?usp=sharing) |
 | [LWL_boxinit](ltr/train_settings/lwl/lwl_boxinit.py) |               70.4               |                --                |            70.8            | [model](https://drive.google.com/file/d/1aAsj_N1LAMpmmcb1iOxo2z66tJM6MEuM/view?usp=sharing) |
-|                         RTS                          |                --                |               79.7               |            80.2            | [model](https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW?usp=sharing) |
-|                      RTS (Box)                       |                --                |               70.8               |            72.6            | [model](https://drive.google.com/drive/folders/1uMQqeRN4RbaeF3IsRpvjvk6D5K8khpSW?usp=sharing) |
+|                         RTS                          |                --                |               79.7               |            80.2            | [model](https://drive.google.com/drive/folders/1mOSA6HZ80zDu-6R7EOSiW8YwQMlzR5SQ?usp=sharing) |
+|                      RTS (Box)                       |                --                |               70.8               |            72.6            | [model](https://drive.google.com/drive/folders/1mOSA6HZ80zDu-6R7EOSiW8YwQMlzR5SQ?usp=sharing) |
 
 
 ### Raw Results

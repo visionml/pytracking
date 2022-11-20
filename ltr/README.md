@@ -49,7 +49,7 @@ The framework consists of the following submodules.
 
 ### RTS
  Three steps are required to train RTS:
- - Download [lasot_got10k_pregenerated_masks.zip](https://drive.google.com/file/d/1p3vSWd_kcwoLdiw1fg24Qd4V4eiRFJp4/view?usp=sharing).
+ - Download [lasot_got10k_pregenerated_masks.zip](https://drive.google.com/file/d/17YcdQOoA4DubK-krClJfxNtw9ooCyWHv/view?usp=sharing).
 
    Unzip the archive in the `pregenerated_masks` set in `ltr/admin/local.py`.
  - Download the pretrained LWL weights [lwl_stage2.pth](https://drive.google.com/file/d/1Xnm4A2BRBliDBKO4EEFHAQfGyfOMsVyY/view?usp=sharing).
