@@ -1,6 +1,9 @@
 # PyTracking
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
+### :fire: One tracking paper accepted at WACV 2023! 👇
+* [Efficient Visual Tracking with Exemplar Transformers](https://arxiv.org/abs/2112.09686) | **Code available!**
+
 ### :fire: One tracking paper accepted at ECCV 2022! 👇
 * [Robust Visual Tracking by Segmentation](https://arxiv.org/abs/2203.11191) | **Code available!**
 
@@ -10,10 +13,6 @@ A general python framework for visual object tracking and video object segmentat
 
 ### One tracking paper accepted at CVPR 2022!
 * [Transforming Model Prediction for Tracking](https://arxiv.org/abs/2203.11192) | **Code available!**
-
-### Two tracking/VOS papers accepted at ICCV 2021!
-* [Learning Target Candidate Association to Keep Track of What Not to Track](https://arxiv.org/abs/2103.16556) | **Code available!**  
-* [Generating Masks from Boxes by Mining Spatio-Temporal Consistencies in Videos](https://arxiv.org/abs/2101.02196) | Code coming here soon...  
 
 
 ## Highlights
@@ -157,6 +156,19 @@ An unofficial implementation of the **ECO** tracker. It is implemented based on 
 
 Please refer to the [official implementation of ECO](https://github.com/martin-danelljan/ECO) if you are looking to reproduce the results in the ECO paper or download the raw results.
 
+## Associated trackers
+We list associated trackers that can be found in external repositories.  
+
+### E.T.Track (WACV 2023)
+
+**[[Paper]](https://arxiv.org/abs/2112.09686) [[Code]](https://github.com/pblatter/ettrack)**
+
+Official implementation of **E.T.Track**. E.T.Track utilized our proposed Exemplar Transformer, a transformer module 
+utilizing a single instance level attention layer for realtime visual object tracking. E.T.Track is up to 8x faster than 
+other transformer-based models, and consistently outperforms competing lightweight trackers that can operate in realtime 
+on standard CPUs. 
+
+![ETTrack_teaser_figure](pytracking/.figs/ETTrack_overview.png)
 
 ## Installation
 
