@@ -19,7 +19,7 @@ def run_webcam(tracker_name, tracker_param, debug=None, visdom_info=None):
     """
     visdom_info = {} if visdom_info is None else visdom_info
     tracker = Tracker(tracker_name, tracker_param)
-    tracker.run_webcam(debug, visdom_info)
+    tracker.run_video_generic(debug=debug, visdom_info=visdom_info)
 
 
 def main():
