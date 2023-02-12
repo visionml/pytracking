@@ -328,6 +328,7 @@ class VisTracking(VisBase):
             # Changed the color to match the _pascal_color_map used in overlay_mask
             # color = ((255*((i%3)>0)), 255*((i+1)%2), (255*(i%5))//4)
             color = colors[i+1].tolist()
+            disp_rect = disp_rect.view(4)
             cv2.rectangle(disp_image,
                           (int(disp_rect[0]), int(disp_rect[1])),
                           (int(disp_rect[0] + disp_rect[2]), int(disp_rect[1] + disp_rect[3])), color, 1)

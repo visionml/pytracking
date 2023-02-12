@@ -17,7 +17,7 @@ def run_video(tracker_name, tracker_param, videofile, optional_box=None, debug=N
         debug: Debug level.
     """
     tracker = Tracker(tracker_name, tracker_param)
-    tracker.run_video(videofilepath=videofile, optional_box=optional_box, debug=debug, save_results=save_results)
+    tracker.run_video_generic(videofilepath=videofile, optional_box=optional_box, debug=debug, save_results=save_results)
 
 def main():
     parser = argparse.ArgumentParser(description='Run the tracker on your webcam.')
