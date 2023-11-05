@@ -1,18 +1,15 @@
 # PyTracking
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
+### :fire: One tracking paper accepted at WACV 2024! 👇
+* [Beyond SOT: Tracking Multiple Generic Objects at Once](https://arxiv.org/abs/2212.11920) | **Code available soon!**
+
+
 ### :fire: One tracking paper accepted at WACV 2023! 👇
 * [Efficient Visual Tracking with Exemplar Transformers](https://arxiv.org/abs/2112.09686) | **Code available!**
 
 ### :fire: One tracking paper accepted at ECCV 2022! 👇
 * [Robust Visual Tracking by Segmentation](https://arxiv.org/abs/2203.11191) | **Code available!**
-
-### :fire: We released AVisT a new tracking dataset for adverse visibility! 👇
-* [AVisT: A Benchmark for Visual Object Tracking in Adverse Visibility
-](https://arxiv.org/abs/2208.06888) | The [dataset](https://sites.google.com/view/avist-benchmark), the integration [avistdataset.py](pytracking/evaluation/avistdataset.py) and the evaluation code [analyze_avist_results.ipynb](pytracking/notebooks/analyze_avist_results.ipynb) are available! 
-
-### One tracking paper accepted at CVPR 2022!
-* [Transforming Model Prediction for Tracking](https://arxiv.org/abs/2203.11192) | **Code available!**
 
 
 ## Highlights
