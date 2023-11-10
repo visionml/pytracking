@@ -27,7 +27,7 @@ Here, ```train_module``` is the sub-module inside ```train_settings``` and ```tr
 
 For example, you can train using the included default ATOM settings by running:
 ```bash
-python run_training bbreg atom_default
+python run_training.py bbreg atom_default
 ```
 
 
@@ -107,6 +107,4 @@ To train a custom network using the toolkit, the following components need to be
 - Actor: The trainer passes the training batch to the actor who is responsible for passing the data through the network correctly, and calculating the training loss.  
 - Optimizer: Optimizer to be used, e.g. Adam.  
 - Trainer: The main class which runs the epochs and saves checkpoints. 
- 
 
- 
