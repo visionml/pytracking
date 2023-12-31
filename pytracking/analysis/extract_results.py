@@ -181,3 +181,111 @@ def extract_results(trackers, dataset, report_name, skip_missing_seq=False, plot
         pickle.dump(eval_data, fh)
 
     return eval_data
+
+
+def extract_results_prec_rec_f1(trackers, dataset, report_name, skip_missing_seq=False, plot_bin_gap=0.05,
+                                exclude_invalid_frames=False, verbose=True, anno_period=1, **kwargs):
+    settings = env_settings()
+
+    # add option to not combine result
+    result_plot_path = os.path.join(settings.result_plot_path, report_name)
+
+    if not os.path.exists(result_plot_path):
+        os.makedirs(result_plot_path)
+
+    valid_sequence = torch.ones(len(dataset), dtype=torch.uint8)
+
+    raw_data = {}
+    for trk in tqdm(trackers):
+
+        anno_bb_all = []
+        target_visible_all = []
+        scores_all = []
+        pred_bb_all = []
+
+        for seq_id, seq in enumerate(dataset):
+            # Load anno
+            anno_bb = torch.tensor(seq.ground_truth_rect)
+            target_visible = torch.tensor(seq.target_visible,
+                                          dtype=torch.uint8) if seq.target_visible is not None else None
+
+            # Load results
+            base_results_path = '{}/{}'.format(trk.results_dir, seq.name)
+            base_results_path = os.path.join(settings.results_path,
+                                             os.path.relpath(base_results_path, settings.results_path))
+            results_path = '{}.txt'.format(base_results_path)
+            scores_path = '{}_object_presence_scores.txt'.format(base_results_path)
+
+            if os.path.isfile(results_path) and os.path.isfile(scores_path):
+                pred_bb = torch.tensor(load_text(str(results_path), delimiter=('\t', ','), dtype=np.float64))
+                scores = torch.tensor(load_text(str(scores_path), delimiter=('\t', ','), dtype=np.float64))
+            elif os.path.isfile(results_path):
+                pred_bb = torch.tensor(load_text(str(results_path), delimiter=('\t', ','), dtype=np.float64))
+                scores = torch.ones(pred_bb.shape[0])
+            else:
+                if skip_missing_seq:
+                    valid_sequence[seq_id] = 0
+                    break
+                else:
+                    raise Exception('Result not found. {}'.format(results_path))
+
+            pred_bb_all.append(pred_bb[::anno_period])
+            anno_bb_all.append(anno_bb[::anno_period])
+            target_visible_all.append(target_visible[::anno_period])
+            scores_all.append(scores[::anno_period])
+
+        pred_bb_cat = torch.cat(pred_bb_all, 0)
+        anno_bb_cat = torch.cat(anno_bb_all, 0)
+        target_visible_cat = torch.cat(target_visible_all, 0)
+        scores_cat = torch.cat(scores_all, 0)
+
+        err_overlap_cat, _, _, valid_frame_cat = calc_seq_err_robust(pred_bb_cat, anno_bb_cat, dataset[0].dataset,
+                                                                     target_visible_cat)
+
+        ind = torch.argsort(scores_cat, descending=True)
+        scores_sorted = scores_cat[ind]
+
+        overlap_sorted = err_overlap_cat[ind]
+        target_invisible_sorted = ~valid_frame_cat[ind]
+
+        overlap_sorted[target_invisible_sorted] = 0.
+        overlap_acc = torch.cumsum(overlap_sorted, 0)
+
+        den_rec = valid_frame_cat.sum()
+        den_prec = torch.arange(1, scores_sorted.shape[0] + 1, dtype=torch.float32)
+        rec = torch.cat([torch.zeros(1), overlap_acc / den_rec])
+        prec = torch.cat([torch.ones(1), overlap_acc / den_prec])
+
+        f1 = 2 * prec * rec / (prec + rec)
+        f1[torch.isnan(f1)] = 0.
+        idx = torch.argmax(f1)
+        f1_max = f1[idx]
+        ths_max = scores_sorted[min(idx, scores_sorted.shape[0] - 1)]
+
+        if trk.run_id is None:
+            key = "{}".format(trk.display_name)
+        else:
+            key = "{}_{}".format(trk.display_name, trk.run_id)
+
+        raw_data[key] = {
+            'prec': prec,
+            'rec': rec,
+            'f1_max': f1_max,
+            'ths_max': ths_max,
+            'idx': idx
+        }
+
+    # Prepare dictionary for saving data
+    seq_names = [s.name for s in dataset]
+    tracker_names = [{'name': t.name, 'param': t.parameter_name, 'run_id': t.run_id, 'disp_name': t.display_name}
+                     for t in trackers]
+
+    eval_data = {'sequences': seq_names,
+                 'trackers': tracker_names,
+                 'valid_sequence': valid_sequence.tolist(),
+                 'raw_data': raw_data}
+
+    with open(result_plot_path + '/eval_data.pkl', 'wb') as fh:
+        pickle.dump(eval_data, fh)
+
+    return eval_data

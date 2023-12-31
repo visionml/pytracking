@@ -67,6 +67,7 @@ def _apply_filter_ksz1(feat, filter):
     """
 
     multiple_filters = (filter.dim() == 5)
+    num_filters = filter.shape[1] if multiple_filters else 1
 
     assert filter.shape[-2] == 1 and filter.shape[-1] == 1
 
@@ -78,13 +79,13 @@ def _apply_filter_ksz1(feat, filter):
     assert groups == 1
 
     # scores = torch.einsum('nc, incs->nis', filter.reshape(filter.shape[:-2]), feat.reshape(*feat.shape[:-2], -1))
-    scores = torch.matmul(filter.reshape(num_sequences, 1, 1, num_channels),
+    scores = torch.matmul(filter.reshape(num_sequences, 1, num_filters, num_channels),
                           feat.reshape(num_sequences, num_images, num_channels, -1))
 
     if multiple_filters:
         return scores.reshape(num_images, num_sequences, -1, feat.shape[-2], feat.shape[-1])
-
-    return scores.reshape(num_images, num_sequences, feat.shape[-2], feat.shape[-1])
+    else:
+        return scores.reshape(num_images, num_sequences, feat.shape[-2], feat.shape[-1])
 
 
 def apply_feat_transpose(feat, input, filter_ksz, training=True, groups=1):

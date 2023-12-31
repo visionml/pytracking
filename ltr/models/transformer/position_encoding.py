@@ -41,7 +41,9 @@ class PositionEmbeddingSine(nn.Module):
         self.num_pos_feats = num_pos_feats
         self.temperature = temperature
         self.normalize = normalize
-        self.sine = NerfPositionalEncoding(num_pos_feats//2, sine_type, avoid_aliazing, max_spatial_resolution)
+        if not isinstance(max_spatial_resolution, (list, tuple)):
+            max_spatial_resolution = (max_spatial_resolution, max_spatial_resolution)
+        self.sine = NerfPositionalEncoding(num_pos_feats // 2, sine_type, avoid_aliazing, max(max_spatial_resolution))
 
     @torch.no_grad()
     def forward(self, mask):

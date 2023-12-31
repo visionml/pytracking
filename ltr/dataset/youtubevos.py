@@ -165,6 +165,9 @@ class YouTubeVOS(VOSDatasetBase):
         if len(to_remove) > 0:
             print("   %d sequences were removed, (%d remaining)." % (len(to_remove), len(sequences)))
 
+    def is_mot_dataset(self):
+        return self.multiobj
+
     def _construct_sequence(self, sequence_info):
 
         seq_name = sequence_info['sequence']

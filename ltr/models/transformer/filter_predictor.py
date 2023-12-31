@@ -148,3 +148,168 @@ class FilterPredictor(nn.Module):
         bbreg_dec_opt = dec_opt[1].unsqueeze(0)
 
         return cls_dec_opt, bbreg_dec_opt, cls_enc_opt, bbreg_enc_opt
+
+
+class GOTFilterPredictor(nn.Module):
+    def __init__(self, transformer, feature_sz, num_tokens, label_enc='gaussian', box_enc='ltrb'):
+        super().__init__()
+        self.transformer = transformer
+        self.feature_sz = feature_sz
+        self.num_tokens = num_tokens
+        self.label_enc = label_enc
+        self.box_enc = box_enc
+
+        self.box_encoding = MLP([4, self.transformer.d_model // 4, self.transformer.d_model, self.transformer.d_model])
+
+        self.query_embed_fg = nn.Embedding(self.num_tokens, self.transformer.d_model)
+        nn.init.orthogonal_(self.query_embed_fg.weight)
+
+        self.pos_encoding = PositionEmbeddingSine(num_pos_feats=self.transformer.d_model // 2, sine_type='lin_sine',
+                                                  avoid_aliazing=True, max_spatial_resolution=feature_sz)
+
+    def forward(self, train_feat, test_feat, train_label, train_ltrb_target, *args, **kwargs):
+        return self.predict_filter(train_feat, test_feat, train_label, train_ltrb_target, *args, **kwargs)
+
+    def get_positional_encoding(self, feat):
+        nframes, nseq, _, h, w = feat.shape
+
+        mask = torch.zeros((nframes * nseq, h, w), dtype=torch.bool, device=feat.device)
+        pos = self.pos_encoding(mask)
+        return pos.reshape(nframes, nseq, -1, h, w)
+
+    def predict_filter(self, train_feat, test_feat, train_label, train_ltrb_target, *args, **kwargs):
+        # train_label size guess: Nf_tr, Ns, H, W.
+        if train_feat.dim() == 4:
+            train_feat = train_feat.unsqueeze(1)
+        if test_feat.dim() == 4:
+            test_feat = test_feat.unsqueeze(1)
+        if train_ltrb_target.dim() == 5:
+            train_ltrb_target = train_ltrb_target.unsqueeze(1)
+        if train_label.dim() == 4:
+            train_label = train_label.unsqueeze(1)
+
+        h, w = test_feat.shape[-2:]
+
+        test_pos = self.get_positional_encoding(test_feat)  # Nf_te, Ns, C, H, W
+        train_pos = self.get_positional_encoding(train_feat)  # Nf_tr, Ns, C, H, W
+
+        test_feat_seq = test_feat.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)  # Nf_te*H*W, Ns, C
+        train_feat_seq = train_feat.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)  # Nf_tr*H*W, Ns, C
+        train_label_seq = train_label.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)  # Nf_tr*H*W,Ns,num_objects
+        train_ltrb_target_seq_T = train_ltrb_target.permute(1, 3, 0, 2, 4, 5).flatten(2)  # Ns,4,Nf_tr*H*W
+
+        test_pos = test_pos.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)
+        train_pos = train_pos.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)
+
+        p_indices = torch.arange(0, self.num_tokens)
+        if self.label_enc == 'gaussian':
+            fg_token = self.query_embed_fg.weight[p_indices].reshape(self.num_tokens, 1, 1, -1)
+            train_label_enc = fg_token * train_label_seq.permute(2, 0, 1).unsqueeze(-1)
+            train_feat_seq += torch.sum(train_label_enc, dim=0)
+
+        if self.box_enc == 'ltrb' and self.num_tokens == 1:
+            train_ltrb_target_enc = self.box_encoding(train_ltrb_target_seq_T).permute(2, 0, 1)  # Nf_tr*H*H,Ns,C
+            train_feat_seq += train_ltrb_target_enc
+        elif self.box_enc == 'ltrb_token':
+            nframes, nseq, nobj, c, h, w = train_ltrb_target.shape
+            train_ltrb_target_seq_T_nobj = train_ltrb_target.permute(1, 2, 3, 0, 4, 5).reshape(nseq * nobj, c,
+                                                                                               nframes * h * w)
+            train_ltrb_target_enc = self.box_encoding(train_ltrb_target_seq_T_nobj).reshape(nseq, nobj, -1,
+                                                                                            nframes * h * w)
+            fg_token = self.query_embed_fg.weight[p_indices].reshape(1, self.num_tokens, -1, 1)
+            train_feat_seq += torch.sum(train_ltrb_target_enc * fg_token, dim=1).permute(2, 0, 1)
+
+        feat = torch.cat([train_feat_seq, test_feat_seq], dim=0)
+        pos = torch.cat([train_pos, test_pos], dim=0)
+
+        output_embed, enc_mem = self.transformer(feat, mask=None, query_embed=self.query_embed_fg.weight[p_indices],
+                                                 pos_embed=pos)
+
+        enc_opt = enc_mem[-h * w:].transpose(0, 1)
+        enc_opt = enc_opt.permute(0, 2, 1).reshape(test_feat.shape)
+
+        dec_opt = output_embed.permute(1, 0, 2, 3).reshape(test_feat.shape[1], -1, test_feat.shape[2], 1, 1)
+
+        return dec_opt, enc_opt
+
+    def predict_cls_bbreg_filters_parallel(self, train_feat, test_feat, train_label, num_gth_frames, train_ltrb_target,
+                                           *args, **kwargs):
+        if train_feat.shape[0] == num_gth_frames:
+            dec_opt, enc_opt = self.predict_filter(train_feat, test_feat, train_label, train_ltrb_target)
+            cls_dec_opt, bbreg_dec_opt, cls_enc_opt, bbreg_enc_opt = dec_opt, dec_opt, enc_opt, enc_opt
+        else:
+            cls_dec_opt, bbreg_dec_opt, cls_enc_opt, bbreg_enc_opt = self._predict_cls_bbreg_filters_parallel(
+                train_feat, test_feat, train_label, num_gth_frames, train_ltrb_target)
+        return cls_dec_opt, bbreg_dec_opt, cls_enc_opt, bbreg_enc_opt
+
+    def _predict_cls_bbreg_filters_parallel(self, train_feat, test_feat, train_label, num_gth_frames, train_ltrb_target,
+                                            *args, **kwargs):
+        # train_label size guess: Nf_tr, Ns, H, W.
+        if train_feat.dim() == 4:
+            train_feat = train_feat.unsqueeze(1)
+        if test_feat.dim() == 4:
+            test_feat = test_feat.unsqueeze(1)
+        if train_ltrb_target.dim() == 5:
+            train_ltrb_target = train_ltrb_target.unsqueeze(1)
+        if train_label.dim() == 4:
+            train_label = train_label.unsqueeze(1)
+
+        H, W = train_feat.shape[-2:]
+        h, w = test_feat.shape[-2:]
+
+        train_feat_stack = torch.cat([train_feat, train_feat], dim=1)
+        test_feat_stack = torch.cat([test_feat, test_feat], dim=1)
+        train_label_stack = torch.cat([train_label, train_label], dim=1)
+        train_ltrb_target_stack = torch.cat([train_ltrb_target, train_ltrb_target], dim=1)
+
+        test_pos = self.get_positional_encoding(test_feat)  # Nf_te, Ns, C, H, W
+        train_pos = self.get_positional_encoding(train_feat)  # Nf_tr, Ns, C, H, W
+
+        test_feat_seq = test_feat_stack.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)  # Nf_te*H*W, Ns, C
+        train_feat_seq = train_feat_stack.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)  # Nf_tr*H*W, Ns, C
+        train_label_seq = train_label_stack.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)
+        train_ltrb_target_seq_T = train_ltrb_target_stack.permute(1, 3, 2, 0, 4, 5).flatten(2)
+
+        test_pos = test_pos.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)
+        train_pos = train_pos.permute(1, 2, 0, 3, 4).flatten(2).permute(2, 0, 1)
+
+        p_indices = torch.arange(0, self.num_tokens)
+        if self.label_enc == 'gaussian':
+            fg_token = self.query_embed_fg.weight[p_indices].reshape(self.num_tokens, 1, 1, -1)
+            train_label_enc = fg_token * train_label_seq.permute(2, 0, 1).unsqueeze(-1)
+            train_feat_seq += torch.sum(train_label_enc, dim=0)
+
+        if self.box_enc == 'ltrb' and self.num_tokens == 1:
+            train_ltrb_target_enc = self.box_encoding(train_ltrb_target_seq_T).permute(2, 0, 1)  # Nf_tr*H*H,Ns,C
+            train_feat_seq += train_ltrb_target_enc
+        elif self.box_enc == 'ltrb_token':
+            nframes, nseq, nobj, c, h, w = train_ltrb_target_stack.shape
+            train_ltrb_target_seq_T_nobj = train_ltrb_target_stack.permute(1, 2, 3, 0, 4, 5).reshape(nseq * nobj, c,
+                                                                                                     nframes * h * w)
+            train_ltrb_target_enc = self.box_encoding(train_ltrb_target_seq_T_nobj).reshape(nseq, nobj, -1,
+                                                                                            nframes * h * w)
+            fg_token = self.query_embed_fg.weight[p_indices].reshape(1, self.num_tokens, -1, 1)
+            train_feat_seq += torch.sum(train_ltrb_target_enc * fg_token, dim=1).permute(2, 0, 1)
+
+        feat = torch.cat([train_feat_seq, test_feat_seq], dim=0)
+
+        pos = torch.cat([train_pos, test_pos], dim=0)
+
+        src_key_padding_mask = torch.zeros(feat.shape[1], feat.shape[0]).bool()
+        src_key_padding_mask[1, num_gth_frames * H * W:-h * w] = 1.
+        src_key_padding_mask = src_key_padding_mask.bool().to(feat.device)
+
+        output_embed, enc_mem = self.transformer(feat, mask=src_key_padding_mask,
+                                                 query_embed=self.query_embed_fg.weight,
+                                                 pos_embed=pos)
+
+        enc_opt = enc_mem[-h * w:].transpose(0, 1)
+        enc_opt = enc_opt.permute(0, 2, 1).reshape(test_feat_stack.shape)
+        dec_opt = output_embed.squeeze(0).unsqueeze(3).unsqueeze(4)
+
+        cls_enc_opt = enc_opt[:, 0].unsqueeze(1)
+        bbreg_enc_opt = enc_opt[:, 1].unsqueeze(1)
+        cls_dec_opt = dec_opt[0].unsqueeze(0)
+        bbreg_dec_opt = dec_opt[1].unsqueeze(0)
+
+        return cls_dec_opt, bbreg_dec_opt, cls_enc_opt, bbreg_enc_opt

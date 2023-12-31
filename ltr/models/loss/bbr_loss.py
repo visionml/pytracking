@@ -42,7 +42,7 @@ class GIoULoss(nn.Module):
         losses = 1 - gious
 
         if weights is not None and weights.sum() > 0:
-            weights = weights.permute(0, 1, 3, 4, 2).reshape(-1) # nf x ns x x 1 x h x w
+            weights = weights.reshape(-1) # nf x ns x 1 x h x w
             loss_mean = losses[weights>0].mean()
             ious = ious[weights>0]
         else:

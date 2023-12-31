@@ -7,7 +7,7 @@ import pickle
 import json
 import math
 from pytracking.evaluation.environment import env_settings
-from pytracking.analysis.extract_results import extract_results
+from pytracking.analysis.extract_results import extract_results, extract_results_prec_rec_f1
 
 
 def get_plot_draw_styles():
@@ -159,12 +159,12 @@ def plot_draw_save(y, x, scores, trackers, plot_draw_styles, result_plot_path, p
     ax.grid(True, linestyle='-.')
     fig.tight_layout()
 
-    tikzplotlib.save('{}/{}_plot.tex'.format(result_plot_path, plot_type))
+    # tikzplotlib.save('{}/{}_plot.tex'.format(result_plot_path, plot_type))
     fig.savefig('{}/{}_plot.pdf'.format(result_plot_path, plot_type), dpi=300, format='pdf', transparent=True)
     plt.draw()
 
 
-def check_and_load_precomputed_results(trackers, dataset, report_name, force_evaluation=False, **kwargs):
+def check_and_load_precomputed_results(trackers, dataset, report_name, force_evaluation=False, f1_prec_rec=False, **kwargs):
     # Load data
     settings = env_settings()
 
@@ -176,8 +176,10 @@ def check_and_load_precomputed_results(trackers, dataset, report_name, force_eva
         with open(eval_data_path, 'rb') as fh:
             eval_data = pickle.load(fh)
     else:
-        # print('Pre-computed evaluation data not found. Computing results!')
-        eval_data = extract_results(trackers, dataset, report_name, **kwargs)
+        if f1_prec_rec:
+            eval_data = extract_results_prec_rec_f1(trackers, dataset, report_name, **kwargs)
+        else:
+            eval_data = extract_results(trackers, dataset, report_name, **kwargs)
 
     if not check_eval_data_is_valid(eval_data, trackers, dataset):
         # print('Pre-computed evaluation data invalid. Re-computing results!')
@@ -208,7 +210,7 @@ def get_prec_curve(ave_success_rate_plot_center, valid_sequence):
 
 
 def plot_results(trackers, dataset, report_name, merge_results=False,
-                 plot_types=('success'), force_evaluation=False, **kwargs):
+                 plot_types=('success'), force_evaluation=False, plot_opts=None, **kwargs):
     """
     Plot results for the given trackers
 
@@ -220,6 +222,8 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
         plot_types - List of scores to display. Can contain 'success',
                     'prec' (precision), and 'norm_prec' (normalized precision)
     """
+    if plot_opts is None:
+        plot_opts = {}
     # Load data
     settings = env_settings()
 
@@ -249,8 +253,10 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
         auc_curve, auc = get_auc_curve(ave_success_rate_plot_overlap, valid_sequence)
         threshold_set_overlap = torch.tensor(eval_data['threshold_set_overlap'])
 
-        success_plot_opts = {'plot_type': 'success', 'legend_loc': 'lower left', 'xlabel': 'Overlap threshold',
+        success_plot_opts = {'plot_type': 'success', 'legend_loc': 'upper right', 'xlabel': 'Overlap threshold',
                              'ylabel': 'Overlap Precision [%]', 'xlim': (0, 1.0), 'ylim': (0, 100), 'title': 'Success plot'}
+        for k, v in plot_opts.items():
+            success_plot_opts[k] = v
         plot_draw_save(auc_curve, threshold_set_overlap, auc, tracker_names, plot_draw_styles, result_plot_path, success_plot_opts)
 
     # ********************************  Precision Plot **************************************
@@ -264,6 +270,8 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
         precision_plot_opts = {'plot_type': 'precision', 'legend_loc': 'lower right',
                                'xlabel': 'Location error threshold [pixels]', 'ylabel': 'Distance Precision [%]',
                                'xlim': (0, 50), 'ylim': (0, 100), 'title': 'Precision plot'}
+        for k, v in plot_opts.items():
+            precision_plot_opts[k] = v
         plot_draw_save(prec_curve, threshold_set_center, prec_score, tracker_names, plot_draw_styles, result_plot_path,
                        precision_plot_opts)
 
@@ -278,10 +286,90 @@ def plot_results(trackers, dataset, report_name, merge_results=False,
         norm_precision_plot_opts = {'plot_type': 'norm_precision', 'legend_loc': 'lower right',
                                     'xlabel': 'Location error threshold', 'ylabel': 'Distance Precision [%]',
                                     'xlim': (0, 0.5), 'ylim': (0, 100), 'title': 'Normalized Precision plot'}
+        for k, v in plot_opts.items():
+            norm_precision_plot_opts[k] = v
         plot_draw_save(prec_curve, threshold_set_center_norm, prec_score, tracker_names, plot_draw_styles, result_plot_path,
                        norm_precision_plot_opts)
 
+    if 'f1_prec_rec' in plot_types:
+        f1_prec_rec_plot_opts = {'plot_type': 'f1_prec_rec', 'legend_loc': 'lower left',
+                                 'xlabel': 'Recall', 'ylabel': 'Precision',
+                                 'xlim': (0, 1.0), 'ylim': (0, 1.0), 'title': 'Precision Recall plot'}
+        for k, v in plot_opts.items():
+            f1_prec_rec_plot_opts[k] = v
+        plot_draw_save_f1_prec_rec(eval_data, tracker_names, plot_draw_styles, result_plot_path, f1_prec_rec_plot_opts)
+
     plt.show()
+
+
+def plot_draw_save_f1_prec_rec(data, trackers, plot_draw_styles, result_plot_path, plot_opts):
+    # Plot settings
+    font_size = plot_opts.get('font_size', 12)
+    font_size_axis = plot_opts.get('font_size_axis', 13)
+    line_width = plot_opts.get('line_width', 2)
+    font_size_legend = plot_opts.get('font_size_legend', 13)
+
+    plot_type = plot_opts['plot_type']
+    legend_loc = plot_opts['legend_loc']
+    legend_ncol = plot_opts.get('legend_ncol', 1)
+
+    xlabel = plot_opts['xlabel']
+    ylabel = plot_opts['ylabel']
+    xlim = plot_opts['xlim']
+    ylim = plot_opts['ylim']
+
+    title = plot_opts['title']
+
+    matplotlib.rcParams.update({'font.size': font_size})
+    matplotlib.rcParams.update({'axes.titlesize': font_size_axis})
+    matplotlib.rcParams.update({'axes.titleweight': 'black'})
+    matplotlib.rcParams.update({'axes.labelsize': font_size_axis})
+
+    fig, ax = plt.subplots()
+
+    data = data['raw_data']
+    index_sort = torch.argsort(torch.tensor([val['f1_max'] for val in data.values()]), descending=False)
+
+    plotted_lines = []
+    legend_text = []
+
+    values = list(data.values())
+    for id, id_sort in enumerate(index_sort):
+        val = values[id_sort]
+
+        line = ax.plot(val['rec'].tolist(), val['prec'].tolist(),
+                       linewidth=line_width,
+                       color=plot_draw_styles[index_sort.numel() - id - 1]['color'],
+                       linestyle=plot_draw_styles[index_sort.numel() - id - 1]['line_style'])
+        ax.plot([val['rec'][val['idx']]], [val['prec'][val['idx']]],
+                color=plot_draw_styles[index_sort.numel() - id - 1]['color'],
+                linestyle=plot_draw_styles[index_sort.numel() - id - 1]['line_style'],
+                marker='o')
+
+        plotted_lines.append(line[0])
+
+        tracker = trackers[id_sort]
+        disp_name = get_tracker_display_name(tracker)
+
+        if len(disp_name) > 3 and disp_name[:3] == r'\bf':
+            legend_text.append(r'$\mathbf{{{}}}$ $\mathbf{{[{:.3f}]}}$'.format(disp_name[3:], val['f1_max']))
+        else:
+            legend_text.append('{} [{:.3f}]'.format(disp_name, val['f1_max']))
+
+    ax.legend(plotted_lines[::-1], legend_text[::-1], loc=legend_loc, fancybox=False, edgecolor='black',
+              fontsize=font_size_legend, framealpha=1.0, ncol=legend_ncol)
+
+    ax.set(xlabel=xlabel,
+           ylabel=ylabel,
+           xlim=xlim, ylim=ylim,
+           title=title)
+
+    ax.grid(True, linestyle='-.')
+    fig.tight_layout()
+
+    # tikzplotlib.save('{}/{}_plot.tex'.format(result_plot_path, plot_type))
+    fig.savefig('{}/{}_plot.pdf'.format(result_plot_path, plot_type), dpi=300, format='pdf', transparent=True)
+    plt.draw()
 
 
 def generate_formatted_report(row_labels, scores, table_name=''):
@@ -361,6 +449,13 @@ def print_results(trackers, dataset, report_name, merge_results=False,
         # Index out valid sequences
         norm_prec_curve, norm_prec_score = get_prec_curve(ave_success_rate_plot_center_norm, valid_sequence)
         scores['Norm Precision'] = norm_prec_score
+
+    if 'f1_prec_rec' in plot_types:
+        names = ['{}_{}'.format(trk['disp_name'], trk['run_id'])
+                 if trk['run_id'] is not None else trk['disp_name']
+                 for trk in tracker_names]
+
+        scores['F1 Scores'] = torch.tensor([eval_data['raw_data'][n]['f1_max'] for n in names])
 
     # Print
     tracker_disp_names = [get_tracker_display_name(trk) for trk in tracker_names]
