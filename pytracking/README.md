@@ -82,8 +82,8 @@ The trained models of TaMOs can be found at [this url](https://drive.google.com/
 
 ##### Parameter Files
 Two parameter settings are provided.
-* **[tamos-resnet50](parameter/tamos/tamos_resnet50.py)**: This set of parameters was used to generate all results using a ResNet50 backbone.
-* **[tamos-swin](parameter/tamos/tamos_swin_base.py)**: This set of parameters was used to generate all results using a SwinBase backbone.
+* **[tamos_resnet50](parameter/tamos/tamos_resnet50.py)**: This set of parameters was used to generate all results using a ResNet50 backbone.
+* **[tamos_swin_base](parameter/tamos/tamos_swin_base.py)**: This set of parameters was used to generate all results using a SwinBase backbone.
 
 ### RTS
 The official implementation for RTS ([paper](https://arxiv.org/abs/2203.11191)).  
