@@ -70,6 +70,10 @@ def _save_tracker_output(seq: Sequence, tracker: Tracker, output: dict):
         tracked_bb = np.array(data).astype(int)
         np.savetxt(file, tracked_bb, delimiter='\t', fmt='%d')
 
+    def save_scores(file, data):
+        scores = np.array(data).astype(float)
+        np.savetxt(file, scores, delimiter='\t', fmt='%f')
+
     def save_time(file, data):
         exec_times = np.array(data).astype(float)
         np.savetxt(file, exec_times, delimiter='\t', fmt='%f')
@@ -100,6 +104,17 @@ def _save_tracker_output(seq: Sequence, tracker: Tracker, output: dict):
                 # Single-object mode
                 bbox_file = '{}.txt'.format(base_results_path)
                 save_bb(bbox_file, data)
+
+        elif key == 'object_presence_score':
+            if isinstance(data[0], (dict, OrderedDict)):
+                data_dict = _convert_dict(data)
+
+                for obj_id, d in data_dict.items():
+                    scores_file = '{}_{}_object_presence_scores.txt'.format(base_results_path, obj_id)
+                    save_scores(scores_file, d)
+            else:
+                scores_file = '{}_object_presence_scores.txt'.format(base_results_path)
+                save_scores(scores_file, data)
 
         elif key == 'time':
             if isinstance(data[0], dict):

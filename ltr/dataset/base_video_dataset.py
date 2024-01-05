@@ -62,6 +62,9 @@ class BaseVideoDataset(torch.utils.data.Dataset):
             int - number of sequences in the dataset."""
         return len(self.sequence_list)
 
+    def is_mot_dataset(self):
+        return False
+
     def has_class_info(self):
         return False
 

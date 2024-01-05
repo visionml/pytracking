@@ -78,6 +78,10 @@ class LTRTrainer(BaseTrainer):
             if loader.training:
                 self.optimizer.zero_grad()
                 loss.backward()
+
+                if hasattr(self.settings, 'grad_clip_max_norm'):
+                    torch.nn.utils.clip_grad_norm_(self.actor.net.parameters(), self.settings.grad_clip_max_norm)
+
                 self.optimizer.step()
 
             # update statistics

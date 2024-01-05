@@ -176,6 +176,33 @@ of the models on standard tracking datasets.
     <td>50.8</td>
     <td><a href="https://drive.google.com/drive/folders/1mOSA6HZ80zDu-6R7EOSiW8YwQMlzR5SQ?usp=sharing">model</a></td>
   </tr>
+  <tr>
+    <td>TaMOs-50</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+    <td>67.9</td>
+    <td>-</td>
+    <td>82.7</td>
+    <td>-</td>
+    <td>51.5</td>
+    <td><a href="https://drive.google.com/file/d/1AiMOz3ElDHZSvL4KpnvZ-I7YB3GTGycO/view?usp=sharing">model</a></td>    
+  </tr>
+  <tr>
+    <td>TaMOs-SwinBase</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+    <td>70.2</td>
+    <td>-</td>
+    <td>84.4</td>
+    <td>-</td>
+    <td>55.1</td>
+    <td><a href="https://drive.google.com/file/d/19_b15SGqDT08vkHcQecUEd7K0nHTO08T/view?usp=sharing">model</a></td>
+  </tr>
+
 </table>
 
 ### Raw Results

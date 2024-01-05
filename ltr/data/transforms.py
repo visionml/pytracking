@@ -36,7 +36,7 @@ class Transform:
         if len(transforms) == 1 and isinstance(transforms[0], (list, tuple)):
             transforms = transforms[0]
         self.transforms = transforms
-        self._valid_inputs = ['image', 'coords', 'bbox', 'mask']
+        self._valid_inputs = ['image', 'coords', 'bbox', 'mask', 'bboxes']
         self._valid_args = ['joint', 'new_roll']
         self._valid_all = self._valid_inputs + self._valid_args
 
@@ -44,7 +44,10 @@ class Transform:
         var_names = [k for k in inputs.keys() if k in self._valid_inputs]
         for v in inputs.keys():
             if v not in self._valid_all:
-                raise ValueError('Incorrect input \"{}\" to transform. Only supports inputs {} and arguments {}.'.format(v, self._valid_inputs, self._valid_args))
+                raise ValueError(
+                    'Incorrect input \"{}\" to transform. Only supports inputs {} and arguments {}.'.format(v,
+                                                                                                            self._valid_inputs,
+                                                                                                            self._valid_args))
 
         joint_mode = inputs.get('joint', True)
         new_roll = inputs.get('new_roll', True)
@@ -65,7 +68,7 @@ class Transform:
     def _split_inputs(self, inputs):
         var_names = [k for k in inputs.keys() if k in self._valid_inputs]
         split_inputs = [{k: v for k, v in zip(var_names, vals)} for vals in zip(*[inputs[vn] for vn in var_names])]
-        for arg_name, arg_val in filter(lambda it: it[0]!='joint' and it[0] in self._valid_args, inputs.items()):
+        for arg_name, arg_val in filter(lambda it: it[0] != 'joint' and it[0] in self._valid_args, inputs.items()):
             if isinstance(arg_val, list):
                 for inp, av in zip(split_inputs, arg_val):
                     inp[arg_name] = av
@@ -85,8 +88,9 @@ class Transform:
 
 class TransformBase:
     """Base class for transformation objects. See the Transform class for details."""
+
     def __init__(self):
-        self._valid_inputs = ['image', 'coords', 'bbox', 'mask']
+        self._valid_inputs = ['image', 'coords', 'bbox', 'mask', 'bboxes']
         self._valid_args = ['new_roll']
         self._valid_all = self._valid_inputs + self._valid_args
         self._rand_params = None
@@ -109,7 +113,7 @@ class TransformBase:
         for var_name, var in input_vars.items():
             if var is not None:
                 transform_func = getattr(self, 'transform_' + var_name)
-                if var_name in ['coords', 'bbox']:
+                if var_name in ['coords', 'bbox', 'bboxes']:
                     params = (self._get_image_size(input_vars),) + self._rand_params
                 else:
                     params = self._rand_params
@@ -146,13 +150,16 @@ class TransformBase:
         """Must be deterministic"""
         return coords
 
+    def transform_bboxes(self, bboxes, image_shape, *rand_params):
+        return {i: self.transform_bbox(bbox, image_shape, *rand_params) for i, bbox in bboxes.items()}
+
     def transform_bbox(self, bbox, image_shape, *rand_params):
         """Assumes [x, y, w, h]"""
         # Check if not overloaded
         if self.transform_coords.__code__ == TransformBase.transform_coords.__code__:
             return bbox
 
-        coord = bbox.clone().view(-1,2).t().flip(0)
+        coord = bbox.clone().view(-1, 2).t().flip(0)
 
         x1 = coord[1, 0]
         x2 = coord[1, 0] + coord[1, 1]
@@ -193,9 +200,9 @@ class ToTensor(TransformBase):
             return torch.from_numpy(mask)
 
 
-
 class ToTensorAndJitter(TransformBase):
     """Convert to a Tensor and jitter brightness"""
+
     def __init__(self, brightness_jitter=0.0, normalize=True):
         super().__init__()
         self.brightness_jitter = brightness_jitter
@@ -210,7 +217,7 @@ class ToTensorAndJitter(TransformBase):
 
         # backward compatibility
         if self.normalize:
-            return image.float().mul(brightness_factor/255.0).clamp(0.0, 1.0)
+            return image.float().mul(brightness_factor / 255.0).clamp(0.0, 1.0)
         else:
             return image.float().mul(brightness_factor).clamp(0.0, 255.0)
 
@@ -223,6 +230,7 @@ class ToTensorAndJitter(TransformBase):
 
 class Normalize(TransformBase):
     """Normalize image"""
+
     def __init__(self, mean, std, inplace=False):
         super().__init__()
         self.mean = mean
@@ -235,7 +243,8 @@ class Normalize(TransformBase):
 
 class ToGrayscale(TransformBase):
     """Converts image to grayscale with probability"""
-    def __init__(self, probability = 0.5):
+
+    def __init__(self, probability=0.5):
         super().__init__()
         self.probability = probability
         self.color_weights = np.array([0.2989, 0.5870, 0.1140], dtype=np.float32)
@@ -255,6 +264,7 @@ class ToGrayscale(TransformBase):
 
 class ToBGR(TransformBase):
     """Converts image to BGR"""
+
     def transform_image(self, image):
         if torch.is_tensor(image):
             raise NotImplementedError('Implement torch variant.')
@@ -264,7 +274,8 @@ class ToBGR(TransformBase):
 
 class RandomHorizontalFlip(TransformBase):
     """Horizontally flip image randomly with a probability p."""
-    def __init__(self, probability = 0.5):
+
+    def __init__(self, probability=0.5):
         super().__init__()
         self.probability = probability
 
@@ -281,7 +292,7 @@ class RandomHorizontalFlip(TransformBase):
     def transform_coords(self, coords, image_shape, do_flip):
         if do_flip:
             coords = coords.clone()
-            coords[1,:] = (image_shape[1] - 1) - coords[1,:]
+            coords[1, :] = (image_shape[1] - 1) - coords[1, :]
         return coords
 
     def transform_mask(self, mask, do_flip):
@@ -294,28 +305,30 @@ class RandomHorizontalFlip(TransformBase):
 
 class Blur(TransformBase):
     """ Blur the image by applying a gaussian kernel with given sigma"""
+
     def __init__(self, sigma):
         super().__init__()
         if isinstance(sigma, (float, int)):
             sigma = (sigma, sigma)
         self.sigma = sigma
-        self.filter_size = [math.ceil(2*s) for s in self.sigma]
-        x_coord = [torch.arange(-sz, sz+1, dtype=torch.float32) for sz in self.filter_size]
-        self.filter = [torch.exp(-(x**2)/(2*s**2)) for x, s in zip(x_coord, self.sigma)]
-        self.filter[0] = self.filter[0].view(1,1,-1,1) / self.filter[0].sum()
-        self.filter[1] = self.filter[1].view(1,1,1,-1) / self.filter[1].sum()
+        self.filter_size = [math.ceil(2 * s) for s in self.sigma]
+        x_coord = [torch.arange(-sz, sz + 1, dtype=torch.float32) for sz in self.filter_size]
+        self.filter = [torch.exp(-(x ** 2) / (2 * s ** 2)) for x, s in zip(x_coord, self.sigma)]
+        self.filter[0] = self.filter[0].view(1, 1, -1, 1) / self.filter[0].sum()
+        self.filter[1] = self.filter[1].view(1, 1, 1, -1) / self.filter[1].sum()
 
     def transform_image(self, image):
         if torch.is_tensor(image):
             sz = image.shape[2:]
             im1 = F.conv2d(image.view(-1, 1, sz[0], sz[1]), self.filter[0], padding=(self.filter_size[0], 0))
-            return F.conv2d(im1, self.filter[1], padding=(0,self.filter_size[1])).view(-1,sz[0],sz[1])
+            return F.conv2d(im1, self.filter[1], padding=(0, self.filter_size[1])).view(-1, sz[0], sz[1])
         else:
             raise NotImplementedError
 
 
 class RandomBlur(TransformBase):
     """ Blur the image, with a given probability, by applying a gaussian kernel with given sigma"""
+
     def __init__(self, sigma, probability=0.1):
         super().__init__()
         self.probability = probability
@@ -323,11 +336,11 @@ class RandomBlur(TransformBase):
         if isinstance(sigma, (float, int)):
             sigma = (sigma, sigma)
         self.sigma = sigma
-        self.filter_size = [math.ceil(2*s) for s in self.sigma]
-        x_coord = [torch.arange(-sz, sz+1, dtype=torch.float32) for sz in self.filter_size]
-        self.filter = [torch.exp(-(x**2)/(2*s**2)) for x, s in zip(x_coord, self.sigma)]
-        self.filter[0] = self.filter[0].view(1,1,-1,1) / self.filter[0].sum()
-        self.filter[1] = self.filter[1].view(1,1,1,-1) / self.filter[1].sum()
+        self.filter_size = [math.ceil(2 * s) for s in self.sigma]
+        x_coord = [torch.arange(-sz, sz + 1, dtype=torch.float32) for sz in self.filter_size]
+        self.filter = [torch.exp(-(x ** 2) / (2 * s ** 2)) for x, s in zip(x_coord, self.sigma)]
+        self.filter[0] = self.filter[0].view(1, 1, -1, 1) / self.filter[0].sum()
+        self.filter[1] = self.filter[1].view(1, 1, 1, -1) / self.filter[1].sum()
 
     def roll(self):
         return random.random() < self.probability
@@ -340,7 +353,7 @@ class RandomBlur(TransformBase):
             if torch.is_tensor(image):
                 sz = image.shape[1:]
                 im1 = F.conv2d(image.view(-1, 1, sz[0], sz[1]), self.filter[0], padding=(self.filter_size[0], 0))
-                return F.conv2d(im1, self.filter[1], padding=(0,self.filter_size[1])).view(-1,sz[0],sz[1])
+                return F.conv2d(im1, self.filter[1], padding=(0, self.filter_size[1])).view(-1, sz[0], sz[1])
             else:
                 raise NotImplementedError
         else:
@@ -349,14 +362,16 @@ class RandomBlur(TransformBase):
 
 class RandomAffine(TransformBase):
     """Apply random affine transformation."""
+
     def __init__(self, p_flip=0.0, max_rotation=0.0, max_shear=0.0, max_scale=0.0, max_ar_factor=0.0,
-                 border_mode='constant', pad_amount=0):
+                 border_mode='constant', pad_amount=0, scale_center=0.0):
         super().__init__()
         self.p_flip = p_flip
         self.max_rotation = max_rotation
         self.max_shear = max_shear
         self.max_scale = max_scale
         self.max_ar_factor = max_ar_factor
+        self.scale_center = scale_center
 
         if border_mode == 'constant':
             self.border_flag = cv.BORDER_CONSTANT
@@ -377,9 +392,11 @@ class RandomAffine(TransformBase):
         ar_factor = np.exp(random.uniform(-self.max_ar_factor, self.max_ar_factor))
         scale_factor = np.exp(random.uniform(-self.max_scale, self.max_scale))
 
-        return do_flip, theta, (shear_x, shear_y), (scale_factor, scale_factor * ar_factor)
+        scale_center = random.uniform(-self.scale_center, self.scale_center)
 
-    def _construct_t_mat(self, image_shape, do_flip, theta, shear_values, scale_factors):
+        return do_flip, theta, (shear_x, shear_y), (scale_factor, scale_factor * ar_factor), scale_center
+
+    def _construct_t_mat(self, image_shape, do_flip, theta, shear_values, scale_factors, scale_center):
         im_h, im_w = image_shape
         t_mat = np.identity(3)
 
@@ -399,7 +416,11 @@ class RandomAffine(TransformBase):
                             [0.0, scale_factors[1], (1.0 - scale_factors[1]) * 0.5 * im_h],
                             [0.0, 0.0, 1.0]])
 
-        t_mat = t_scale @ t_rot @ t_shear @ t_mat
+        t_trans = np.array([[1.0, 0.0, -0.2 * im_w * scale_center],
+                            [0.0, 1.0, -0.2 * im_w * scale_center],
+                            [0.0, 0.0, 1.0]])
+
+        t_mat = t_scale @ t_rot @ t_shear @ t_mat @ t_trans
 
         t_mat[0, 2] += self.pad_amount
         t_mat[1, 2] += self.pad_amount
@@ -408,31 +429,36 @@ class RandomAffine(TransformBase):
 
         return t_mat
 
-    def transform_image(self, image, do_flip, theta, shear_values, scale_factors):
+    def transform_image(self, image, do_flip, theta, shear_values, scale_factors, scale_center):
         if torch.is_tensor(image):
             raise Exception('Only supported for numpy input')
 
-        t_mat = self._construct_t_mat(image.shape[:2], do_flip, theta, shear_values, scale_factors)
-        output_sz = (image.shape[1] + 2*self.pad_amount, image.shape[0] + 2*self.pad_amount)
+        t_mat = self._construct_t_mat(image.shape[:2], do_flip, theta, shear_values, scale_factors, scale_center)
+        output_sz = (image.shape[1] + 2 * self.pad_amount, image.shape[0] + 2 * self.pad_amount)
         image_t = cv.warpAffine(image, t_mat, output_sz, flags=cv.INTER_LINEAR,
                                 borderMode=self.border_flag)
 
         return image_t
 
-    def transform_coords(self, coords, image_shape, do_flip, theta, shear_values, scale_factors):
-        t_mat = self._construct_t_mat(image_shape, do_flip, theta, shear_values, scale_factors)
+    def transform_coords(self, coords, image_shape, do_flip, theta, shear_values, scale_factors, scale_center):
+        t_mat = self._construct_t_mat(image_shape, do_flip, theta, shear_values, scale_factors, scale_center)
 
         t_mat_tensor = torch.from_numpy(t_mat).float()
 
-        coords_xy1 = torch.stack((coords[1, :], coords[0, :], torch.ones_like(coords[1, :])))
+        coords_xy1 = torch.stack((coords[1, :], coords[0, :], torch.ones_like(coords[1, :]))).float()
 
         coords_xy_t = torch.mm(t_mat_tensor, coords_xy1)
 
-        return coords_xy_t[[1, 0], :]
+        # coords_xy_t_cropped = torch.clamp(coords_xy_t, min=torch.zeros(2, 1),
+        #                                   max=torch.tensor([[image_shape[1]], [image_shape[0]]]))
+        coords_xy_t_cropped = torch.stack([torch.clamp(coords_xy_t[0], min=0, max=image_shape[1]),
+                                           torch.clamp(coords_xy_t[1], min=0, max=image_shape[0])], dim=0)
 
-    def transform_mask(self, mask, do_flip, theta, shear_values, scale_factors):
-        t_mat = self._construct_t_mat(mask.shape[:2], do_flip, theta, shear_values, scale_factors)
-        output_sz = (mask.shape[1] + 2*self.pad_amount, mask.shape[0] + 2*self.pad_amount)
+        return coords_xy_t_cropped[[1, 0], :]
+
+    def transform_mask(self, mask, do_flip, theta, shear_values, scale_factors, scale_center):
+        t_mat = self._construct_t_mat(mask.shape[:2], do_flip, theta, shear_values, scale_factors, scale_center)
+        output_sz = (mask.shape[1] + 2 * self.pad_amount, mask.shape[0] + 2 * self.pad_amount)
 
         mask_t = cv.warpAffine(mask.numpy(), t_mat, output_sz, flags=cv.INTER_NEAREST,
                                borderMode=self.border_flag)

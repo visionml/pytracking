@@ -1,5 +1,6 @@
 from . import BaseActor
 import torch
+import torch.nn.functional as F
 
 
 class DiMPActor(BaseActor):
@@ -576,5 +577,172 @@ class ToMPActor(BaseActor):
 
         if ious.max().item() > 0:
             stats['stdIoU'] = ious[ious>0].std().item()
+
+        return loss, stats
+
+
+class TaMOsActor(BaseActor):
+    """Actor for training the TaMOs network."""
+
+    def __init__(self, net, objective, loss_weight=None, prob=False, plot_save=None, fg_cls_loss=False):
+        super().__init__(net, objective)
+        if loss_weight is None:
+            loss_weight = {'bb_ce': 1.0}
+        self.loss_weight = loss_weight
+        self.prob = prob
+        self.plot_save = plot_save
+        self.fg_cls_loss = fg_cls_loss
+
+    def compute_iou_at_max_score_pos(self, scores, ltrb_gth, ltrb_pred):
+        if ltrb_pred.dim() == 4:
+            ltrb_pred = ltrb_pred.unsqueeze(0)
+
+        n = scores.shape[1]
+        ids = scores.reshape(1, n, -1).max(dim=2)[1]
+        g = ltrb_gth.flatten(3)[0, torch.arange(0, n), :, ids].view(1, n, 4, 1, 1)
+        p = ltrb_pred.flatten(3)[0, torch.arange(0, n), :, ids].view(1, n, 4, 1, 1)
+
+        _, ious_pred_center = self.objective['giou'](p, g)  # nf x ns x x 4 x h x w
+        ious_pred_center[g.view(n, 4).min(dim=1)[0] < 0] = 0
+
+        return ious_pred_center
+
+    def compute_cls_loss(self, test_label, target_scores, test_anno, test_sample_region):
+        test_label = test_label.flatten(1, 2)
+        target_scores = target_scores.flatten(1, 2)
+        test_sample_region = test_sample_region.flatten(1, 2)
+
+        if self.fg_cls_loss:
+            fg_mask = torch.sum(test_sample_region[0], dim=(1, 2)) > 0
+            target_scores = target_scores[:, fg_mask]
+            test_label = test_label[:, fg_mask]
+
+        clf_loss_test = self.objective['test_clf'](target_scores, test_label, test_anno)
+        return clf_loss_test
+
+    def compute_bbreg_loss(self, test_ltrb_target, test_sample_region, bbox_preds):
+        test_ltrb_target = test_ltrb_target.flatten(1, 2)
+        test_sample_region = test_sample_region.flatten(1, 2)
+        bbox_preds = bbox_preds.flatten(1, 2)
+        loss_giou, ious = self.objective['giou'](bbox_preds, test_ltrb_target, test_sample_region)
+        return loss_giou, ious
+
+    def compute_iou_pred(self, target_scores, bbox_preds, test_ltrb_target, test_sample_region):
+        target_scores = target_scores.flatten(1, 2)
+        test_ltrb_target = test_ltrb_target.flatten(1, 2)
+        test_sample_region = test_sample_region.flatten(1, 2)
+        bbox_preds = bbox_preds.flatten(1, 2)
+        fg_mask = torch.sum(test_sample_region[0], dim=(1, 2)) > 0
+        return self.compute_iou_at_max_score_pos(target_scores[:, fg_mask], test_ltrb_target[:, fg_mask],
+                                                 bbox_preds[:, fg_mask])
+
+    def __call__(self, data):
+        """
+        args:
+            data - The input data, should contain the fields 'train_images', 'test_images', 'train_anno',
+                    'test_proposals', 'proposal_iou' and 'test_label'.
+
+        returns:
+            loss    - the training loss
+            stats  -  dict containing detailed losses
+        """
+        # Run network
+        target_scores, bbox_preds = self.net(train_imgs=data['train_images'],
+                                             test_imgs=data['test_images'],
+                                             train_bb=data['train_anno'],
+                                             train_label=data['train_label'],
+                                             train_ltrb_target=data['train_ltrb_target'],
+                                             test_label=data['test_label'],
+                                             epoch=data['epoch'])
+
+        stats = {}
+
+        clf_loss_test, loss_giou = 0, 0
+
+        if 'trafo' in target_scores:
+            clf_loss_test_trafo = self.compute_cls_loss(data['test_label'], target_scores['trafo'], data['test_anno'],
+                                                        data['test_sample_region'])
+            clf_loss_test += clf_loss_test_trafo
+
+        if 'lowres' in target_scores:
+            clf_loss_test_lowres = self.compute_cls_loss(data['test_label'], target_scores['lowres'], data['test_anno'],
+                                                         data['test_sample_region'])
+            clf_loss_test += clf_loss_test_lowres
+
+        if 'highres' in target_scores:
+            clf_loss_test_highres = self.compute_cls_loss(data['test_label_highres'], target_scores['highres'],
+                                                          data['test_anno'], data['test_sample_region_highres'])
+            clf_loss_test += clf_loss_test_highres
+
+        if 'trafo' in bbox_preds:
+            loss_giou_trafo, ious_trafo = self.compute_bbreg_loss(data['test_ltrb_target'], data['test_sample_region'],
+                                                                  bbox_preds['trafo'])
+            stats['mIoU_trafo'] = ious_trafo.mean().item()
+            loss_giou += loss_giou_trafo
+
+        if 'lowres' in bbox_preds:
+            loss_giou_lowres, ious_lowres = self.compute_bbreg_loss(data['test_ltrb_target'],
+                                                                    data['test_sample_region'], bbox_preds['lowres'])
+            stats['mIoU_lowres'] = ious_lowres.mean().item()
+            loss_giou += loss_giou_lowres
+
+        if 'highres' in bbox_preds:
+            loss_giou_highres, ious_highres = self.compute_bbreg_loss(data['test_ltrb_target_highres'],
+                                                                      data['test_sample_region_highres'],
+                                                                      bbox_preds['highres'])
+            stats['mIoU_highres'] = ious_highres.mean().item()
+            stats['Loss/weighted_GIoU_highres'] = self.loss_weight['giou'] * loss_giou_highres.item()
+            loss_giou += loss_giou_highres
+
+        if 'trafo' in target_scores and 'trafo' in bbox_preds:
+            ious_pred_center_trafo = self.compute_iou_pred(target_scores['trafo'], bbox_preds['trafo'],
+                                                           data['test_ltrb_target'], data['test_sample_region'])
+            stats['mIoU_pred_center_trafo'] = ious_pred_center_trafo.mean().item()
+
+        if 'lowres' in target_scores and 'lowres' in bbox_preds:
+            ious_pred_center_lowres = self.compute_iou_pred(target_scores['lowres'], bbox_preds['lowres'],
+                                                            data['test_ltrb_target'], data['test_sample_region'])
+            stats['mIoU_pred_center_lowres'] = ious_pred_center_lowres.mean().item()
+
+        if 'highres' in target_scores and 'highres' in bbox_preds:
+            ious_pred_center_highres = self.compute_iou_pred(target_scores['highres'], bbox_preds['highres'],
+                                                             data['test_ltrb_target_highres'],
+                                                             data['test_sample_region_highres'])
+            stats['mIoU_pred_center_highres'] = ious_pred_center_highres.mean().item()
+
+        if 'highres' not in target_scores and 'highres' in bbox_preds:
+            if 'trafo' in target_scores:
+                target_scores_trafo = target_scores['trafo'].flatten(1, 2)
+                target_scores_trafo_interp = F.interpolate(target_scores_trafo,
+                                                           data['test_ltrb_target_highres'].shape[-2:], mode='bicubic')
+
+                ious_pred_center_highres = self.compute_iou_pred(
+                    target_scores_trafo_interp.reshape(data['test_sample_region_highres'].shape), bbox_preds['highres'],
+                    data['test_ltrb_target_highres'], data['test_sample_region_highres'])
+                stats['mIoU_pred_center_trafo_highres'] = ious_pred_center_highres.mean().item()
+
+            if 'lowres' in target_scores:
+                target_scores_lowres = target_scores['lowres'].flatten(1, 2)
+                target_scores_lowres_interp = F.interpolate(target_scores_lowres,
+                                                            data['test_ltrb_target_highres'].shape[-2:], mode='bicubic')
+
+                ious_pred_center_highres = self.compute_iou_pred(
+                    target_scores_lowres_interp.reshape(data['test_sample_region_highres'].shape),
+                    bbox_preds['highres'], data['test_ltrb_target_highres'], data['test_sample_region_highres'])
+                stats['mIoU_pred_center_lowres_highres'] = ious_pred_center_highres.mean().item()
+
+        loss = self.loss_weight['giou'] * loss_giou + self.loss_weight['test_clf'] * clf_loss_test
+
+        if torch.isnan(loss):
+            raise ValueError('NaN detected in loss')
+
+        stats.update({
+            'Loss/total': loss.item(),
+            'Loss/GIoU': loss_giou.item(),
+            'Loss/weighted_GIoU': self.loss_weight['giou'] * loss_giou.item(),
+            'Loss/clf_loss_test': clf_loss_test.item(),
+            'Loss/weighted_clf_loss_test': self.loss_weight['test_clf'] * clf_loss_test.item(),
+
+        })
 
         return loss, stats

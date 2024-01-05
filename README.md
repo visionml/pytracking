@@ -2,7 +2,7 @@
 A general python framework for visual object tracking and video object segmentation, based on **PyTorch**.
 
 ### :fire: One tracking paper accepted at WACV 2024! 👇
-* [Beyond SOT: Tracking Multiple Generic Objects at Once](https://arxiv.org/abs/2212.11920) | **Code available soon!**
+* [Beyond SOT: Tracking Multiple Generic Objects at Once](https://arxiv.org/abs/2212.11920) | **Code available!**
 
 
 ### :fire: One tracking paper accepted at WACV 2023! 👇
@@ -44,6 +44,20 @@ benchmarks are provided in the [model zoo](MODEL_ZOO.md).
 
 ## Trackers
 The toolkit contains the implementation of the following trackers.
+
+### TaMOs (WACV 2024)
+
+**[[Paper]](https://arxiv.org/abs/2212.11920) [[Raw results]](MODEL_ZOO.md#Raw-Results-1)
+[[Models]](MODEL_ZOO.md#Models-1) [[Training Code]](./ltr/README.md#TaMOs)  [[Tracker Code]](./pytracking/README.md#TaMOs)**
+
+Official implementation of **TaMOs**. TaMOs is the first generico object tracker to tackle the problem of tracking multiple
+generic object at once. It uses a shared model predictor consisting of a Transformer in order to produce multiple
+target models (one for each specified target). It achieves sub-linear run-time when tracking multiple objects and
+outperforms existing single object trackers when running one instance for each target separately.
+TaMOs serves as the baseline tracker for the new large-scale generic object tracking  benchmark LaGOT  (see [here]())
+that contains multiple annotated target objects per sequence.
+
+![TaMOs_teaser_figure](pytracking/.figs/TaMOs_overview.png)
 
 ### RTS (ECCV 2022)
 

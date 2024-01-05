@@ -6,6 +6,7 @@ A general PyTorch based framework for learning tracking representations.
 * [Quick Start](#quick-start)
 * [Overview](#overview)
 * [Trackers](#trackers)
+   * [TaMOs](#TaMOs)
    * [RTS](#RTS)
    * [ToMP](#ToMP)
    * [KeepTrack](#KeepTrack)
@@ -46,6 +47,13 @@ The framework consists of the following submodules.
  
 ## Trackers
  The framework currently contains the training code for the following trackers.
+
+### TaMOs
+The following setting files can be used to train the TaMOs tracker. In addition to the typical tracking datasets used for
+single object trackers we further include [TAO](https://taodataset.org/), [YoutubeVOS](https://youtube-vos.org) and [ImagenetVid](http://image-net.org/) training data.
+ - [tamos.tamos_resnet50](train_settings/tamos/tamos_resnet50.py): The default setting use for training with ResNet50 backbone.
+ - [tamos.tamos_swin_base](train_settings/tamos/tamos_swin_base.py): The default setting use for training with SwinBase backbone.
+If needed, the weights of the SwinBase backbone can be downloaded [here](https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_base_patch4_window12_384_22k.pth).
 
 ### RTS
  Three steps are required to train RTS:

@@ -733,3 +733,168 @@ class SequentialTargetCandidateMatchingSampler(torch.utils.data.Dataset):
             data[key] = val
 
         return self.processing(data)
+
+
+class TaMOsDatasetSampler(TrackingSampler):
+    """ See TrackingSampler."""
+
+    def __init__(self, datasets, p_datasets, samples_per_epoch, max_gap,
+                 num_test_frames, num_train_frames=1, processing=no_processing, frame_sample_mode='causal',
+                 buffer_size=160, use_gap=False):
+        super().__init__(datasets=datasets, p_datasets=p_datasets, samples_per_epoch=samples_per_epoch, max_gap=max_gap,
+                         num_test_frames=num_test_frames, num_train_frames=num_train_frames, processing=processing,
+                         frame_sample_mode=frame_sample_mode)
+
+        self.buffer_size = buffer_size
+        self.samples = self.buffer_size * [None]
+        self.frames_dict = None
+        self.buffer_idx = 0
+        self.use_gap = use_gap
+
+    def __getitem__(self, index):
+        """
+        args:
+            index (int): Index (Ignored since we sample randomly)
+
+        returns:
+            TensorDict - dict containing all the data blocks
+        """
+
+        sample = self.samples[self.buffer_idx]
+
+        if sample is None:
+            keys = ['train_frame_ids', 'test_frame_ids', 'seq_id', 'dataset_id']
+            self.samples = [dict(zip(keys, self._sample_training_data())) for _ in range(self.buffer_size)]
+
+            sample = self.samples[self.buffer_idx]
+
+        train_frames, train_anno, meta_obj_train = self.datasets[sample['dataset_id']].get_frames(sample['seq_id'],
+                                                                                                  sample[
+                                                                                                      'train_frame_ids'])
+        test_frames, test_anno, meta_obj_test = self.datasets[sample['dataset_id']].get_frames(sample['seq_id'],
+                                                                                               sample['test_frame_ids'])
+
+        if self.datasets[sample['dataset_id']].is_mot_dataset():
+            train_anno = [{int(k): v for k, v in anno.items()} for anno in train_anno['bbox']]
+            test_anno = [{int(k): v for k, v in anno.items()} for anno in test_anno['bbox']]
+        else:
+            train_anno = [{0: box} for box in train_anno['bbox']]
+            test_anno = [{0: box} for box in test_anno['bbox']]
+
+        data = TensorDict({'train_images': train_frames,
+                           'train_anno': train_anno,
+                           'test_images': test_frames,
+                           'test_anno': test_anno,
+                           'dataset': self.datasets[sample['dataset_id']].get_name(),
+                           'test_class': meta_obj_test.get('object_class_name')})
+
+        self.samples[self.buffer_idx] = None
+        self.buffer_idx = (self.buffer_idx + 1) % self.buffer_size
+
+        return self.processing(data)
+
+    def _sample_training_data(self):
+        num_tries = 100
+        for i in range(num_tries):
+            data = self._try_sample_training_data()
+            if data is not None:
+                return data
+        raise RuntimeError()
+
+    def _try_sample_training_data(self):
+        # Select a dataset
+        dataset_id = random.choices([i for i in range(len(self.datasets))], self.p_datasets)[0]
+        dataset = self.datasets[dataset_id]
+        is_video_dataset = dataset.is_video_sequence()
+        is_mot_dataset = dataset.is_mot_dataset()
+
+        # Sample a sequence with enough visible frames
+        enough_visible_frames = False
+        while not enough_visible_frames:
+            # Sample a sequence
+            seq_id = random.randint(0, dataset.get_num_sequences() - 1)
+
+            # Sample frames
+            seq_info_dict = dataset.get_sequence_info(seq_id)
+
+            if not is_video_dataset:
+                visible = torch.ByteTensor([1])
+            elif 'visible' in seq_info_dict:
+                visible = seq_info_dict['visible']
+                if visible.ndim == 2:
+                    visible_mot = visible.clone()
+                    visible = torch.any(visible_mot, dim=1)
+            elif is_mot_dataset:
+                obj_ids = [int(oid) for boxes in seq_info_dict['bbox'] for oid in boxes.keys()]
+                if len(obj_ids) == 0:
+                    continue
+                num_obj = max(obj_ids)
+                visible_mot = torch.ByteTensor(
+                    [[1 if str(i) in anno else 0 for i in range(num_obj)] for anno in seq_info_dict['bbox']])
+                visible = torch.any(visible_mot, dim=1)
+            else:
+                raise NotImplementedError()
+
+            enough_visible_frames = visible.type(torch.int64).sum().item() > 2 * (
+                        self.num_test_frames + self.num_train_frames)
+
+            enough_visible_frames = enough_visible_frames or not is_video_dataset
+
+        if is_video_dataset:
+            train_frame_ids = None
+            test_frame_ids = None
+            gap_increase = 0
+
+            frame_annotation_period = 1
+            if hasattr(dataset, 'get_frame_annotation_period'):
+                frame_annotation_period = dataset.get_frame_annotation_period(seq_id)
+
+            max_gap = self.max_gap
+            if isinstance(max_gap, dict):
+                if is_mot_dataset:
+                    max_gap = max_gap['mot']
+                    gap = 3 * max_gap // 4 if self.use_gap else 0
+                else:
+                    max_gap = max_gap['sot']
+                    gap = 3 * max_gap // 4 if self.use_gap else 0
+
+            max_gap = max_gap // frame_annotation_period
+            gap = gap // frame_annotation_period
+
+            # Sample test and train frames in a causal manner, i.e. test_frame_ids > train_frame_ids
+            while test_frame_ids is None:
+                base_frame_id = self._sample_visible_ids(visible, num_ids=1, min_id=self.num_train_frames - 1,
+                                                         max_id=len(visible) - self.num_test_frames)
+                prev_frame_ids = self._sample_visible_ids(visible, num_ids=self.num_train_frames - 1,
+                                                          min_id=base_frame_id[0] - max_gap - gap_increase,
+                                                          max_id=base_frame_id[0])
+                if prev_frame_ids is None:
+                    gap_increase += max(1, 5 // frame_annotation_period)
+                    continue
+                train_frame_ids = base_frame_id + prev_frame_ids
+
+                if is_mot_dataset:
+                    visible_for_train_frames = self.recompute_visiblity_for_train_frame_objects(visible_mot,
+                                                                                                train_frame_ids)
+                else:
+                    visible_for_train_frames = visible.clone()
+
+                test_frame_ids = self._sample_visible_ids(visible_for_train_frames, min_id=train_frame_ids[0] + 1 + gap,
+                                                          max_id=train_frame_ids[0] + max_gap + gap_increase,
+                                                          num_ids=self.num_test_frames)
+                # Increase gap until a frame is found
+                gap_increase += max(1, 5 // frame_annotation_period)
+
+                if gap_increase > len(visible):
+                    return None
+        else:
+            # In case of image dataset, just repeat the image to generate synthetic video
+            train_frame_ids = [1] * self.num_train_frames
+            test_frame_ids = [1] * self.num_test_frames
+
+        return train_frame_ids, test_frame_ids, seq_id, dataset_id
+
+    def recompute_visiblity_for_train_frame_objects(self, visible_mot, train_frame_ids):
+        cols = torch.where(visible_mot[train_frame_ids])[1]
+        visible_any = torch.any(visible_mot[:, cols], dim=1)
+        return visible_any

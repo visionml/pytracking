@@ -164,3 +164,26 @@ class TrackingClassificationAccuracy(nn.Module):
             prediction_accuracy = prediction_correct.float().mean()
 
         return prediction_accuracy, prediction_correct.float()
+
+
+class FocalLoss(nn.Module):
+    def __init__(self, gamma=2.0, alpha=-1):
+        super().__init__()
+        self.gamma = gamma
+        self.alpha = alpha
+
+    def forward(self, prediction, label, target_bb=None):
+        prediction = prediction.float()
+        label = label.float()
+        p = torch.sigmoid(prediction)
+        ce_loss = F.binary_cross_entropy_with_logits(prediction, label, reduction="none")
+        p_t = p * label + (1 - p) * (1 - label)
+        loss = ce_loss * ((1 - p_t) ** self.gamma)
+
+        if self.alpha >= 0:
+            alpha_t = self.alpha * label + (1 - self.alpha) * (1 - label)
+            loss = alpha_t * loss
+
+        loss = loss.mean()
+
+        return loss

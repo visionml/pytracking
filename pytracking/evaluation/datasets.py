@@ -47,6 +47,8 @@ dataset_dict = dict(
                              kwargs=dict(version='2019', split='jjvalid', cleanup=['starts'])),
     yt2019_jjval_all=DatasetInfo(module="ltr.dataset.youtubevos", class_name="YouTubeVOS",
                                  kwargs=dict(version='2019', split='jjvalid', all_frames=True, cleanup=['starts'])),
+    lagot_sot_mode=DatasetInfo(module=pt % "lagot", class_name="LaGOTDataset", kwargs=dict(sot_mode=True)),
+    lagot=DatasetInfo(module=pt % "lagot", class_name="LaGOTDataset", kwargs=dict(sot_mode=False)),
 )
 
 

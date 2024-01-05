@@ -22,7 +22,7 @@ def load_network(net_path, **kwargs):
                 net, _ = ltr_loading.load_network(path_full, **kwargs)
                 break
             except Exception as e:
-                # print(e)
+                print(e)
                 pass
 
         assert net is not None, 'Failed to load network'
