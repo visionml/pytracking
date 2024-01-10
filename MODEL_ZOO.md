@@ -187,7 +187,7 @@ of the models on standard tracking datasets.
     <td>82.7</td>
     <td>-</td>
     <td>51.5</td>
-    <td><a href="https://drive.google.com/file/d/1AiMOz3ElDHZSvL4KpnvZ-I7YB3GTGycO/view?usp=sharing">model</a></td>    
+    <td><a href="https://drive.google.com/file/d/1oHnVv4hbfGm5CHTaEbPWUkMyRJ6tzt7d/view?usp=sharing">model</a></td>    
   </tr>
   <tr>
     <td>TaMOs-SwinBase</td>
@@ -200,7 +200,7 @@ of the models on standard tracking datasets.
     <td>84.4</td>
     <td>-</td>
     <td>55.1</td>
-    <td><a href="https://drive.google.com/file/d/19_b15SGqDT08vkHcQecUEd7K0nHTO08T/view?usp=sharing">model</a></td>
+    <td><a href="https://drive.google.com/file/d/1YFm-z-M02bq5Rag9tuqSqZ7r3H3X0YBw/view?usp=sharing">model</a></td>
   </tr>
 
 </table>

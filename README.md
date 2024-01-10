@@ -14,9 +14,9 @@ A general python framework for visual object tracking and video object segmentat
 
 ## Highlights
 
-### RTS, ToMP, KeepTrack, LWL, KYS, PrDiMP, DiMP and ATOM Trackers
+### TaMOs, RTS, ToMP, KeepTrack, LWL, KYS, PrDiMP, DiMP and ATOM Trackers
 
-Official implementation of the **RTS** (ECCV 2022), **ToMP** (CVPR 2022), **KeepTrack** (ICCV 2021), **LWL** (ECCV 2020), **KYS** (ECCV 2020), **PrDiMP** (CVPR 2020),
+Official implementation of the **TaMOs** (WACV  2024), **RTS** (ECCV 2022), **ToMP** (CVPR 2022), **KeepTrack** (ICCV 2021), **LWL** (ECCV 2020), **KYS** (ECCV 2020), **PrDiMP** (CVPR 2020),
 **DiMP** (ICCV 2019), and **ATOM** (CVPR 2019) trackers, including complete **training code** and trained models.
 
 ### [Tracking Libraries](pytracking)
