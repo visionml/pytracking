@@ -122,7 +122,7 @@ class Tracker:
             if debug is None:
                 visualization_ = getattr(params, 'visualization', False)
             else:
-                visualization_ = True if debug else False
+                visualization_ = False if debug else True
 
         params.visualization = visualization_
         params.debug = debug_
@@ -180,7 +180,7 @@ class Tracker:
         image = self._read_image(seq.frames[0])
 
         if tracker.params.visualization and self.visdom is None:
-            self.visualize(image, init_info.get('init_bbox'))
+            self.visualize(image, [init_info.get('init_bbox')])
 
         start_time = time.time()
         out = tracker.initialize(image, init_info)
