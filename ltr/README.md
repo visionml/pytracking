@@ -50,7 +50,8 @@ The framework consists of the following submodules.
 
 ### TaMOs
 The following setting files can be used to train the TaMOs tracker. In addition to the typical tracking datasets used for
-single object trackers we further include [TAO](https://taodataset.org/), [YoutubeVOS](https://youtube-vos.org) and [ImagenetVid](http://image-net.org/) training data.
+single object trackers we further include [TAO](https://taodataset.org/), [YoutubeVOS](https://youtube-vos.org) and [ImagenetVid](http://image-net.org/) training data. 
+When training with TAO we use the [BURST](https://github.com/Ali2500/BURST-benchmark) annotations since they provide a higher annotation frame rate. We converted those annotations to our own format [TaoBurst.json](https://drive.google.com/file/d/1q-x9BKa9cHYohh7le5sa9vk6is0Q2ljj/view?usp=sharing).
  - [tamos.tamos_resnet50](train_settings/tamos/tamos_resnet50.py): The default setting use for training with ResNet50 backbone.
  - [tamos.tamos_swin_base](train_settings/tamos/tamos_swin_base.py): The default setting use for training with SwinBase backbone.
 If needed, the weights of the SwinBase backbone can be downloaded [here](https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_base_patch4_window12_384_22k.pth).
