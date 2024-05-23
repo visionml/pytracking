@@ -112,7 +112,7 @@ class LTRTrainer(BaseTrainer):
         for name, val in new_stats.items():
             if name not in self.stats[loader.name].keys():
                 self.stats[loader.name][name] = AverageMeter()
-            self.stats[loader.name][name].update(val, batch_size)
+            self.stats[loader.name][name].update(val.item(), batch_size)
 
     def _print_stats(self, i, loader, batch_size):
         self.num_frames += batch_size
