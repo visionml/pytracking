@@ -54,7 +54,7 @@ Official implementation of **TaMOs**. TaMOs is the first generico object tracker
 generic object at once. It uses a shared model predictor consisting of a Transformer in order to produce multiple
 target models (one for each specified target). It achieves sub-linear run-time when tracking multiple objects and
 outperforms existing single object trackers when running one instance for each target separately.
-TaMOs serves as the baseline tracker for the new large-scale generic object tracking  benchmark LaGOT  (see [here]())
+TaMOs serves as the baseline tracker for the new large-scale generic object tracking  benchmark LaGOT  (see [here](https://github.com/google-research-datasets/LaGOT))
 that contains multiple annotated target objects per sequence.
 
 ![TaMOs_teaser_figure](pytracking/.figs/TaMOs_overview.png)
