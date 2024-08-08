@@ -380,7 +380,12 @@ class Tracker:
                 init_state = ui_control.get_bb()
 
                 info['init_object_ids'] = [next_object_id, ]
+                info['object_ids'] = [next_object_id,]
+                info['sequence_object_ids'] = [next_object_id,]
                 info['init_bbox'] = OrderedDict({next_object_id: init_state})
+                out = tracker.initialize(frame, info)
+                prev_output = OrderedDict(out)
+
                 sequence_object_ids.append(next_object_id)
                 if save_results:
                     output_boxes[next_object_id] = [init_state, ]
